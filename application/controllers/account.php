@@ -46,6 +46,12 @@ class Account_Controller extends Base_Controller
                         ->with_input();
             }
 
+            if(Input::get('rememberme'))
+            {
+                Cookie::put(Aux::get_cookie_name_autologin(), Auth::user()->id, 43200); // 30 days
+                Cookie::put(Aux::get_cookie_name_autologin_secret(), Aux::get_user_cookie_secret(Auth::user()), 43200); // 30 days
+            }
+
             return Redirect::to('/');
         }
         else
@@ -55,15 +61,19 @@ class Account_Controller extends Base_Controller
                 ->with_input();
         }
     }
+
     public function get_logout()
     {
+	Cookie::forget(Aux::get_cookie_name_autologin());
+	Cookie::forget(Aux::get_cookie_name_autologin_secret());
+
         Auth::logout();
         return Redirect::to('/');
     }
 
     public function get_signup()
     {
-	   return View::make('pages.signup');
+        return View::make('pages.signup');
     }
 
     public function post_signup()
@@ -130,6 +140,31 @@ class Account_Controller extends Base_Controller
         Auth::login($account->id);
 
         return Redirect::to_action('account@show', array('uid' => $account->id));
+    }
+
+    public function get_checkrole($rolename)
+    {
+        if(Auth::guest() || !Auth::user()->has_role('admin'))
+        {
+            return json_encode(array(
+                'status' => 0,
+                'error' => 'no rights to perform this action'
+            ));
+        }
+
+        $r = Role::where('name', '=', $rolename)->first();
+        if($r == null)
+        {
+            return json_encode(array(
+                'status' => 0,
+                'error' => "no role '" . $rolename . "' exists"
+            ));
+        }
+
+        return json_encode(array(
+            'status' => 1,
+            'error' => "role '" . $rolename . "' exist"
+        ));
     }
 
     public function get_addrole($uid, $rolename)

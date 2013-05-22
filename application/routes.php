@@ -39,6 +39,17 @@ Route::controller('pin');
 */
 
 Route::get('/', function() {
+// check for login cookies
+   $autologin = Cookie::get(Aux::get_cookie_name_autologin()) + 0;
+   if($autologin != 0)
+   {
+       $alsecret = Cookie::get(Aux::get_cookie_name_autologin_secret());
+       $u = User::find($autologin);
+       $usecret = Aux::get_user_cookie_secret($u);
+       if($usecret == $alsecret)
+          Auth::login($u->id);
+   }
+
     $posts = Post::order_by('updated_at', 'desc')->get();
 //    $posts = Post::with('author')->all();
     return View::make('pages.home')
@@ -224,14 +235,9 @@ Route::post('(edit|new)/comm/(:num?)', array('before' => 'auth', 'as' => 'comm',
         $comm->save();
     }
 
-            echo json_encode(array( 
-                    'status' => 1 ,
-                    // 'html' => $comm->body,
-                    // 'author' => $comm->author()->first()->nickname,
-                    // 'cid' => $comm->id,
-                ));
-
-//    return Redirect::to_action('post@show', array('postid' => $post->id));
+    echo json_encode(array( 
+        'status' => 1 ,
+    ));
 }));
 
 Route::any('admin/(:any)', array('before' => 'auth', 'uses' => 'admin@(:1)'));

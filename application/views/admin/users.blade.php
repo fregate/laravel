@@ -60,6 +60,7 @@
 <div class="alert" style="width:250px"></div>
 
 <script type="text/javascript">
+var ajaxresult;
 	function showresult(status, msg) {
 	    if(status == 1)
 	    {
@@ -74,6 +75,8 @@
 
 		$(".alert").html(msg);
 		$(".alert").show();
+
+		ajaxresult = ( status == 1 );
 	}
     $(document).ready(function() {
     	$(".alert").hide();
@@ -85,11 +88,41 @@
 	        	beforeTagRemoved: function(event, ui) {
 	        		if(ui.duringInitialization != true)
 	        		{
-				        $.get('{{ URL::to_action("account@delrole") }}/' + ui.tag.parent().data("uid") + '/' + ui.tagLabel, function(msg) {
-				        	showresult(msg.status, msg.error);
-				        }, 'json');
+				        //$.('{{ URL::to_action("account@delrole") }}/' + ui.tag.parent().data("uid") + '/' + ui.tagLabel, function(msg) {
+				        //	showresult(msg.status, msg.error);
+				        //}, 'json');
+
+					$.ajax({
+						url: '{{ URL::to_action("account@delrole") }}/' 
+						     + ui.tag.parent().data("uid") 
+						     + '/' + ui.tagLabel,
+						success: function(msg) {
+								showresult(msg.status, msg.error);
+							},
+						async: false,
+						dataType: 'json'
+					});
 	        		}
+					return ajaxresult;
 	        	},
+
+			beforeTagAdded: function(event, ui) {
+                                if(ui.duringInitialization != true)
+                                {
+					$.ajax({
+						url: '{{ URL::to_action("account@checkrole") }}/'
+						     + ui.tagLabel,
+						success: function(msg) {
+						                showresult(msg.status, msg.error);
+						        },
+						async: false,
+						dataType: 'json'
+					});
+
+					return ajaxresult;
+                                }
+			},
+
 	        	afterTagAdded: function(event, ui) {
 	        		if(ui.duringInitialization != true)
 	        		{
