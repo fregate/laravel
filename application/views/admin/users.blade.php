@@ -31,7 +31,7 @@
 		foreach ($users as $u) {
 			echo "<tr>";
 			echo "<td>" . $u->id . "</td>";
-			echo "<td>" . $u->nickname . "</td>";
+			echo "<td>" . HTML::link(URL::to_action('account@show', array('uid' => $u->id)), $u->nickname ) . "</td>";
 			echo "<td>" . $u->email . "</td>";
 
 			$rolehtml = "<ul id='uroles" . $u->id . "' data-uid='" . $u->id . "'>";
@@ -60,7 +60,9 @@
 <div class="alert" style="width:250px"></div>
 
 <script type="text/javascript">
-var ajaxresult;
+	var ajaxresult;
+	var fetchedtags = [];
+
 	function showresult(status, msg) {
 	    if(status == 1)
 	    {
@@ -78,54 +80,63 @@ var ajaxresult;
 
 		ajaxresult = ( status == 1 );
 	}
+
+	function gettags() {
+		return fetchedtags;
+	}
+
     $(document).ready(function() {
+
     	$(".alert").hide();
+
+		$.ajax({
+			url: '{{ URL::to_action("account@getroles") }}',
+			success: function(msg) {
+					if(msg.status != 0)
+						fetchedtags = msg.tags;
+				},
+			async: false,
+			dataType: 'json'
+		});
+
 
     	$.each($("ul[id^='uroles']"), function() {
     		$(this).tagit({
-	        	availableTags: ["c++", "java", "php", "javascript", "ruby", "python", "c"],
+	        	availableTags: gettags() , //["c++", "java", "php", "javascript", "ruby", "python", "c"],
 	        	autocomplete: {delay: 0, minLength: 0},
 	        	beforeTagRemoved: function(event, ui) {
-	        		if(ui.duringInitialization != true)
-	        		{
-				        //$.('{{ URL::to_action("account@delrole") }}/' + ui.tag.parent().data("uid") + '/' + ui.tagLabel, function(msg) {
-				        //	showresult(msg.status, msg.error);
-				        //}, 'json');
-
-					$.ajax({
-						url: '{{ URL::to_action("account@delrole") }}/' 
-						     + ui.tag.parent().data("uid") 
-						     + '/' + ui.tagLabel,
-						success: function(msg) {
-								showresult(msg.status, msg.error);
-							},
-						async: false,
-						dataType: 'json'
-					});
+	        		if(ui.duringInitialization != true) {
+						$.ajax({
+							url: '{{ URL::to_action("account@delrole") }}/' 
+							     + ui.tag.parent().data("uid") 
+							     + '/' + ui.tagLabel,
+							success: function(msg) {
+									showresult(msg.status, msg.error);
+								},
+							async: false,
+							dataType: 'json'
+						});
 	        		}
 					return ajaxresult;
 	        	},
 
-			beforeTagAdded: function(event, ui) {
-                                if(ui.duringInitialization != true)
-                                {
-					$.ajax({
-						url: '{{ URL::to_action("account@checkrole") }}/'
-						     + ui.tagLabel,
-						success: function(msg) {
-						                showresult(msg.status, msg.error);
-						        },
-						async: false,
-						dataType: 'json'
-					});
+				beforeTagAdded: function(event, ui) {
+	                if(ui.duringInitialization != true) {
+						$.ajax({
+							url: '{{ URL::to_action("account@checkrole") }}/' + ui.tagLabel,
+							success: function(msg) {
+							        	 showresult(msg.status, msg.error);
+							         },
+							async: false,
+							dataType: 'json'
+						});
 
-					return ajaxresult;
-                                }
-			},
+						return ajaxresult;
+	                }
+				},
 
 	        	afterTagAdded: function(event, ui) {
-	        		if(ui.duringInitialization != true)
-	        		{
+	        		if(ui.duringInitialization != true) {
 				        $.get('{{ URL::to_action("account@addrole") }}/' + ui.tag.parent().data("uid") + '/' + ui.tagLabel, function(msg) {
 				        	showresult(msg.status, msg.error);
 				        }, 'json');

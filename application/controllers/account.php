@@ -85,10 +85,9 @@ class Account_Controller extends Base_Controller
         );
 
         if(Input::get('email') == null || Input::get('email') == '')
-            $new_account['email'] = uniqid();
+            $new_account['email'] = uniqid() . '@' . uniqid();
         else
             $new_account['email'] = Input::get('email');
-
 
         $rules = array(
             'nickname'  => 'required|min:3|max:128',
@@ -112,7 +111,15 @@ class Account_Controller extends Base_Controller
                     ->with('input_errors', true)
                     ->with_input();
         }
+
         unset($new_account['recaptcha']);
+
+        $testemail = User::where('email', '=', $new_account['email'])->first();
+        if($testemail != null) {
+            return Redirect::to_action('account@signup')
+                    ->with('input_errors', true)
+                    ->with_input();
+        }
 
         // create the new post
         $account = new User($new_account);
@@ -125,7 +132,7 @@ class Account_Controller extends Base_Controller
             'identity' => Input::get('identity'),
             'network' => Input::get('network'),
             'identityhash' => md5(Input::get('identity')),
-            'hidden' => Input::get('hideidn')
+            'hidden' => false
         );
 
         if(Input::get('network') == 'club.quant')
@@ -140,6 +147,29 @@ class Account_Controller extends Base_Controller
         Auth::login($account->id);
 
         return Redirect::to_action('account@show', array('uid' => $account->id));
+    }
+
+    public function get_getroles()
+    {
+        // if(Auth::guest() || !Auth::user()->has_role('admin'))
+        // {
+        //     return json_encode(array(
+        //         'status' => 0
+        //     ));
+        // }
+
+        // $rns = array();
+
+        $roles = Role::all();
+
+        foreach ($roles as $r) {
+            $rns[] = $r->name;
+        }
+
+        return json_encode(array(
+                'status' => 1,
+                'tags' => $rns
+            ));
     }
 
     public function get_checkrole($rolename)

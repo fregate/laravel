@@ -15,7 +15,7 @@ class Create_Users {
 		    $table->string('nickname', 128);
 		    $table->string('password', 64);
 		    $table->string('email', 64)->unique();
-		    $table->datetime('birthday');
+		    $table->date('birthday');
 		    $table->boolean('show_year');
 		    $table->timestamps();
 		});
