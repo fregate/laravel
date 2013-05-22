@@ -36,5 +36,8 @@
 return array(
 
 	'docs' => array('handles' => 'docs'),
+	'imageworkshop' => array('auto' => true),
+    'authority' => array( 'auto' => true ),
+    'recaptcha' => array( 'auto' => true )
 
 );
