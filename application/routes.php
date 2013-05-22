@@ -203,9 +203,6 @@ Route::post('(edit|new)/comm/(:num?)', array('before' => 'auth', 'as' => 'comm',
                 ));
 
             return;
-        // return Redirect::to_action('post@show', array('postid' => $post->id))
-        //         ->with_errors($v)
-        //         ->with_input();
     }
 
     if($action == 'new')
