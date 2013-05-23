@@ -1,4 +1,5 @@
 @layout('templates.main')
+
 @section('content')
     {{ Form::open('login') }}
         <!-- check for login errors flash var -->
@@ -11,6 +12,10 @@
         <!-- password field -->
         <p>{{ Form::label('password', 'Password') }}</p>
         <p>{{ Form::password('password') }}</p>
+
+        <p>{{ Form::label('rememberme', 'Remember me') }}</p>
+        <p>{{ Form::checkbox('rememberme', '1', Input::old('rememberme')) }}</p>
+
         @if (Session::has('captcha_error'))
             <span class="error">Mistyped captcha.</span>
         @endif
@@ -20,4 +25,7 @@ echo Recaptcha\Recaptcha::recaptcha_get_html('6LePcOASAAAAAMRzVZ5ZoE-iNXpfRmRlwx
         <!-- submit button -->
         <p>{{ Form::submit('Login') }}</p>
     {{ Form::close() }}
+
+{{ HTML::link_to_action("account@remindpass", "Forget password") }}
+
 @endsection

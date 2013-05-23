@@ -40,12 +40,13 @@ Route::controller('pin');
 
 Route::get('/', function() {
 // check for login cookies
-   $autologin = Cookie::get(Aux::get_cookie_name_autologin()) + 0;
+   $autologin = Cookie::get(AuxFunc::get_cookie_name_autologin());
+   Log::write('info', AuxFunc::get_cookie_name_autologin() . " " . $autologin);
    if($autologin != 0)
    {
-       $alsecret = Cookie::get(Aux::get_cookie_name_autologin_secret());
+       $alsecret = Cookie::get(AuxFunc::get_cookie_name_autologin_secret());
        $u = User::find($autologin);
-       $usecret = Aux::get_user_cookie_secret($u);
+       $usecret = AuxFunc::get_user_cookie_secret($u);
        if($usecret == $alsecret)
           Auth::login($u->id);
    }
@@ -244,6 +245,7 @@ Route::any('admin/(:any)', array('before' => 'auth', 'uses' => 'admin@(:1)'));
 
 Route::any('login', 'account@login');
 Route::any('signup', array('as' => 'signup', 'uses' => 'account@signup'));
+Route::any('remindpass', 'account@remindpass');
 
 Route::get('logout', 'account@logout');
 

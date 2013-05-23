@@ -1,16 +1,31 @@
 @layout('templates.main')
+
+@section('morelinks')
+<link href="css/datepicker.css" rel="stylesheet">
+<script src="js/bootstrap-datepicker.js"></script>
+@endsection
+
 @section('content')
     <div class="profile">
         <h1>{{ $user->nickname }}</h1>
         <h2>ID#: {{ $user->id }}</h2>
         <?php 
+        $dc = new DateTime($user->birthday);
+        if($dc->getTimestamp() != 0) {
+            echo '<h3>Birthday: ';
+            if($user->show_year == true)
+                echo $dc->format('d-m-Y');
+            else
+                echo $dc->format('d-m');
+        echo '</h3>';
+       }
+
         $dc = new DateTime($user->created_at);
         if($dc->getTimestamp() != 0)
            echo '<p>Since: ' . $dc->format('d-m-Y') . '</p>';
         else
             echo '<p>Always here</p>';
         ?>
-        <p>{{ HTML::link('/', '&larr; Back to main.') }}</p>
     </div>
 
     <div>
@@ -80,16 +95,122 @@ echo ' </div>';
 
 if($thisuser) {
     echo '<div>';
-    echo 'Change your personal data';
+    echo Form::open('', 'POST', array('id' => 'changeUserDataForm'));
+        echo Form::hidden('user_id', $user->id);
+        echo Form::hidden('oldpassword');
+        if($user->id != 1) { 
+            echo '<p>' . Form::label('newname', 'Change name') . '</p>';
+            echo '<p>' . Form::text('newname', Input::old('newname', $user->nickname));
+
+            echo '<p>' . Form::label('newemail', 'Change email') . '</p>';
+            echo '<p>' . Form::email('newemail', Input::old('newemail', $user->email));
+        }
+
+        echo '<p>' . Form::label('newpassword', 'Enter new password') . '</p>';
+        echo '<p>' . Form::password('newpassword') . '<span class="alert alert-error" id="equalpwds">passwords are not match!</span></p>';
+
+// remove confirmation password from FORM 
+        echo '<p>' . Form::label('confirmpassword', 'Confirm new password') . '</p>';
+        echo '<p>' . Form::password('confirmpassword') . '</p>';
+
+        $dc = new DateTime($user->birthday);
+        if($dc->getTimestamp() == 0)
+            $dc = new DateTime();
+
+        echo '<p>' . Form::label('dp_birth', 'Birthday') . '</p>';
+
+        echo '<input type="text" class="span2" value="'. Input::old('birthday', $dc->format('d-m-Y')) . '" id="dp_birth"';
+        if($user->id != 1) { 
+            echo  'name="birthday">';
+        }
+        else {
+            echo '>';
+        }
+
+        echo '<p>' . Form::label('show_birth_year', 'Show birth year in public') . Form::checkbox('show_birth_year', '1', Input::old('show_birth_year', $user->show_year ? '1' : '0')) . '</p>';
+
+        echo '<p>' . Form::label('send_email', 'Send email with new data') . Form::checkbox('send_email', '1', Input::old('send_email', '1')) . '</p>';
+
+        echo '<a data-toggle="modal" href="#enterpasswd" class="btn btn-primary">Save changes</a>';
+    echo Form::close();
+
     echo '</div>';
 }
 
 ?>
+
+<div id="enterpasswd" class="modal hide fade in" style="display: none; ">  
+<div class="modal-header">  
+<a class="close" data-dismiss="modal">×</a>  
+<h3>Confirm changes</h3>  
+</div>  
+<div class="modal-body">
+<p>Please enter current password</p>
+<p><input type=password id="confirmoldpwd"/></p>
+</div>
+<div class="modal-footer">  
+<a href="#" class="btn btn-success btn-primary" id="confirmpwd">Change info</a>  
+<a href="#" class="btn btn-cancel" data-dismiss="modal">No</a>  
+</div>  
+</div> 
+
+<script>
+$(function() {
+    $("#equalpwds").hide();
+
+    $('#dp_birth').datepicker({
+        format: 'dd-mm-yyyy'
+    }).data('datepicker');
+
+    var working = false;
+
+    /* Listening for the submit event of the form: */
+
+    $('#confirmpwd').click(function(e) {
+        e.preventDefault();
+        $("#enterpasswd").modal('hide');
+
+        if(working)
+            return;
+
+        // check for passwords
+        if($('#newpassword').val() != '' && $('#newpassword').val() != $('#confirmpassword').val()) {
+            $("#equalpwds").show();
+            return;
+        }
+        else {
+            $("#equalpwds").hide();
+        }
+
+		$("input[name='oldpassword']").val($("#enterpasswd #confirmoldpwd").val());
+		$("#enterpasswd #confirmoldpwd").val(null);
+
+	    working = true;
+	    $('#submit').val('Working...');
+
+        $.post('{{ URL::to_action("account@update") }}', $('#changeUserDataForm').serialize(), function(msg) {
+            working = false;
+            $('#submit').val('Save changes');
+
+console.log(msg);
+
+            if(msg.status == 1)
+            {
+            }
+            else
+            {
+            }
+        }, 'json');
+    });
+})
+
+</script>
+
 @endsection
 
 @section('moderation')
 <?php
-if(!Auth::guest() && User::find(Auth::user()->id)->has_role('admin'))
+if(!Auth::guest() && Auth::user()->has_role('admin'))
 {
     echo HTML::link_to_action('admin@index', 'Admin panel');
 }

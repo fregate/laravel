@@ -10,10 +10,89 @@ class Account_Controller extends Base_Controller
     {
         return Redirect::to('/');
     }
+
     public function get_show($uid)
     {
         $user = User::find($uid);
         return View::make('pages.userprofile')->with('user', $user);
+    }
+
+    public function post_update() // ajax
+    {
+        $u = User::find(Input::get('user_id'));
+        if($u == null)
+        {
+            return json_encode(array(
+                'status' => 0,
+                'message' => "no user " . Input::get('user_id') . " exists"
+            ));
+        }
+
+        if(Auth::guest() || Auth::user()->id != $u->id)
+        {
+            return json_encode(array(
+                'status' => 0,
+                'message' => 'no rights to perform this action',
+                'input' => Input::all()
+            ));
+        }
+
+        if(!Hash::check(Input::get('oldpassword'), $u->password))
+        {
+            return json_encode(array(
+                'status' => 0,
+                'message' => 'wrong current password',
+                'input' => Input::all()
+            ));
+        }
+
+        if($u->id != 1)
+        {
+            $new_account = array(
+                'email' => Input::get('newemail'),
+                'password' => Input::get('newpassword'),
+                'birthday' => Input::get('birthday'),
+                'show_year' => Input::get('show_birth_year') == '1',
+                'nickname' => Input::get('newname')
+            );
+
+            $rules = array(
+                'nickname'  => 'required|min:3|max:128',
+                'email'  => 'required|min:3|max:64'
+            );
+
+            $v = Validator::make($new_account, $rules);
+            if($v->fails())
+            {
+                return json_encode(array(
+                    'status' => 0,
+                    'message' => 'input errors',
+                    'input' => Input::all()
+                ));
+            }
+
+            $uemail = User::where('email', '=', $new_account['email'])->where('id', '!=', $u->id)->first();
+            if($uemail != null)
+            {
+                return json_encode(array(
+                    'status' => 0,
+                    'message' => 'email already used by another user',
+                    'input' => Input::all()
+                ));
+            }
+
+            $u->email = $new_account['email'];
+            $u->nickname = $new_account['nickname'];
+            $u->birthday = DateTime::createFromFormat("d-m-Y|", $new_account['birthday']);
+            $u->show_year = $new_account['show_year'];
+        }
+
+        if($new_account['password'] != '')
+            $u->password = Hash::make($new_account['password']);
+
+        $u->save();
+
+	    return json_encode(array( 'status' => 1, 'message' => 'information updated successfully' ));
     }
 
     public function get_login()
@@ -46,10 +125,12 @@ class Account_Controller extends Base_Controller
                         ->with_input();
             }
 
-            if(Input::get('rememberme'))
+            Log::write('info', 'input rememberme ' . Input::get('rememberme'));
+            if(Input::get('rememberme') == '1')
             {
-                Cookie::put(Aux::get_cookie_name_autologin(), Auth::user()->id, 43200); // 30 days
-                Cookie::put(Aux::get_cookie_name_autologin_secret(), Aux::get_user_cookie_secret(Auth::user()), 43200); // 30 days
+                Log::write('info', 'rememberme cookies put');
+                Cookie::put(AuxFunc::get_cookie_name_autologin(), Auth::user()->id, 43200); // 30 days
+                Cookie::put(AuxFunc::get_cookie_name_autologin_secret(), AuxFunc::get_user_cookie_secret(Auth::user()), 43200); // 30 days
             }
 
             return Redirect::to('/');
@@ -64,8 +145,9 @@ class Account_Controller extends Base_Controller
 
     public function get_logout()
     {
-	Cookie::forget(Aux::get_cookie_name_autologin());
-	Cookie::forget(Aux::get_cookie_name_autologin_secret());
+        Log::write('info', 'autologin cookies forget');
+    	Cookie::forget(AuxFunc::get_cookie_name_autologin());
+    	Cookie::forget(AuxFunc::get_cookie_name_autologin_secret());
 
         Auth::logout();
         return Redirect::to('/');
@@ -80,7 +162,7 @@ class Account_Controller extends Base_Controller
     {
         $new_account = array(
             'nickname' => Input::get('firstname') . " " . Input::get('lastname'),
-            'password' => Hash::make(Input::get('password')),
+            'password' => Input::get('password'),
             'recaptcha' => Input::get('recaptcha_response_field')
         );
 
@@ -113,6 +195,8 @@ class Account_Controller extends Base_Controller
         }
 
         unset($new_account['recaptcha']);
+
+        $new_account['password'] = Hash::make(Input::get('password'));
 
         $testemail = User::where('email', '=', $new_account['email'])->first();
         if($testemail != null) {
@@ -149,6 +233,58 @@ class Account_Controller extends Base_Controller
         return Redirect::to_action('account@show', array('uid' => $account->id));
     }
 
+    public function get_remindpass()
+    {
+        return View::make('pages.remindpass');
+    }
+
+    public function post_remindpass()
+    {
+        $find_account = array(
+            'email' => Input::get('email'),
+            'recaptcha' => Input::get('recaptcha_response_field')
+        );
+
+        $email_rule = array(
+            'email'  => 'required|min:3|max:64'
+        );
+
+        // make the validator
+        $v = Validator::make($find_account, $email_rule);
+        if ( $v->fails() )
+        {
+            // redirect back to the form with
+            // errors, input and our currently
+            // logged in user
+            return Redirect::to_action('account@remindpass')
+                ->with('input_errors', true)
+                ->with_input();
+        }
+
+        $captcha_rule = array(
+            'recaptcha' => 'recaptcha:6LePcOASAAAAAIqDe2sjBrp1RmAQJL70xLJn7GNs|required'
+        );
+
+        $v = Validator::make($find_account, $captcha_rule);
+        if ( $v->fails() )
+        {
+            return Redirect::to_action('account@remindpass')
+                ->with('captcha_errors', true)
+                ->with_input();
+        }
+
+        $u = User::where('email', '=', $find_account['email'])->first();
+        if($u == null)
+        {
+            return Redirect::to_action('account@remindpass')
+                ->with('email_errors', true)
+                ->with_input();
+        }
+
+        return Redirect::to_action('account@remindpass')
+            ->with('everything_ok', true);
+    }
+
     public function get_getroles()
     {
         // if(Auth::guest() || !Auth::user()->has_role('admin'))
@@ -167,9 +303,9 @@ class Account_Controller extends Base_Controller
         }
 
         return json_encode(array(
-                'status' => 1,
-                'tags' => $rns
-            ));
+            'status' => 1,
+            'tags' => $rns
+        ));
     }
 
     public function get_checkrole($rolename)

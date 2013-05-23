@@ -36,7 +36,7 @@
 <p>It will remove all related commentaries too</p>
 </div>
 <div class="modal-footer">  
-<a href="' . URL::to_route("post", array("delete", $post->id)) . '" class="btn btn-success">Yes, delete</a>  
+<a href="' . URL::to_route("post", array("delete", $post->id)) . '" class="btn btn-success">Yes, delete</a>
 <a href="#" class="btn" data-dismiss="modal">No</a>  
 </div>  
 </div>  
@@ -111,7 +111,7 @@ $(document).ready(function(){
 //        $('span.error').remove();
 
         /* Sending the form fileds to submit.php: */
-        $.post('{{ URL::to_route("comm", array("new")) }}',$(this).serialize(),function(msg){
+        $.post('{{ URL::to_route("comm", array("new")) }}', $(this).serialize(), function(msg) {
 
             working = false;
             $('#submit').val('Add new pin');
