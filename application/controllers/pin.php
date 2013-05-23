@@ -35,8 +35,8 @@ class Pin_Controller extends Base_Controller
         {
             $new_pin['showtime_start'] = DateTime::createFromFormat("d-m-Y|", $new_pin['showtime_start']);
             $new_pin['showtime_end'] = DateTime::createFromFormat("d-m-Y|", $new_pin['showtime_end']);
-           $pin = new Pin($new_pin);
-           $pin->save();
+            $pin = new Pin($new_pin);
+            $pin->save();
 
             echo json_encode(array(
                 'status' => 1,
