@@ -87,8 +87,9 @@ class Account_Controller extends Base_Controller
             $u->show_year = $new_account['show_year'];
         }
 
-        if($new_account['password'] != '')
+        if($new_account['password'] != '') {
             $u->password = Hash::make($new_account['password']);
+        }
 
         $u->save();
 
@@ -103,8 +104,9 @@ class Account_Controller extends Base_Controller
     public function post_login()
     {
         $userdata = array(
-            'username' => Input::get('email'),
+            'username' => strtolower(Input::get('email')),
             'password' => Input::get('password'),
+	    'remember' => Input::get('rememberme')
         );
 
         if ( Auth::attempt($userdata) )
@@ -125,15 +127,7 @@ class Account_Controller extends Base_Controller
                         ->with_input();
             }
 
-            Log::write('info', 'input rememberme ' . Input::get('rememberme'));
-            if(Input::get('rememberme') == '1')
-            {
-                Log::write('info', 'rememberme cookies put');
-                Cookie::put(AuxFunc::get_cookie_name_autologin(), Auth::user()->id, 43200); // 30 days
-                Cookie::put(AuxFunc::get_cookie_name_autologin_secret(), AuxFunc::get_user_cookie_secret(Auth::user()), 43200); // 30 days
-            }
-
-            return Redirect::to('/');
+            return Redirect::to('/')->with('rememberuser', Input::get('rememberme') == '1');
         }
         else
         {
@@ -287,15 +281,6 @@ class Account_Controller extends Base_Controller
 
     public function get_getroles()
     {
-        // if(Auth::guest() || !Auth::user()->has_role('admin'))
-        // {
-        //     return json_encode(array(
-        //         'status' => 0
-        //     ));
-        // }
-
-        // $rns = array();
-
         $roles = Role::all();
 
         foreach ($roles as $r) {

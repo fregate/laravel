@@ -39,20 +39,7 @@ Route::controller('pin');
 */
 
 Route::get('/', function() {
-// check for login cookies
-   $autologin = Cookie::get(AuxFunc::get_cookie_name_autologin());
-   Log::write('info', AuxFunc::get_cookie_name_autologin() . " " . $autologin);
-   if($autologin != 0)
-   {
-       $alsecret = Cookie::get(AuxFunc::get_cookie_name_autologin_secret());
-       $u = User::find($autologin);
-       $usecret = AuxFunc::get_user_cookie_secret($u);
-       if($usecret == $alsecret)
-          Auth::login($u->id);
-   }
-
     $posts = Post::order_by('updated_at', 'desc')->get();
-//    $posts = Post::with('author')->all();
     return View::make('pages.home')
         ->with('posts', $posts);
 });
