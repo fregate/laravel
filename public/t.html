@@ -7,12 +7,58 @@
 
     <title>Сайт Клуба Квант</title>
 
-<link rel="stylesheet" href="css/nivo-slider.css" type="text/css" media="screen" />
-<link rel="stylesheet" href="css/nivo/cq/cq.css" type="text/css" media="screen" />
-
 	<link rel="stylesheet" href="css/960_12_col.css" />
 	<link href='http://fonts.googleapis.com/css?family=PT+Sans|PT+Sans+Narrow|Open+Sans+Condensed:700&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
 	<script src="js/jquery.min.js"></script>
+
+<!-- pinned news extension -->
+	<link rel="stylesheet" href="css/nivo-slider.css" type="text/css" media="screen" />
+	<link rel="stylesheet" href="css/nivo/cq/cq.css" type="text/css" media="screen" />
+	<script src="js/jquery.nivo.slider.js" type="text/javascript"></script>
+<!-- end pinned news extension -->
+
+<!-- editor extension -->
+	<link rel="stylesheet" type="text/css" href="css/markitup/skin/style.css">
+	<link rel="stylesheet" type="text/css" href="css/markitup/style.css">
+	<script type="text/javascript" src="js/jquery.markitup.min.js"></script>
+
+	<script type="text/javascript">
+	var comm_editor_settings = {
+		onTab:    		{keepDefault:false, replaceWith:'    '},
+		markupSet:  [ 	
+			{name:'Bold', className: 'Bold', key:'B', openWith:'(!(<b>|!|<strong>)!)', closeWith:'(!(</b>|!|</strong>)!)' },
+			{name:'Emphasis', className: 'Emphasis', key:'I', openWith:'(!(<i>|!|<em>)!)', closeWith:'(!(</i>|!|</em>)!)'  },
+	//		{name:'Stroke through', className: 'Stroke', key:'S', openWith:'<del>', closeWith:'</del>' },
+			{name:'Underline', className: 'Underline', key:'U', openWith:'<u>', closeWith:'</u>' },
+			{separator:'---------------' },
+			{name:'Spoiler', className: 'Spoiler', openWith:'<spoiler>', closeWith:'</spoiler>' },
+			{name:'Irony', className: 'Irony', openWith:'<irony>', closeWith:'</irony>' },
+			{separator:'---------------' },
+			{name:'Picture', className: 'Image', key:'P', replaceWith:'<img src="[![Source:!:http://]!]" alt="[![Alternative text]!]" />' },
+			{name:'Link', className: 'Link', key:'L', openWith:'<a href="[![Link:!:http://]!]"(!( title="[![Title]!]")!)>', closeWith:'</a>', placeHolder:'Your text to link...' },
+			{name:'Video', className: 'Video', replaceWith:'<video src="[![Youtube Link:!:http://]!]" />' }
+	//		{name:'Audio', className: 'Audio', openWith:'<audio>', closeWith:'</audio>' }
+		]
+	};
+
+	var post_editor_settings = {
+		onTab:    		{keepDefault:false, replaceWith:'    '},
+		markupSet:  [ 	
+			{name:'Bold', className: 'Bold', key:'B', openWith:'(!(<b>|!|<strong>)!)', closeWith:'(!(</b>|!|</strong>)!)' },
+			{name:'Emphasis', className: 'Emphasis', key:'I', openWith:'(!(<i>|!|<em>)!)', closeWith:'(!(</i>|!|</em>)!)'  },
+	//		{name:'Stroke through', className: 'Stroke', key:'S', openWith:'<del>', closeWith:'</del>' },
+			{name:'Underline', className: 'Underline', key:'U', openWith:'<u>', closeWith:'</u>' },
+			{separator:'---------------' },
+			{name:'Spoiler', className: 'Spoiler', openWith:'<spoiler>', closeWith:'</spoiler>' },
+			{separator:'---------------' },
+			{name:'Picture', className: 'Image', key:'P', replaceWith:'<img src="[![Source:!:http://]!]" alt="[![Alternative text]!]" />' },
+			{name:'Link', className: 'Link', key:'L', openWith:'<a href="[![Link:!:http://]!]"(!( title="[![Title]!]")!)>', closeWith:'</a>', placeHolder:'Your text to link...' },
+			{name:'Video', className: 'Video', replaceWith:'<video src="[![Youtube Link:!:http://]!]" />' }
+	//		{name:'Audio', className: 'Audio', openWith:'<audio>', closeWith:'</audio>' }
+		]
+	};
+	</script>
+<!-- editor extension -->
 
     <style type="text/css">
 
@@ -61,6 +107,10 @@
 		margin: 5px 0px;
 	}
 
+    .newsblock {
+    	margin-top: 5px;
+    }
+
 	.newsblock :last-child {
 		border: none;
 	}
@@ -92,10 +142,6 @@
     	height: 1px;
     	margin-top: 1px;
     	background: #ff9f40;
-    }
-
-    .newsblock {
-    	margin-top: 5px;
     }
 
     .content {
@@ -170,6 +216,8 @@
 	<script>
 		$(document).ready(function(){
 			$('.inlinebg').inlinebackgrounds();
+
+			$('#commeditor').markItUp(comm_editor_settings);
 		});
 
 		(function($){
@@ -196,8 +244,6 @@
 <div class="container_12">
 	<div class='grid_2 topheader'><div class='cqlogotop'></div></div>
 	<div class='grid_8 topheader'><div class='pinnednews'>
-
-<script src="js/jquery.nivo.slider.js" type="text/javascript"></script>
 
 <div class='imagelayer'>
         <div class="slider-wrapper theme-cq">
@@ -266,6 +312,11 @@
 Берлускони обвиняют в том, что в период с февраля по май 2010 года он имел сексуальные контакты с эль-Маруг, более известной под сценическим псевдонимом Руби, которой на тот момент не было 18 лет. Также следствие подозревает бывшего премьера в превышении полномочий: он, согласно материалам расследования, воспользовался своим положением, чтобы вызволить эль-Маруг из-под стражи по не связанному с делом Берлускони правонарушению.</p>
 					<div class='posttimestamp'>от <u>xyz</u>, 12.05.2013 в 20:13 | <div class='commanchor'><span class='commcount'>0</span></div></div>
 				</div>
+
+				<div class='postentry'>
+					<textarea id="commeditor"></textarea>
+				</div>
+
 			</div>
 		</div>
 	</div>
