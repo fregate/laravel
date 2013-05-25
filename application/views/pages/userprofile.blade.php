@@ -2,13 +2,17 @@
 
 @section('morelinks')
 <link href="css/datepicker.css" rel="stylesheet">
-<script src="js/bootstrap-datepicker.js"></script>
+<script type="text/javascript" src="js/bootstrap-datepicker.js"></script>
+@endsection
+
+@section('pinned')
+    <div class="imagelayer"><img src="img/x.png"></div>
+    <div class="masklayer" style="top: -215px;"><img src="img/m2.png">
+    <div class="postcaption">{{ $user->nickname }} (ID #{{ $user->id }})</div></div>
 @endsection
 
 @section('content')
     <div class="profile">
-        <h1>{{ $user->nickname }}</h1>
-        <h2>ID#: {{ $user->id }}</h2>
         <?php 
         $dc = new DateTime($user->birthday);
         if($dc->getTimestamp() != 0) {
@@ -17,12 +21,12 @@
                 echo $dc->format('d-m-Y');
             else
                 echo $dc->format('d-m');
-        echo '</h3>';
+            echo '</h3>';
        }
 
         $dc = new DateTime($user->created_at);
         if($dc->getTimestamp() != 0)
-           echo '<p>Since: ' . $dc->format('d-m-Y') . '</p>';
+           echo '<p>Registered since: ' . $dc->format('d-m-Y') . '</p>';
         else
             echo '<p>Always here</p>';
         ?>
@@ -83,12 +87,12 @@
     }
 
     if($thisuser && $user->id != 1) // add new id
-        { 
-            echo '<tr ><td ><script src="//ulogin.ru/js/ulogin.js"></script>
-                  <div id="uLogin" data-ulogin="display=panel;fields=first_name,last_name;providers=facebook,vkontakte,twitter,google,odnoklassniki,mailru,yandex;hidden=openid;redirect_uri='
-                  . rawurlencode(URL::base() . '/newidn/' . $user->id) .'"></div>
-                  </td><td colspan="4">Connect this account with other networks</td></tr>';
-        }
+    { 
+        echo '<tr ><td ><script src="//ulogin.ru/js/ulogin.js"></script>
+              <div id="uLogin" data-ulogin="display=panel;fields=first_name,last_name;providers=facebook,vkontakte,twitter,google,odnoklassniki,mailru,yandex;hidden=openid;redirect_uri='
+              . rawurlencode(URL::base() . '/newidn/' . $user->id) .'"></div>
+              </td><td colspan="4">Connect this account with other social network accounts</td></tr>';
+    }
 
 echo '</tbody></table>';
 echo ' </div>';
@@ -99,19 +103,19 @@ if($thisuser) {
         echo Form::hidden('user_id', $user->id);
         echo Form::hidden('oldpassword');
         if($user->id != 1) { 
-            echo '<p>' . Form::label('newname', 'Change name') . '</p>';
-            echo '<p>' . Form::text('newname', Input::old('newname', $user->nickname));
+            echo '<p>' . Form::label('newname', 'Change name');
+            echo Form::text('newname', Input::old('newname', $user->nickname)) . '</p>';
 
-            echo '<p>' . Form::label('newemail', 'Change email') . '</p>';
-            echo '<p>' . Form::email('newemail', Input::old('newemail', $user->email));
+            echo '<p>' . Form::label('newemail', 'Change email');
+            echo Form::email('newemail', Input::old('newemail', $user->email)) . '</p>';
         }
 
-        echo '<p>' . Form::label('newpassword', 'Enter new password') . '</p>';
+        echo '<p>' . Form::label('newpassword', 'Enter new password');
         echo '<p>' . Form::password('newpassword') . '<span class="alert alert-error" id="equalpwds">passwords are not match!</span></p>';
 
 // remove confirmation password from FORM 
-        echo '<p>' . Form::label('confirmpassword', 'Confirm new password') . '</p>';
-        echo '<p>' . Form::password('confirmpassword') . '</p>';
+        echo '<p>' . Form::label('confirmpassword', 'Confirm new password');
+        echo Form::password('confirmpassword') . '</p>';
 
         $dc = new DateTime($user->birthday);
         if($dc->getTimestamp() == 0)
@@ -139,7 +143,7 @@ if($thisuser) {
 
 ?>
 
-<div id="enterpasswd" class="modal hide fade in" style="display: none; ">  
+<div id="enterpasswd" class="modal hide fade in prompts" style="display: none; ">  
 <div class="modal-header">  
 <a class="close" data-dismiss="modal">×</a>  
 <h3>Confirm changes</h3>  

@@ -1,5 +1,12 @@
 @layout('templates.main')
+
+@section('pinned')
+    <div class="imagelayer"><img src="img/x.png"></div>
+    <div class="masklayer" style="top: -215px;"><img src="img/m2.png"></div>
+@endsection
+
 @section('content')
+<br>
     {{ Form::open('signup') }}
         <!-- check for login errors flash var -->
         @if (Session::has('input_errors'))
@@ -16,12 +23,15 @@
         <p>{{ Form::label('username', 'Username') }}</p>
         <p>{{ Form::text('username', Input::old('username')) }}</p> -->
         <!-- password field -->
+        @if(Input::old('social', 0) != 0)
         <p>
             Если вы хотите часто общаться на этом сайте, рекомендуем зарегистрироваться,
             набрав ваш е-мейл и пароль, при этом, вы сможете добавить еще различных акканутов,
             через какие можно вас будет идентифицировать. Либо ничего не вводить, но мы вас все равно
             запомним и будем стараться подставлять ваши данные, когда нужно и куда нужно.
         </p>
+        @endif
+        
         <p>{{ Form::label('email', 'Email') }}</p>
         <p>{{ Form::email('email', Input::old('email')) }}</p>
 
@@ -31,7 +41,6 @@
 <?php
 echo Recaptcha\Recaptcha::recaptcha_get_html('6LePcOASAAAAAMRzVZ5ZoE-iNXpfRmRlwxdosLdG');
 ?>
-
 
         {{ Form::hidden('social', Input::old('social', 'false')) }}
         {{ Form::hidden('network', Input::old('network', 'club.quant')) }}

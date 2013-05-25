@@ -19,6 +19,14 @@
 	background-image:url(images/underline.png);
 }
 
+.markItUp .markItUpButtonSup a {
+	background-image:url(images/sup.png);
+}
+
+.markItUp .markItUpButtonSub a {
+	background-image:url(images/sub.png);
+}
+
 /* ----------------------- */
 
 .markItUp .markItUpButtonIrony a {

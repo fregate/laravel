@@ -78,15 +78,14 @@ Supports Thumbs: true
 
 .theme-cq .nivo-caption {
 	opacity: 1;
-    margin-bottom: 10px;
+    margin-bottom: 0.85em;
 	background-color: rgba(255, 255, 255, .9);
 	color: rgba(255, 159, 64, 1);
-		font-family: 'Open Sans Condensed', sans-serif;
-		font-style: bold;
-		font-weight: 700;
-		font-size: 1.85em;
-		letter-spacing: 0.07em;
-		z-index: 101;
+	font-family: 'Open Sans Condensed', sans-serif;
+	font-weight: 700;
+	font-size: 1.85em;
+	letter-spacing: 0.07em;
+	z-index: 101;
 }
 
 .theme-cq .nivo-caption a {

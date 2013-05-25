@@ -1,6 +1,12 @@
 @layout('templates.main')
 
+@section('pinned')
+    <div class="imagelayer"><img src="img/x.png"></div>
+    <div class="masklayer" style="top: -215px;"><img src="img/m2.png"></div>
+@endsection
+
 @section('content')
+<br>
 @if (!Session::has('everything_ok'))
     {{ Form::open('remindpass') }}
 
@@ -8,8 +14,7 @@
             <p class="error">Empty email</p>
         @endif
 
-        <p>{{ Form::label('email', 'Enter email') }}</p>
-        <p>{{ Form::email('email', Input::old('email')) }}</p>
+        <p>{{ Form::label('email', 'Enter your email') }} {{ Form::email('email', Input::old('email')) }}</p>
 
         @if (Session::has('captcha_errors'))
             <p class="error">Mistyped captcha</p>

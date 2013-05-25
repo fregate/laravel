@@ -2,7 +2,6 @@
 
 @section('morelinks')
 <link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/flick/jquery-ui.css">
-<link rel="stylesheet" type="text/css" href="css/jquery-ui.css">
 <link href="css/jquery.tagit.css" rel="stylesheet" type="text/css">
 <link href="css/tagit.ui-zendesk.css" rel="stylesheet" type="text/css">
 
@@ -13,7 +12,6 @@
 
 @section('manage')
 <br><br>
-<div class='usersmanage' >
 
 <table class="table table-striped table-bordered" id="usertable">  
 <thead>  

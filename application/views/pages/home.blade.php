@@ -1,82 +1,106 @@
 @layout('templates.main')
 
 @section('morelinks')
-<style>
-.pinned {
-    width: 800px;
-    z-index: 2;
-    position: relative;
-}
+    <link rel="stylesheet" href="css/nivo-slider.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="css/nivo/cq/cq.css" type="text/css" media="screen" />
+    <script src="js/jquery.nivo.slider.js" type="text/javascript"></script>
+    <script>
+        $(document).ready(function(){
+            $('.inlinebg').inlinebackgrounds();
+        });
 
-.postheader {
-  width:500px;
-  height: 300px;
-}
+        (function($){
+            $.fn.inlinebackgrounds = function() {
+                $.each(this, function(i,t) {
+                    var split = $(t).html().split('<br>');
+                    var output = '';
+                    $.each(split, function(i,o){
+                        output += '<span>'+o+'</span>';
+                        if (i < (split.length - 1)) {
+                            output += '<br>';
+                        }
+                    });
+                    $(t).html(output);
+                });
+            }
+        })(jQuery);
+    </script>
+@endsection
 
-</style>
+@section('pinned')
+<?php
+$pins = Pin::where('showtime_start', '<', date('c'))
+         ->where('showtime_end', '>', date('c'))->get();
+
+if(count($pins) != 0) {
+
+    echo '<div class="imagelayer">
+            <div class="slider-wrapper theme-cq">
+                <div id="slider" class="nivoSlider">';
+
+    $linkdivs = '';
+    foreach ($pins as $pinkey) {
+        $linkuq = uniqid();
+        if($pinkey->post()->first()->img)
+            echo '<img src="' . AuxImage::get_uri($pinkey->post()->first()->img) 
+                . '" title="#' . $linkuq . '"/>';
+        else
+            echo '<img src="img/x.png" title="#' . $linkuq . '"/>';
+
+        $linkdivs .= '<div class="nivo-caption" id="' . $linkuq . '"><a href="' 
+            . URL::to_action("post@show", array("postid" => $pinkey->post_id)) 
+            . '">' . $pinkey->post()->first()->title . '</a></div>';
+    }
+
+    echo '</div></div>
+          <script type="text/javascript">
+            $(window).load(function() {
+                $("#slider").nivoSlider({
+                    effect: "random",
+                    directionNav: false,
+                    controlNav: true
+                });
+            });
+            </script>'
+            . $linkdivs .
+    '</div>';
+    echo '<div class="masklayer"><img src="img/m2.png"></div>';
+}
+else {
+    echo '<div class="imagelayer"><img src="img/x.png"></div>';
+    echo '<div class="masklayer" style="top: -215px;"><img src="img/m2.png"></div>';
+}
+?>
 @endsection
 
 @section('content')
-@if (Pin::first() != null)
-  <?php
-    $pins = Pin::where('showtime_start', '<', date('c'))
-             ->where('showtime_end', '>', date('c'))->get();
-//    $pins = Pin::all();
+    <div class='newsblock'>
+<?php
+    foreach ($posts as $post) {
+        echo "<div class='postentry'>";
 
-    if(count($pins) != 0) {
+        if ( $post->img ) // post with image or not
+            echo "<div class='postimage' style='background: url(\"" . AuxImage::get_uri($post->img) . "\")'><h3 class='inlinebg'>";
+        else
+            echo "<h3>";
 
-   echo '<script src="js/jquery.nivo.slider.js" type="text/javascript"></script>
-   <div class="pinned">
-        <div class="slider-wrapper theme-light">
-            <div class="ribbon"></div>
-    <div id="slider" class="nivoSlider">';
+        echo "<a href='" . URL::to_action('post@show', array($post->id)) . "'>" . $post->title . "</a>";
 
-    foreach ($pins as $pinkey) {
-//        var_dump($pinkey);
-//        $post = $pinkey->post()->first();
-        echo '<a href="' . URL::to_action('post@show', array('postid' => $pinkey->post_id)) 
-            . '"><img src="' . AuxImage::get_uri($pinkey->post()->first()->img) 
-            . '" alt="" title="' . $pinkey->post()->first()->title . '"/></a>';
-    }
-        // <a href="http://dev7studios.com"><img src="img/slide2.jpg" alt="" title="#htmlcaption" /></a>
-        // <img src="img/slide3.jpg" alt="" title="This is an example of a caption" />
-        // <img src="img/slide4.jpg" alt="" />
-// <div id="htmlcaption" class="nivo-html-caption">
-//     <strong>This</strong> is an example of a <em>HTML</em> caption with <a href="#">a link</a>.
-// </div>
-echo '    </div>
-</div>
-
-<script type="text/javascript">
-$(window).load(function() {
-    $("#slider").nivoSlider({
-    	effect: "random",
-    	directionNav: false,
-    	controlNav: true
-    });
-});
-</script>
-
-
-    </div>';
+        if ( $post->img ) { // close post with|without image
+            echo "</h3></div>";
         }
-    ?>
-@endif
+        else {
+            echo "</h3>";
+        }
 
-    @foreach ($posts as $post)
-        <div class="post">
-<a href='{{ URL::to_action('post@show', array($post->id)) }}'>
-            <div 
-                <?php
-                if ( $post->img )
-                {
-                    echo "class='postheader' style='background: url(" . AuxImage::get_uri($post->img) . ")'";
-                }
-                ?>
- >{{ $post->title }}</div></a></div>
-            <p>{{ substr($post->body,0, 120).' [..]' }}</p>
-            <h5>by {{ $post->author()->first()->nickname }}</h5>
-            <p>{{ HTML::link_to_action('post@show', 'Read more &rarr;', array('postid' => $post->id)) }}</p>
-        </div>
-    @endforeach
+        echo "<p>" . $post->body . "</p>"; // post body 
+
+        echo "<div class='posttimestamp'>от " . HTML::link_to_action('account@show', $post->author()->first()->nickname, array('uid' => $post->author()->first()->id)) . ", " 
+            . AuxFunc::formatdate($post->created_at) . " в " . AuxFunc::formattime($post->created_at) 
+            . " | <a href=" . URL::to_action('post@show', array($post->id)) . "><div class='commanchor'><span class='commcount'>" . $post->comments()->count() . "</span></div></a></div>";
+
+        echo "</div>"; // postentry
+    }
+?>
+    </div>
 @endsection

@@ -1,0 +1,209 @@
+/*    @font-family {
+		font-family: Sosa;
+		src: url("css/sosa.ttf");
+		font-weight:400;
+    }*/
+
+body {
+    font-family:'PT Sans', sans-serif;
+	font-size: 0.85em;
+	text-transform: none;
+	text-decoration: none;
+	line-height: 1.4;
+	margin: 0px;
+}
+
+h3 > a, h3 > span > a {
+	color: black;
+	text-decoration: none;
+}
+
+h3 > a:hover, h3 > span > a:hover {
+	text-decoration: underline ;
+}
+
+h3 > a:visited, h3 > span > a:visited {
+	color: black;
+	text-decoration: none;
+}
+
+h3 {
+	margin: 0px;
+//	margin-bottom: -0.25em;
+	padding: 0px;
+	font-family: 'Open Sans Condensed', sans-serif;
+	font-style: bold;
+	font-weight: 700;
+	font-size: 1.85em;
+	letter-spacing: 0.07em;
+	text-transform: uppercase;
+}
+
+.posttimestamp {
+	font-style: normal;
+	font-weight: 300;
+	font-size: 0.8em;
+	color: #999;
+	text-align: right;
+}
+
+.posttimestamp > a {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.postentry {
+	border-bottom: 1px solid #ff9f40;
+	margin: 5px 0px;
+//	padding: 0px 0px 5px 0px;
+}
+
+.postentry > p {
+	margin: 5px 0px;
+}
+
+.commentry {
+//	border-bottom: 1px solid #ffd79d;
+	margin: 5px 0px;
+	padding-bottom: 5px;
+}
+
+.newsblock {
+	margin-top: 5px;
+}
+
+.newsblock :last-child {
+	border: none;
+}
+
+.topheader {
+	height: 215px;
+}
+
+.cqlogotop {
+	background: url('../img/cqlogotop.png') no-repeat right bottom;
+	height: 100%;
+}
+
+.pinnednews {
+	height: 100%;
+}
+
+.usermenu {
+	height: 100%;
+}
+
+.usermenu > a {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.usermenu > a:hover {
+	text-decoration: none;
+}
+
+.decoration1 {
+	height: 3px;
+	margin: 2px 0;
+	background: #ff9f40;
+}
+
+.decoration2 {
+	height: 1px;
+	margin-top: 1px;
+	background: #ff9f40;
+}
+
+.content {
+	width: 605px;
+	height: 100%;
+}
+
+.footer {
+	background: #ff9f40;
+}
+
+.inlinebg {
+	color: #000;
+	padding-top: 4px;
+	padding-left: 3px;
+}
+
+.inlinebg span {
+	background: #FFF;
+	padding: 0px 5px;
+}
+
+.postimage {
+//	background: url('../img/t.png');
+	height: 120px;
+	margin-top: 11px;
+}
+
+.imagelayer {
+	position: relative;
+	margin:0;
+	padding: 0;
+}
+
+.masklayer {
+	position: relative;
+	top: -24px;
+	z-index: 100;
+	margin:0;
+	padding: 0;
+}
+
+.usermenu {
+	font-family: 'PT Sans Narrow', sans-serif;
+	font-size: 1em;
+	color: #999;
+	margin-top: 5px;
+}
+
+div#uLogin {
+	margin-top: 5px;
+}
+
+.commanchor {
+	display: inline-block;
+	background: url('../img/commanchor.png') no-repeat;
+	background-position: 0px 0px;
+	vertical-align: middle;
+	height: 26px;
+	padding-top: 9px;
+	margin-left: 2px;
+}
+
+.commcount {
+	background: #ff9f40;
+	color: white;
+	padding: 3px 5px;
+}
+
+.postcaption {
+	position:absolute;
+	left:0px;
+	bottom:0px;
+	opacity: 1;
+	width:100%;
+	background-color: rgba(255, 255, 255, .9);
+	color: rgba(255, 159, 64, 1);
+	font-family: 'Open Sans Condensed', sans-serif;
+	font-weight: 700;
+	font-size: 1.85em;
+	letter-spacing: 0.07em;
+	z-index: 101;
+    margin-bottom: 0.85em;
+	padding: 5px 10px;
+}
+
+.red {
+	color: red ! important;
+}
+
+.prompts {
+	text-align:left;
+	color: #999;
+	font-size: 15px ! important;
+}

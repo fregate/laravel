@@ -30,6 +30,8 @@
 			{name:'Emphasis', className: 'Emphasis', key:'I', openWith:'(!(<i>|!|<em>)!)', closeWith:'(!(</i>|!|</em>)!)'  },
 	//		{name:'Stroke through', className: 'Stroke', key:'S', openWith:'<del>', closeWith:'</del>' },
 			{name:'Underline', className: 'Underline', key:'U', openWith:'<u>', closeWith:'</u>' },
+			{name:'Superscript', className: 'Sup', openWith:'<sup>', closeWith:'</sup>' },
+			{name:'Subscript', className: 'Sub', openWith:'<sub>', closeWith:'</sub>' },
 			{separator:'---------------' },
 			{name:'Spoiler', className: 'Spoiler', openWith:'<spoiler>', closeWith:'</spoiler>' },
 			{name:'Irony', className: 'Irony', openWith:'<irony>', closeWith:'</irony>' },
@@ -245,34 +247,31 @@
 	<div class='grid_2 topheader'><div class='cqlogotop'></div></div>
 	<div class='grid_8 topheader'><div class='pinnednews'>
 
-<div class='imagelayer'>
-        <div class="slider-wrapper theme-cq">
-    	    <div class="ribbon"></div>
-	    	<div id="slider" class="nivoSlider">
- 		<img src="img/a.jpg" title='#AAAAA'>
- 		<img src="img/b.jpg" title='BBBBB'>
- 		<img src="img/c.jpg" title='CCCCC'>
- 		<img src="img/d.jpg" title='DDDDD'>
- 		<img src="img/e.jpg" title='EEEEE'>
-			</div>
+		<div class='imagelayer'>
+		        <div class="slider-wrapper theme-cq">
+			    	<div id="slider" class="nivoSlider">
+		 		<img src="img/a.jpg" title='#AAAAA'>
+		 		<img src="img/b.jpg" title='BBBBB'>
+		 		<img src="img/c.jpg" title='CCCCC'>
+		 		<img src="img/d.jpg" title='DDDDD'>
+		 		<img src="img/e.jpg" title='EEEEE'>
+					</div>
+				</div>
+				<div class='nivo-caption' id='AAAAA'><a href="http://dev7studios.com">AAAAAAAAAA</a></div>
+				<script type="text/javascript">
+				$(window).load(function() {
+				    $("#slider").nivoSlider({
+				    	effect: "random",
+				    	directionNav: false,
+				    	controlNav: true
+				    });
+				});
+				</script> 
 		</div>
-		<div class='nivo-caption' id='AAAAA'><a href="http://dev7studios.com">AAAAAAAAAA</a></div>
-		<script type="text/javascript">
-		$(window).load(function() {
-		    $("#slider").nivoSlider({
-		    	effect: "random",
-		    	directionNav: false,
-		    	controlNav: true
-		    });
-		});
-		</script> 
-</div>
 
+		<div class='masklayer'><img src="img/m2.png"></div>
 
-
-<div class='masklayer'><img src="img/m2.png"></div>
-
-</div></div>
+	</div></div>
 	<div class='grid_2 topheader'>
 		<div class='usermenu'>
 			<u>Войти</u>&nbsp;|&nbsp;<u>Регистрация</u>

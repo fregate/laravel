@@ -1,57 +1,80 @@
 @layout('templates.main')
 
 @section('morelinks')
-<style>
-.postheader {
-  width:500px;
-  height: 300px;
-}
+    <link rel="stylesheet" type="text/css" href="css/markitup/skin/style.css">
+    <link rel="stylesheet" type="text/css" href="css/markitup/style.css">
+    <script type="text/javascript" src="js/jquery.markitup.min.js"></script>
 
-</style>
+    <script type="text/javascript">
+    var comm_editor_settings = {
+        onTab:          {keepDefault:false, replaceWith:'    '},
+        markupSet:  [   
+            {name:'Bold', className: 'Bold', key:'B', openWith:'(!(<b>|!|<strong>)!)', closeWith:'(!(</b>|!|</strong>)!)' },
+            {name:'Emphasis', className: 'Emphasis', key:'I', openWith:'(!(<i>|!|<em>)!)', closeWith:'(!(</i>|!|</em>)!)'  },
+    //      {name:'Stroke through', className: 'Stroke', key:'S', openWith:'<del>', closeWith:'</del>' },
+            {name:'Underline', className: 'Underline', key:'U', openWith:'<u>', closeWith:'</u>' },
+            {name:'Superscript', className: 'Sup', openWith:'<sup>', closeWith:'</sup>' },
+            {name:'Subscript', className: 'Sub', openWith:'<sub>', closeWith:'</sub>' },
+            {separator:'---------------' },
+            {name:'Spoiler', className: 'Spoiler', openWith:'<spoiler>', closeWith:'</spoiler>' },
+            {name:'Irony', className: 'Irony', openWith:'<irony>', closeWith:'</irony>' },
+            {separator:'---------------' },
+            {name:'Picture', className: 'Image', key:'P', replaceWith:'<img src="[![Source:!:http://]!]" alt="[![Alternative text]!]" />' },
+            {name:'Link', className: 'Link', key:'L', openWith:'<a href="[![Link:!:http://]!]"(!( title="[![Title]!]")!)>', closeWith:'</a>', placeHolder:'Your text to link...' },
+            {name:'Video', className: 'Video', replaceWith:'<video src="[![Youtube Link:!:http://]!]" />' }
+    //      {name:'Audio', className: 'Audio', openWith:'<audio>', closeWith:'</audio>' }
+        ]
+    };
+
+    $(document).ready(function(){
+        $('textarea').markItUp(comm_editor_settings);
+    });
+    </script>
+@endsection
+
+@section('pinned')
+<?php
+if($post->img) {
+    echo '<div class="imagelayer"><img src="' . AuxImage::get_uri($post->img) . '"></div>';
+}
+else {
+    echo '<div class="imagelayer"><img src="img/x.png"></div>';
+}
+?>
+    <div class="masklayer" style="top: -215px;"><img src="img/m2.png">
+    <div class="postcaption">{{ $post->title }}</div>
+    </div>
 @endsection
 
 @section('content')
-    <div class="post">
-        <div 
-            <?php
-            if ( $post->img )
-            {
-                echo "class='postheader' style='background: url(" . AuxImage::get_uri($post->img) . ")'";
-            }
-            
-            ?>
-           >{{ HTML::link_to_action('post@show', $post->title, array($post->id)) }}</div>
-        <h5>
-	by {{ $post->author()->first()->nickname }}
-    <?php
-	if ( !Auth::guest() && Auth::user()->has_any_role(array('admin', 'moderator')) )
-	{ 
-        echo "<br>";
-        echo '<div id="removepost" class="modal hide fade in" style="display: none; ">  
-<div class="modal-header">  
-<a class="close" data-dismiss="modal">×</a>  
-<h3>Really delete this post?</h3>  
-</div>  
-<div class="modal-body">
-<p>It will remove all related commentaries too</p>
-</div>
-<div class="modal-footer">  
-<a href="' . URL::to_route("post", array("delete", $post->id)) . '" class="btn btn-success">Yes, delete</a>
-<a href="#" class="btn" data-dismiss="modal">No</a>  
-</div>  
-</div>  
-<p><a data-toggle="modal" href="#removepost" class="btn">Delete post</a></p>  ';
+<!--     <h3 class="postcaption">{{ HTML::link_to_action('post@show', $post->title, array($post->id)) }}</h3> -->
+    <div class="postentry">
+        <p>{{ $post->body }} </p>
 
-//    	echo HTML::link_to_route('post', 'Edit Post', array('edit', $post->id));
-//    	echo HTML::link_to_route('post', 'Delete Post', array('delete', $post->id));
-    }
-    ?>
-	</h5>
-       <p>{{ $post->body }}</p>
-        <p>{{ HTML::link('/', '&larr; Back to index.') }}</p>
+        <div class='posttimestamp'>
+            от {{ HTML::link_to_action('account@show', $post->author()->first()->nickname, array('uid' => $post->author()->first()->id)) }} , 
+            {{ AuxFunc::formatdate($post->created_at) }} в {{ AuxFunc::formattime($post->created_at) }}
+            @if ( !Auth::guest() && Auth::user()->has_any_role(array('admin', 'moderator')) )
+                <div id="removepost" class="modal hide fade in prompts" style="display: none">
+                    <div class="modal-header">
+                        <a class="close" data-dismiss="modal">×</a>
+                        <h3>Really delete this post?</h3>
+                    </div>
+                    <div class="modal-body">
+                        <p>It will remove all related commentaries too</p>
+                    </div>
+                    <div class="modal-footer">
+                        <a href="{{ URL::to_route("post", array("delete", $post->id)) }}" class="btn btn-success">Yes, delete</a>
+                        <a href="#" class="btn" data-dismiss="modal">No</a>
+                    </div>
+                </div>
+            | <a data-toggle="modal" href="#removepost" class="red">[x] Delete post</a>
+            @endif
+        </div>
+        <br>
     </div>
 
-	    <!-- if auth, get a cookie with last commid as last_comm_id -->
+        <!-- if auth, get a cookie with last commid as last_comm_id -->
 	    <!-- not properly worked (like lepra)... cookies - only for temp solution -->
 
     <script type="text/javascript">
@@ -67,31 +90,27 @@
 
     </script>
 
-
     <div id="load-comms"></div>
 
     <input onclick="get_comm({{ $post->id }});" type=button value="Refresh Comms">
 
         @if ( !Auth::guest() )
         <br><br>
-    {{ Form::open( '', 'POST', array('id' => 'addCommentForm') ) }}
-        <!-- author -->
-        {{ Form::hidden('author_id', Auth::user()->id) }}
-        <!-- post -->
-        {{ Form::hidden('post_id', $post->id) }}
-        <!-- body field -->
-        <p>{{ Form::label('body', 'Commentary') }}</p>
-        {{ $errors->first('body', '<p class="error">:message</p>') }}
-        <p>{{ Form::textarea('body', Input::old('body')) }}</p>
-        <!-- submit button -->
-        <p>{{ Form::submit('Add comment', array('id' => 'submit')) }}</p>
-    {{ Form::close() }}
-    <div class="commerror"></div>
+        {{ Form::open( '', 'POST', array('id' => 'addCommentForm') ) }}
+            <!-- author -->
+            {{ Form::hidden('author_id', Auth::user()->id) }}
+            <!-- post -->
+            {{ Form::hidden('post_id', $post->id) }}
+            <!-- body field -->
+            <p>{{ Form::textarea('body', Input::old('body')) }}</p>
+            <!-- submit button -->
+            <p>{{ Form::submit('Add comment', array('id' => 'submit')) }}</p>
+        {{ Form::close() }}
+        <div class="commerror"></div>
+        @endif
 
     <script type="text/javascript">
-$(document).ready(function(){
-        console.log('document ready');
-
+    $(document).ready(function() {
         get_comm({{ $post->id }});
 
     /* The following code is executed once the DOM is loaded */
@@ -108,9 +127,7 @@ $(document).ready(function(){
 
         working = true;
         $('#submit').val('Working...');
-//        $('span.error').remove();
 
-        /* Sending the form fileds to submit.php: */
         $.post('{{ URL::to_route("comm", array("new")) }}', $(this).serialize(), function(msg) {
 
             working = false;
@@ -132,7 +149,5 @@ $(document).ready(function(){
 });
 
 </script>
-
-    @endif
 
 @endsection
