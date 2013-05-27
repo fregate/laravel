@@ -26,7 +26,7 @@
 		@yield('pinned')
 	</div></div>
 
-	<div class='grid_2 topheader'>
+	<div class='grid_2 topheader'><div class="menuwrap">
 		<div class='usermenu'>
 	    @if ( Auth::guest() )
 	        {{ HTML::link('login', 'Войти') }} |
@@ -40,7 +40,15 @@
         @yield('moderation')
 	    @endif
 		</div>
-	</div>
+		<div id="commonnav" class="commonmenu">
+			<ul>
+				<li><a href="">Лента новостей</a></li>
+				<li><a href="">Энциклопедия</a></li>
+				<li><a href="">Архивы</a></li>
+				<li><a href="">О клубе</a></li>
+			</ul>
+		</div>
+	</div></div>
     <div class="clear"></div>
 
 	<div class='grid_8 prefix_2 suffix_2'>
@@ -53,7 +61,7 @@
 	<div class="clear"></div>
 
 	<div class='grid_8 prefix_2 suffix_2'>
-		<div class='footer content'>
+		<div class='footer '>
 			there is some footnotes
 		</div>
 	</div>

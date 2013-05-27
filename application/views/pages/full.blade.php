@@ -9,19 +9,19 @@
     var comm_editor_settings = {
         onTab:          {keepDefault:false, replaceWith:'    '},
         markupSet:  [   
-            {name:'Bold', className: 'Bold', key:'B', openWith:'(!(<b>|!|<strong>)!)', closeWith:'(!(</b>|!|</strong>)!)' },
-            {name:'Emphasis', className: 'Emphasis', key:'I', openWith:'(!(<i>|!|<em>)!)', closeWith:'(!(</i>|!|</em>)!)'  },
+            {name:'Bold', className: 'Bold', key:'B', openWith:'(!([b]|!|[strong])!)', closeWith:'(!([/b]|!|[/strong])!)' },
+            {name:'Emphasis', className: 'Emphasis', key:'I', openWith:'(!([i]|!|[em])!)', closeWith:'(!([/i]|!|[/em])!)'  },
     //      {name:'Stroke through', className: 'Stroke', key:'S', openWith:'<del>', closeWith:'</del>' },
-            {name:'Underline', className: 'Underline', key:'U', openWith:'<u>', closeWith:'</u>' },
-            {name:'Superscript', className: 'Sup', openWith:'<sup>', closeWith:'</sup>' },
-            {name:'Subscript', className: 'Sub', openWith:'<sub>', closeWith:'</sub>' },
+            {name:'Underline', className: 'Underline', key:'U', openWith:'[u]', closeWith:'[/u]' },
+            {name:'Superscript', className: 'Sup', openWith:'[sup]', closeWith:'[/sup]' },
+            {name:'Subscript', className: 'Sub', openWith:'[sub]', closeWith:'[/sub]' },
             {separator:'---------------' },
-            {name:'Spoiler', className: 'Spoiler', openWith:'<spoiler>', closeWith:'</spoiler>' },
-            {name:'Irony', className: 'Irony', openWith:'<irony>', closeWith:'</irony>' },
+            {name:'Spoiler', className: 'Spoiler', openWith:'[spoiler]', closeWith:'[/spoiler]' },
+            {name:'Irony', className: 'Irony', openWith:'[irony]', closeWith:'[/irony]' },
             {separator:'---------------' },
-            {name:'Picture', className: 'Image', key:'P', replaceWith:'<img src="[![Source:!:http://]!]" alt="[![Alternative text]!]" />' },
-            {name:'Link', className: 'Link', key:'L', openWith:'<a href="[![Link:!:http://]!]"(!( title="[![Title]!]")!)>', closeWith:'</a>', placeHolder:'Your text to link...' },
-            {name:'Video', className: 'Video', replaceWith:'<video src="[![Youtube Link:!:http://]!]" />' }
+            {name:'Picture', className: 'Image', key:'P', replaceWith:'[img src="[![Source:!:http://]!]" alt="[![Alternative text]!]" /]' },
+            {name:'Link', className: 'Link', key:'L', openWith:'[a href="[![Link:!:http://]!]"(!( title="[![Title]!]")!)]', closeWith:'[/a]', placeHolder:'Your text to link...' },
+            {name:'Video', className: 'Video', replaceWith:'[video src="[![Youtube Link:!:http://]!]" /]' }
     //      {name:'Audio', className: 'Audio', openWith:'<audio>', closeWith:'</audio>' }
         ]
     };
@@ -64,7 +64,7 @@ else {
                         <p>It will remove all related commentaries too</p>
                     </div>
                     <div class="modal-footer">
-                        <a href="{{ URL::to_route("post", array("delete", $post->id)) }}" class="btn btn-success">Yes, delete</a>
+                        <a href="{{ URL::to_route('post', array('delete', $post->id)) }}" class="btn btn-success">Yes, delete</a>
                         <a href="#" class="btn" data-dismiss="modal">No</a>
                     </div>
                 </div>
@@ -128,14 +128,16 @@ else {
         working = true;
         $('#submit').val('Working...');
 
-        $.post('{{ URL::to_route("comm", array("new")) }}', $(this).serialize(), function(msg) {
+var x = $(this).serialize();
+console.log(x);
+        $.post('{{ URL::to_route("comm", array("new")) }}', x, function(msg) {
 
             working = false;
             $('#submit').val('Add new pin');
             
             if(msg.status == 1)
             {
-                $('textarea[id="body"]').val('');
+                $('textarea[name="body"]').val('');
                 get_comm({{ $post->id }});
             }
             else 

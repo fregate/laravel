@@ -14,14 +14,12 @@
 @foreach($comms as $cc)
 <div class="commentry"> <span data-commid='{{$cc->id}}'>{{ $cc->body }}</span>
     <div class='posttimestamp'>
-        от {{ HTML::link_to_action('account@show', $cc->author()->first()->nickname, array('uid' => $cc->author()->first()->id)) }} , 
+        от {{ HTML::link_to_action('account@show', $cc->author()->first()->nickname, array('uid' => $cc->author()->first()->id)) }}, 
         {{ AuxFunc::formatdate($cc->created_at) }} в {{ AuxFunc::formattime($cc->created_at) }}
         <?php
         if( !Auth::guest() && Auth::user()->has_any_role(array('admin', 'moderator')) )
         {
              echo ' | <a href="#" data-toggle="modal" class="confirm-delete red" data-id="' . $cc->id . '" >[x] Delete</a>';
-// echo HTML::link_to_route('comm', 'Edit Comm', array('edit', $cc->id));
-// echo HTML::link_to_route('comm', 'Delete Comm', array('delete', $cc->id));
         }
         ?>
     </div>
@@ -35,12 +33,11 @@
         removeBtn = $(this).find('.btn-dynamic'),
         bodyTxt = $(this).find('#removecommtext');
 
-    removeBtn.attr('href', '" . URL::to_route("comm", array("delete")) . "/' + id);
+    removeBtn.attr('href', '{{ URL::to_route("comm", array("delete")) }}/' + id);
     bodyTxt.text($('span[data-commid=' + id + ']').text().substring(0, 50));
 });
 
 $('.confirm-delete').on('click', function(e) {
-    console.log('confirm.on.click');
     e.preventDefault();
 
     var id = $(this).data('id');

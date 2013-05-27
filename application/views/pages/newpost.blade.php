@@ -9,18 +9,18 @@
     var post_editor_settings = {
         onTab:          {keepDefault:false, replaceWith:'    '},
         markupSet:  [   
-            {name:'Bold', className: 'Bold', key:'B', openWith:'(!(<b>|!|<strong>)!)', closeWith:'(!(</b>|!|</strong>)!)' },
-            {name:'Emphasis', className: 'Emphasis', key:'I', openWith:'(!(<i>|!|<em>)!)', closeWith:'(!(</i>|!|</em>)!)'  },
+            {name:'Bold', className: 'Bold', key:'B', openWith:'(!([b]|!|[strong])!)', closeWith:'(!([/b]|!|[/strong])!)' },
+            {name:'Emphasis', className: 'Emphasis', key:'I', openWith:'(!([i]|!|[em])!)', closeWith:'(!([/i]|!|[/em])!)'  },
     //      {name:'Stroke through', className: 'Stroke', key:'S', openWith:'<del>', closeWith:'</del>' },
-            {name:'Underline', className: 'Underline', key:'U', openWith:'<u>', closeWith:'</u>' },
-            {name:'Superscript', className: 'Sup', openWith:'<sup>', closeWith:'</sup>' },
-            {name:'Subscript', className: 'Sub', openWith:'<sub>', closeWith:'</sub>' },
+            {name:'Underline', className: 'Underline', key:'U', openWith:'[u]', closeWith:'[/u]' },
+            {name:'Superscript', className: 'Sup', openWith:'[sup]', closeWith:'[/sup]' },
+            {name:'Subscript', className: 'Sub', openWith:'[sub]', closeWith:'[/sub]' },
             {separator:'---------------' },
-            {name:'Spoiler', className: 'Spoiler', openWith:'<spoiler>', closeWith:'</spoiler>' },
+            {name:'Spoiler', className: 'Spoiler', openWith:'[spoiler]', closeWith:'[/spoiler]' },
             {separator:'---------------' },
-            {name:'Picture', className: 'Image', key:'P', replaceWith:'<img src="[![Source:!:http://]!]" alt="[![Alternative text]!]" />' },
-            {name:'Link', className: 'Link', key:'L', openWith:'<a href="[![Link:!:http://]!]"(!( title="[![Title]!]")!)>', closeWith:'</a>', placeHolder:'Your text to link...' },
-            {name:'Video', className: 'Video', replaceWith:'<video src="[![Youtube Link:!:http://]!]" />' }
+            {name:'Picture', className: 'Image', key:'P', replaceWith:'[img src="[![Source:!:http://]!]" alt="[![Alternative text]!]" /]' },
+            {name:'Link', className: 'Link', key:'L', openWith:'[a href="[![Link:!:http://]!]"(!( title="[![Title]!]")!)]', closeWith:'[/a]', placeHolder:'Your text to link...' },
+            {name:'Video', className: 'Video', replaceWith:'[video src="[![Youtube Link:!:http://]!]" /]' }
     //      {name:'Audio', className: 'Audio', openWith:'<audio>', closeWith:'</audio>' }
         ]
     };
