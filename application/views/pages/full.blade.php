@@ -4,29 +4,10 @@
     <link rel="stylesheet" type="text/css" href="css/markitup/skin/style.css">
     <link rel="stylesheet" type="text/css" href="css/markitup/style.css">
     <script type="text/javascript" src="js/jquery.markitup.min.js"></script>
+    <script type="text/javascript" src="js/editor.js"></script>
 
     <script type="text/javascript">
-    var comm_editor_settings = {
-        onTab:          {keepDefault:false, replaceWith:'    '},
-        markupSet:  [   
-            {name:'Bold', className: 'Bold', key:'B', openWith:'(!([b]|!|[strong])!)', closeWith:'(!([/b]|!|[/strong])!)' },
-            {name:'Emphasis', className: 'Emphasis', key:'I', openWith:'(!([i]|!|[em])!)', closeWith:'(!([/i]|!|[/em])!)'  },
-    //      {name:'Stroke through', className: 'Stroke', key:'S', openWith:'<del>', closeWith:'</del>' },
-            {name:'Underline', className: 'Underline', key:'U', openWith:'[u]', closeWith:'[/u]' },
-            {name:'Superscript', className: 'Sup', openWith:'[sup]', closeWith:'[/sup]' },
-            {name:'Subscript', className: 'Sub', openWith:'[sub]', closeWith:'[/sub]' },
-            {separator:'---------------' },
-            {name:'Spoiler', className: 'Spoiler', openWith:'[spoiler]', closeWith:'[/spoiler]' },
-            {name:'Irony', className: 'Irony', openWith:'[irony]', closeWith:'[/irony]' },
-            {separator:'---------------' },
-            {name:'Picture', className: 'Image', key:'P', replaceWith:'[img src="[![Source:!:http://]!]" alt="[![Alternative text]!]" /]' },
-            {name:'Link', className: 'Link', key:'L', openWith:'[a href="[![Link:!:http://]!]"(!( title="[![Title]!]")!)]', closeWith:'[/a]', placeHolder:'Your text to link...' },
-            {name:'Video', className: 'Video', replaceWith:'[video src="[![Youtube Link:!:http://]!]" /]' }
-    //      {name:'Audio', className: 'Audio', openWith:'<audio>', closeWith:'</audio>' }
-        ]
-    };
-
-    $(document).ready(function(){
+    $(document).ready(function() {
         $('textarea').markItUp(comm_editor_settings);
     });
     </script>
@@ -52,7 +33,7 @@ else {
         <p>{{ $post->body }} </p>
 
         <div class='posttimestamp'>
-            от {{ HTML::link_to_action('account@show', $post->author()->first()->nickname, array('uid' => $post->author()->first()->id)) }} , 
+            от {{ HTML::link_to_action('account@show', $post->author()->first()->nickname, array('uid' => $post->author()->first()->id)) }}, 
             {{ AuxFunc::formatdate($post->created_at) }} в {{ AuxFunc::formattime($post->created_at) }}
             @if ( !Auth::guest() && Auth::user()->has_any_role(array('admin', 'moderator')) )
                 <div id="removepost" class="modal hide fade in prompts" style="display: none">
@@ -110,6 +91,7 @@ else {
         @endif
 
     <script type="text/javascript">
+
     $(document).ready(function() {
         get_comm({{ $post->id }});
 
@@ -119,30 +101,38 @@ else {
     var working = false;
     
     /* Listening for the submit event of the form: */
-    $('#addCommentForm').submit(function(e){
+    $('#addCommentForm').submit(function(e) {
         e.preventDefault();
 
-        if(working) 
+        if(working)
             return false;
 
         working = true;
         $('#submit').val('Working...');
 
+        $('textarea[name="body"]').encodevalue();
+
 var x = $(this).serialize();
-console.log(x);
+        $('textarea[name="body"]').prop('disabled', true);
+//console.log(x);
+
+     // $('textarea').prop('disabled', false);
+     // $('textarea[name="body"]').val('');
+     // working = false;
+
         $.post('{{ URL::to_route("comm", array("new")) }}', x, function(msg) {
 
+            $('textarea').prop('disabled', false);
+
             working = false;
-            $('#submit').val('Add new pin');
+            $('#submit').val('Add comment');
             
-            if(msg.status == 1)
-            {
+            if(msg.status == 1) {
                 $('textarea[name="body"]').val('');
                 get_comm({{ $post->id }});
             }
-            else 
-            {
-                $.each(msg.errors, function(key, value){
+            else {
+                $.each(msg.errors, function(key, value) {
                     $('.commerror').html(key + ' ' + value); 
                 });
             }

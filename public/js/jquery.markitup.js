@@ -117,7 +117,7 @@
 						markup(params);
 					break;
 					default: 
-						$.error('Method ' +  method + ' does not exist on jQuery.markItUp');
+						$.error('Method ' + method + ' does not exist on jQuery.markItUp');
 				}
 				return;
 			}

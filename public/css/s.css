@@ -13,6 +13,20 @@ body {
 	margin: 0px;
 }
 
+irony {
+	color: red;
+}
+
+spoiler {
+	color: rgba(0, 0, 0, 0);
+	border: 1px dotted silver;
+}
+
+spoiler:hover {
+	color: inherit;
+	border: 1px solid rgba(0, 0, 0, 0);
+}
+
 h3 > a, h3 > span > a {
 	color: black;
 	text-decoration: none;
