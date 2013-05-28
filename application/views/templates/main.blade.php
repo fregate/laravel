@@ -10,7 +10,7 @@
 
 	<script src="js/jquery.min.js"></script>
 	<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
-	<script type="text/javascript" src="js/bootstrap.js"></script>
+	<script type="text/javascript" src="js/bootstrap.min.js"></script>
 
 	<link rel="stylesheet" href="css/960_12_col.css" />
 	<link rel="stylesheet" href="css/s.css" />

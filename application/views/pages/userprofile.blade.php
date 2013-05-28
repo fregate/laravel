@@ -2,7 +2,7 @@
 
 @section('morelinks')
 <link href="css/datepicker.css" rel="stylesheet">
-<script type="text/javascript" src="js/bootstrap-datepicker.js"></script>
+<script type="text/javascript" src="js/datepicker.min.js"></script>
 @endsection
 
 @section('pinned')

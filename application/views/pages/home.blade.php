@@ -3,7 +3,7 @@
 @section('morelinks')
     <link rel="stylesheet" href="css/nivo-slider.css" type="text/css" media="screen" />
     <link rel="stylesheet" href="css/nivo/cq/cq.css" type="text/css" media="screen" />
-    <script src="js/jquery.nivo.slider.js" type="text/javascript"></script>
+    <script src="js/jquery.nivo.slider.pack.js" type="text/javascript"></script>
     <script>
         $(document).ready(function(){
             $('.inlinebg').inlinebackgrounds();

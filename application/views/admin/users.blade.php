@@ -6,7 +6,7 @@
 <link href="css/tagit.ui-zendesk.css" rel="stylesheet" type="text/css">
 
 <script src="js/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script>
-<script src="js/tag-it.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/tag-it.min.js" type="text/javascript" charset="utf-8"></script>
 
 @endsection
 
