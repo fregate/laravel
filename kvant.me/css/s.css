@@ -171,11 +171,12 @@ h3 {
 .content {
 	width: 605px;
 //	height: 100%;
-//	min-height: 500px;
+	min-height: 500px;
 }
 
 .footer {
 	background: #ff9f40;
+	width: 605px;
 }
 
 .inlinebg {
