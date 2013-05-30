@@ -63,7 +63,8 @@ jQuery.fn.encodevalue = function() {
                .replace(/(\[a)([^\]]*)(\])/gm, "<a$2>")
                .replace(/\[\/a\]/gm, "<\/a>")
                .replace(/\[(\/?)(strong|em|sup|sub|spoiler|irony)(\])/gm, "<$1$2>")
-               .replace(/\[(\/?)([biu])\]/gm, "<$1$2>");
+               .replace(/\[(\/?)([biu])\]/gm, "<$1$2>")
+	       .replace(/\n/g, "<br />");
 
     // test for emptiness
     var ivpattern = /<video|<img/g;

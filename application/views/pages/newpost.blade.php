@@ -20,7 +20,8 @@
 
 @section('content')
 <br>
-    {{ Form::open_for_files('post/new') }}
+<!-- Form::open( 'post/new' ) -->
+    {{ Form::open_for_files('', 'POST', array('id' => 'addPostForm')) }}
 	    <!-- author -->
 	    {{ Form::hidden('author_id', $user->id) }}
 	    <!-- title field -->
@@ -37,4 +38,21 @@
         <!-- submit button -->
         <p>{{ Form::submit('Create') }}</p>
     {{ Form::close() }}
+
+    <script type="text/javascript">
+$(document).ready(function() {
+    $('#addPostForm').submit(function(e) {
+//        $('textarea[name="body"]').encodevalue();
+        e.preventDefault();
+
+        $('textarea[name="body"]').encodevalue();
+
+    var x = $(this).serialize();
+        $('textarea[name="body"]').prop('disabled', true);
+
+        $.post('{{ URL::to_route("post", array("new")) }}', x);
+    });
+});
+    </script>
+
 @endsection

@@ -177,6 +177,7 @@ h3 {
 .footer {
 	background: #ff9f40;
 	width: 605px;
+	padding: 3px;
 }
 
 .inlinebg {
@@ -263,3 +264,22 @@ div#uLogin {
 	color: #999;
 	font-size: 15px ! important;
 }
+
+.social_accounts a {
+width: 22px;
+height: 22px;
+display: inline-block;
+margin-right: 2px;
+}
+
+.social_accounts a.tw{background: url('../img/footer.share.png') no-repeat 0px top;}
+.social_accounts a.tw:hover{background: url('../img/footer.share.png') no-repeat 0px bottom;}
+
+.social_accounts a.fb{background: url('../img/footer.share.png') no-repeat -27px top;}
+.social_accounts a.fb:hover{background: url('../img/footer.share.png') no-repeat -27px bottom;}
+
+.social_accounts a.vk{background: url('../img/footer.share.png') no-repeat -53px top;}
+.social_accounts a.vk:hover{background: url('../img/footer.share.png') no-repeat -53px bottom;}
+
+.social_accounts a.gp{background: url('../img/footer.share.png') no-repeat -81px top;}
+.social_accounts a.gp:hover{background: url('../img/footer.share.png') no-repeat -81px bottom;}

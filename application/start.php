@@ -75,7 +75,7 @@ Autoloader::map(array(
 
 Autoloader::directories(array(
 	path('app').'models',
-	path('app').'libraries',
+	path('app').'libraries'
 ));
 
 /*
@@ -171,7 +171,3 @@ if ( ! Request::cli() and Config::get('session.driver') !== '')
 {
 	Session::load();
 }
-
-/*
-	Register JBBParser as singleton
-*/

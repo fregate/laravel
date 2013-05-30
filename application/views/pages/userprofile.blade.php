@@ -2,7 +2,7 @@
 
 @section('morelinks')
 <link href="css/datepicker.css" rel="stylesheet">
-<script type="text/javascript" src="js/datepicker.min.js"></script>
+<script type="text/javascript" src="js/bootstrap-datepicker.js"></script>
 @endsection
 
 @section('pinned')
@@ -94,8 +94,10 @@
               </td><td colspan="4">Connect this account with other social network accounts</td></tr>';
     }
 
-echo '</tbody></table>';
-echo ' </div>';
+    if(count($indents) != 0 && $user->id != 1) {
+        echo '</tbody></table>';
+    }
+    echo ' </div>';
 
 if($thisuser) {
     echo '<div>';
@@ -139,27 +141,29 @@ if($thisuser) {
     echo Form::close();
 
     echo '</div>';
+    echo '<div class="alert" style="width:250px"></div>';
 }
 
 ?>
 
 <div id="enterpasswd" class="modal hide fade in prompts" style="display: none; ">  
-<div class="modal-header">  
-<a class="close" data-dismiss="modal">×</a>  
-<h3>Confirm changes</h3>  
-</div>  
-<div class="modal-body">
-<p>Please enter current password</p>
-<p><input type=password id="confirmoldpwd"/></p>
-</div>
-<div class="modal-footer">  
-<a href="#" class="btn btn-success btn-primary" id="confirmpwd">Change info</a>  
-<a href="#" class="btn btn-cancel" data-dismiss="modal">No</a>  
-</div>  
+    <div class="modal-header">
+        <a class="close" data-dismiss="modal">×</a>  
+        <h3>Confirm changes</h3>  
+    </div>  
+    <div class="modal-body">
+        <p>Please enter current password</p>
+        <p><input type=password id="confirmoldpwd"/></p>
+    </div>
+    <div class="modal-footer">  
+        <a href="#" class="btn btn-success btn-primary" id="confirmpwd">Change info</a>  
+        <a href="#" class="btn btn-cancel" data-dismiss="modal">No</a>  
+    </div>  
 </div> 
 
 <script>
 $(function() {
+    $(".alert").hide();
     $("#equalpwds").hide();
 
     $('#dp_birth').datepicker({
@@ -200,10 +204,18 @@ console.log(msg);
 
             if(msg.status == 1)
             {
+                $(".alert").removeClass('alert-error');
+                $(".alert").addClass('alert-success');
             }
             else
             {
+                $(".alert").removeClass('alert-success');
+                $(".alert").addClass('alert-error');
             }
+
+            $(".alert").html(msg);
+            $(".alert").show();
+
         }, 'json');
     });
 })

@@ -19,6 +19,8 @@ class Account_Controller extends Base_Controller
 
     public function post_update() // ajax
     {
+        Log::write('post_update ' . Input::all());
+
         $u = User::find(Input::get('user_id'));
         if($u == null)
         {

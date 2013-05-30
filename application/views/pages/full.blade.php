@@ -92,8 +92,8 @@ else {
 
     <script type="text/javascript">
 
-    $(document).ready(function() {
-        get_comm({{ $post->id }});
+$(document).ready(function() {
+    get_comm({{ $post->id }});
 
     /* The following code is executed once the DOM is loaded */
     
