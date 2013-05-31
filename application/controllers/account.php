@@ -19,8 +19,6 @@ class Account_Controller extends Base_Controller
 
     public function post_update() // ajax
     {
-        Log::write('post_update ' . Input::all());
-
         $u = User::find(Input::get('user_id'));
         if($u == null)
         {
@@ -48,15 +46,13 @@ class Account_Controller extends Base_Controller
             ));
         }
 
+	$new_account = array('password' => Input::get('newpassword'));
         if($u->id != 1)
         {
-            $new_account = array(
-                'email' => Input::get('newemail'),
-                'password' => Input::get('newpassword'),
-                'birthday' => Input::get('birthday'),
-                'show_year' => Input::get('show_birth_year') == '1',
-                'nickname' => Input::get('newname')
-            );
+            $new_account['email'] = Input::get('newemail');
+            $new_account['birthday'] = Input::get('birthday');
+            $new_account['show_year'] = Input::get('show_birth_year') == '1';
+            $new_account['nickname'] = Input::get('newname');
 
             $rules = array(
                 'nickname'  => 'required|min:3|max:128',

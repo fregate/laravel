@@ -141,7 +141,7 @@ if($thisuser) {
     echo Form::close();
 
     echo '</div>';
-    echo '<div class="alert" style="width:250px"></div>';
+    echo '<div class="alert" id="updatestatus" style="width:250px"></div>';
 }
 
 ?>
@@ -163,7 +163,7 @@ if($thisuser) {
 
 <script>
 $(function() {
-    $(".alert").hide();
+    $("#updatestatus").hide();
     $("#equalpwds").hide();
 
     $('#dp_birth').datepicker({
@@ -204,17 +204,17 @@ console.log(msg);
 
             if(msg.status == 1)
             {
-                $(".alert").removeClass('alert-error');
-                $(".alert").addClass('alert-success');
+                $("#updatestatus").removeClass('alert-error');
+                $("#updatestatus").addClass('alert-success');
             }
             else
             {
-                $(".alert").removeClass('alert-success');
-                $(".alert").addClass('alert-error');
+                $("#updatestatus").removeClass('alert-success');
+                $("#updatestatus").addClass('alert-error');
             }
 
-            $(".alert").html(msg);
-            $(".alert").show();
+            $("#updatestatus").text(msg.message);
+            $("#updatestatus").show();
 
         }, 'json');
     });
