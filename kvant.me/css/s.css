@@ -86,7 +86,7 @@ h3 {
 	margin-top: 5px;
 }
 
-.newsblock :last-child {
+.newsblock:last-child {
 	border: none;
 }
 
@@ -283,3 +283,13 @@ margin-right: 2px;
 
 .social_accounts a.gp{background: url('../img/footer.share.png') no-repeat -81px top;}
 .social_accounts a.gp:hover{background: url('../img/footer.share.png') no-repeat -81px bottom;}
+
+iframe.videoframe {
+	border: none;
+	width: 605px;
+	height: 340px;
+}
+
+media {
+ 	display:none;
+}

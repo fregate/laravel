@@ -16,12 +16,15 @@ var uri = new URI($(this).attr('src'));
 console.log(uri);
 if(uri.domain() == 'youtube.com') {
         var uo = uri.search(true);
-        $(this).after('<iframe src="http://www.youtube.com/embed/' + uo.v  +'"></iframe>');
+        $(this).after('<iframe src="http://www.youtube.com/embed/' 
+		+ uo.v  +'"></iframe>');
 }
 
 if(uri.domain() == 'vimeo.com') {
     var vid = uri.path();
-   $(this).after('<iframe src="http://player.vimeo.com/video' + vid  + '" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>');
+   $(this).after('<iframe src="http://player.vimeo.com/video'
+	 + vid  + 
+	'" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>');
 }
       })
 }; })(jQuery);

@@ -20,8 +20,7 @@
 
 @section('content')
 <br>
-<!-- Form::open( 'post/new' ) -->
-    {{ Form::open_for_files('', 'POST', array('id' => 'addPostForm')) }}
+    {{ Form::open_for_files('post/new', 'POST', array('id' => 'addPostForm')) }}
 	    <!-- author -->
 	    {{ Form::hidden('author_id', $user->id) }}
 	    <!-- title field -->
@@ -42,17 +41,17 @@
     <script type="text/javascript">
 $(document).ready(function() {
     $('#addPostForm').submit(function(e) {
-//        $('textarea[name="body"]').encodevalue();
-        e.preventDefault();
-
         $('textarea[name="body"]').encodevalue();
+//        e.preventDefault();
 
-    var x = $(this).serialize();
-        $('textarea[name="body"]').prop('disabled', true);
+  //      $('textarea[name="body"]').encodevalue();
 
-        $.post('{{ URL::to_route("post", array("new")) }}', x);
+//    var x = $(this).serialize();
+  //      $('textarea[name="body"]').prop('disabled', true);
+
+    //    $.post('{{ URL::to_route("post", array("new")) }}', x);
     });
 });
-    </script>
+    </script> 
 
 @endsection

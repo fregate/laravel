@@ -28,7 +28,7 @@ class Pin_Controller extends Base_Controller
         {
             echo json_encode(array( 
                     'status' => 0 ,
-                    'errors' => array('invalid fields')
+                    'errors' => 'invalid fields'
                 ));
         }
         else

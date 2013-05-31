@@ -68,7 +68,7 @@
 </table>  
 
 </div>
-<div class='pinerror'></div>
+<div class='alert'></div>
 <script>
 function OnPostSelectChange() {
 	$("#newpinpost").text( $("#postselect").val() );
@@ -76,7 +76,8 @@ function OnPostSelectChange() {
 	$("#postidinput").attr('value', $("#postselect :selected").text() );
 }
 
-$(function(){
+$(function() {
+ $(".alert").hide();
 	OnPostSelectChange();
 	var nowTemp = new Date();
 	var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
@@ -129,13 +130,19 @@ $(function(){
 				$("#postselect :selected").remove();
 				$('#pintable > tbody > tr:last').before(msg.html);
 				OnPostSelectChange();
+                $(".alert").removeClass('alert-error');
+                $(".alert").addClass('alert-success');
+                   $(".alert").html('pin succesfully added');
+
 			}
 			else 
 			{
-				$.each(msg.errors, function(key, value){
-					$('.pinerror').html(key + ' ' + value); 
-				});
+                $(".alert").removeClass('alert-success');
+                $(".alert").addClass('alert-error');
+                   $(".alert").html(msg.errors);
 			}
+                   $(".alert").show();
+
 		}, 'json');
    });
 })

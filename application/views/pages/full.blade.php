@@ -5,10 +5,14 @@
     <link rel="stylesheet" type="text/css" href="css/markitup/style.css">
     <script type="text/javascript" src="js/jquery.markitup.min.js"></script>
     <script type="text/javascript" src="js/editor.js"></script>
+    <script type="text/javascript" src="js/uri.min.js"></script>
 
     <script type="text/javascript">
     $(document).ready(function() {
         $('textarea').markItUp(comm_editor_settings);
+
+	$('media').parseVideo();
+
     });
     </script>
 @endsection

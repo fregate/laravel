@@ -3,7 +3,7 @@
 
 class AuxImage
 {
-    protected static function path() { return 'public/uploads'; }
+    protected static function path() { return 'storage/uploads'; }
 
     public static function get_field()
     {

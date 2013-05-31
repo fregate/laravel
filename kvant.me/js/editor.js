@@ -15,7 +15,7 @@ var comm_editor_settings = {
         {separator:'---------------' },
         {name:'Picture', className: 'Image', key:'P', replaceWith:'<img src="[![Source:!:http://]!]" alt="[![Alternative text]!]" />' },
         {name:'Link', className: 'Link', key:'L', openWith:'<a href="[![Link:!:http://]!]"(!( title="[![Title]!]")!)>', closeWith:'</a>', placeHolder:'Your text to link...' },
-        {name:'Video', className: 'Video', replaceWith:'<video src="[![Youtube Link:!:http://]!]" />' }
+        {name:'Video', className: 'Video', openWith:'<media src="[![Link:!:http://]!]" />', closeWith: '</media>' }
 //      {name:'Audio', className: 'Audio', openWith:'<audio>', closeWith:'</audio>' }
     ]
 };
@@ -35,7 +35,7 @@ var post_editor_settings = {
         {separator:'---------------' },
         {name:'Picture', className: 'Image', key:'P', replaceWith:'<img src="[![Source:!:http://]!]" alt="[![Alternative text]!]" />' },
         {name:'Link', className: 'Link', key:'L', openWith:'<a href="[![Link:!:http://]!]"(!( title="[![Title]!]")!)>', closeWith:'</a>', placeHolder:'Your text to link...' },
-        {name:'Video', className: 'Video', replaceWith:'<video src="[![Youtube Link:!:http://]!]" />' }
+        {name:'Video', className: 'Video', openWith:'<media src="[![Link:!:http://]!]" />', closeWith: '</media>' }
 //      {name:'Audio', className: 'Audio', openWith:'<audio>', closeWith:'</audio>' }
     ]
 };
@@ -46,10 +46,10 @@ jQuery.fn.encodevalue = function() {
     var html = me.val();
 
     // replace known tags
-    html = html.replace(/(<video)([^>]*)(>)/gm, "[video$2]")
+    html = html.replace(/(<media)([^>]*)(>)/gm, "[media$2]")
                .replace(/(<img)([^>]*)(>)/gm, "[img$2]")
                .replace(/(<a)([^>]*)(>)/gm, "[a$2]")
-               .replace(/<\/a>/g, "[\/a]")
+               .replace(/<\/(a|media)>/g, "[\/$1]")
                .replace(/<(\/?)(strong|em|sup|sub|spoiler|irony)(:?[^>]*)?(>)/gm, "[$1$2]")
                .replace(/<(\/?)([biu])(?:[^>]*)?(>)/gm, "[$1$2]")
                .replace(/(accesskey|class|contenteditable|contextmenu|dir|hidden|id|lang|spellcheck|style|tabindex|title|xml:lang|onblur|onchange|onclick|ondblclick|onfocus|onkeydown|onkeypress|onkeyup|onload|onmousedown|onmousemove|onmouseout|onmouseover|onmouseup|onreset|onselect|onsubmit|onunload)(?:\s?=\s?)(['"][^'"]*['"])?/gm, ""); // remove additional attributes and events
@@ -58,16 +58,16 @@ jQuery.fn.encodevalue = function() {
     html = html.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 
     // return back known tags
-    html = html.replace(/(\[video)([^\]]*)(\])/gm, "<video$2>")
+    html = html.replace(/(\[media)([^\]]*)(\])/gm, "<media$2>")
                .replace(/(\[img)([^\]]*)(\])/gm, "<img$2>")
                .replace(/(\[a)([^\]]*)(\])/gm, "<a$2>")
-               .replace(/\[\/a\]/gm, "<\/a>")
+               .replace(/\[\/(a|media)\]/gm, "<\/$1>")
                .replace(/\[(\/?)(strong|em|sup|sub|spoiler|irony)(\])/gm, "<$1$2>")
                .replace(/\[(\/?)([biu])\]/gm, "<$1$2>")
 	       .replace(/\n/g, "<br />");
 
     // test for emptiness
-    var ivpattern = /<video|<img/g;
+    var ivpattern = /<media|<img/g;
     var x = $('<div></div>');
     x.html(html);
     if(x.text() === "" && !ivpattern.test(html))
@@ -76,3 +76,23 @@ jQuery.fn.encodevalue = function() {
     me.val(html);
   });
 };
+
+(function($) {
+    $.fn.parseVideo = function() {
+        return this.each( function () {
+             var uri = new URI($(this).attr('src'));
+             if(uri.domain() == 'youtube.com') {
+                  var uo = uri.search(true);
+                  $(this).after('<iframe class="videoframe" src="http://www.youtube.com/embed/'
+                      + uo.v  +'"></iframe>');
+             }
+
+             if(uri.domain() == 'vimeo.com') {
+                  var vid = uri.path();
+                  $(this).after('<iframe class="videoframe" src="http://player.vimeo.com/video'
+                         + vid  +
+                        '" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>');
+             }
+        })
+    }; 
+})(jQuery);

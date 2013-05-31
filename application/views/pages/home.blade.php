@@ -4,9 +4,12 @@
     <link rel="stylesheet" href="css/nivo-slider.css" type="text/css" media="screen" />
     <link rel="stylesheet" href="css/nivo/cq/cq.css" type="text/css" media="screen" />
     <script src="js/jquery.nivo.slider.pack.js" type="text/javascript"></script>
+    <script src="js/editor.js" type="text/javascript"></script>
+    <script src="js/uri.min.js" type="text/javascript"></script>
     <script>
         $(document).ready(function(){
             $('.inlinebg').inlinebackgrounds();
+	    $('media').parseVideo();
         });
 
         (function($){
