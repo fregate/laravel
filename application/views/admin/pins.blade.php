@@ -83,10 +83,7 @@ $(function() {
 	var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
 
 	var checkin = $('#dpd1').datepicker({
-		format: 'dd-mm-yyyy',
-		onRender: function(date) {
-			return date.valueOf() < now.valueOf() ? 'disabled' : '';
-		}
+		format: 'dd-mm-yyyy'
 	}).on('changeDate', function(ev) {
 		if (ev.date.valueOf() > checkout.date.valueOf()) {
 			var newDate = new Date(ev.date)

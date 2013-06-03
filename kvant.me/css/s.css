@@ -13,6 +13,10 @@ body {
 	margin: 0px;
 }
 
+a {
+	cursor: pointer;
+}
+
 irony {
 	color: red;
 }
@@ -34,6 +38,7 @@ h3 > a, h3 > span > a {
 
 h3 > a:hover, h3 > span > a:hover {
 	text-decoration: underline ;
+	color: black;
 }
 
 h3 > a:visited, h3 > span > a:visited {
@@ -86,7 +91,7 @@ h3 {
 	margin-top: 5px;
 }
 
-.newsblock:last-child {
+.newsblock .postentry:last-child {
 	border: none;
 }
 
@@ -201,6 +206,7 @@ h3 {
 	position: relative;
 	margin:0;
 	padding: 0;
+	max-height: 215px;
 }
 
 .masklayer {
@@ -230,6 +236,7 @@ div#uLogin {
 	height: 26px;
 	padding-top: 9px;
 	margin-left: 2px;
+	margin-right: 1px;
 }
 
 .commcount {
@@ -265,6 +272,9 @@ div#uLogin {
 	font-size: 15px ! important;
 }
 
+.social_accounts {
+}
+
 .social_accounts a {
 width: 22px;
 height: 22px;
@@ -275,14 +285,14 @@ margin-right: 2px;
 .social_accounts a.tw{background: url('../img/footer.share.png') no-repeat 0px top;}
 .social_accounts a.tw:hover{background: url('../img/footer.share.png') no-repeat 0px bottom;}
 
-.social_accounts a.fb{background: url('../img/footer.share.png') no-repeat -27px top;}
-.social_accounts a.fb:hover{background: url('../img/footer.share.png') no-repeat -27px bottom;}
+.social_accounts a.fb{background: url('../img/footer.share.png') no-repeat -23px top;}
+.social_accounts a.fb:hover{background: url('../img/footer.share.png') no-repeat -23px bottom;}
 
-.social_accounts a.vk{background: url('../img/footer.share.png') no-repeat -53px top;}
-.social_accounts a.vk:hover{background: url('../img/footer.share.png') no-repeat -53px bottom;}
+.social_accounts a.gp{background: url('../img/footer.share.png') no-repeat -46px top;}
+.social_accounts a.gp:hover{background: url('../img/footer.share.png') no-repeat -46px bottom;}
 
-.social_accounts a.gp{background: url('../img/footer.share.png') no-repeat -81px top;}
-.social_accounts a.gp:hover{background: url('../img/footer.share.png') no-repeat -81px bottom;}
+.social_accounts a.vk{background: url('../img/footer.share.png') no-repeat -69px top;}
+.social_accounts a.vk:hover{background: url('../img/footer.share.png') no-repeat -69px bottom;}
 
 iframe.videoframe {
 	border: none;

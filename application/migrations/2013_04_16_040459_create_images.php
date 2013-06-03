@@ -18,6 +18,7 @@ class Create_Images {
 		    $table->integer('sx');
 		    $table->integer('sy');
 		    $table->string('mime', 32);
+		    $table->integer('user_id'); // who upload the image
 		    $table->timestamps();
 		});
 	}

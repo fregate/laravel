@@ -42,14 +42,8 @@
 $(document).ready(function() {
     $('#addPostForm').submit(function(e) {
         $('textarea[name="body"]').encodevalue();
-//        e.preventDefault();
-
-  //      $('textarea[name="body"]').encodevalue();
-
-//    var x = $(this).serialize();
-  //      $('textarea[name="body"]').prop('disabled', true);
-
-    //    $.post('{{ URL::to_route("post", array("new")) }}', x);
+        var x = $('input[name="title"]');
+        x.val(x.val().replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'));
     });
 });
     </script> 

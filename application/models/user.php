@@ -12,6 +12,11 @@ class User extends Eloquent
     	return $this->has_many('Identity');
     }
 
+    public function images()
+    {
+        return $this->has_many('Image');
+    }
+
     public function roles()
     {
         return $this->has_many_and_belongs_to('Role', 'role_user');

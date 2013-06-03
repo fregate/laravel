@@ -63,7 +63,7 @@
 	<div class='grid_8 prefix_2 suffix_2'>
 		<div class='footer'>
 			<div>
-			Клуб Квант <a target=_new href="http://www.phys.nsu.ru/main/">физического факультета</a> <a href="http://www.nsu.ru" target=_new>Новосибирского Государственного Университета</a>
+			Клуб Квант <a target=_new href="http://www.phys.nsu.ru/main/">физического факультета</a><br><a href="http://www.nsu.ru" target=_new>Новосибирского Государственного Университета</a>
 			</div>
 			<div class="social_accounts">
 				Мы в социальных сетях<br>

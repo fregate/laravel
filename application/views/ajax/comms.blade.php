@@ -14,7 +14,7 @@
 @foreach($comms as $cc)
 <div class="commentry"> <span data-commid='{{$cc->id}}'>{{ $cc->body }}</span>
     <div class='posttimestamp'>
-        от {{ HTML::link_to_action('account@show', $cc->author()->first()->nickname, array('uid' => $cc->author()->first()->id)) }}, 
+        <a onclick="javascript:answerto('{{$cc->author()->first()->nickname}}')">ответить</a> | от {{ HTML::link_to_action('account@show', $cc->author()->first()->nickname, array('uid' => $cc->author()->first()->id)) }}, 
         {{ AuxFunc::formatdate($cc->created_at) }} в {{ AuxFunc::formattime($cc->created_at) }}
         <?php
         if( !Auth::guest() && Auth::user()->has_any_role(array('admin', 'moderator')) )

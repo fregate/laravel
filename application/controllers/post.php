@@ -72,6 +72,11 @@ class Post_Controller extends Base_Controller
         {
             $post = Post::find($postid);
             $post->comments()->delete();
+
+            $pin = Pin::where('post_id', '=', $post->id)->get();
+            if($pin != null)
+                $pin->delete();
+
             $post->delete();
             return Redirect::to('/');
         }

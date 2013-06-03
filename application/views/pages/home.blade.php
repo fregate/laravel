@@ -9,7 +9,7 @@
     <script>
         $(document).ready(function(){
             $('.inlinebg').inlinebackgrounds();
-	    $('media').parseVideo();
+	        $('media').parseVideo();
         });
 
         (function($){

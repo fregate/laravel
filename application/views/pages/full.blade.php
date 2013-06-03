@@ -10,9 +10,7 @@
     <script type="text/javascript">
     $(document).ready(function() {
         $('textarea').markItUp(comm_editor_settings);
-
-	$('media').parseVideo();
-
+	    $('media').parseVideo();
     });
     </script>
 @endsection
@@ -20,7 +18,7 @@
 @section('pinned')
 <?php
 if($post->img) {
-    echo '<div class="imagelayer"><img src="' . AuxImage::get_uri($post->img) . '"></div>';
+    echo '<div class="imagelayer" style="overflow:hidden"><img src="' . AuxImage::get_uri($post->img) . '"></div>';
 }
 else {
     echo '<div class="imagelayer"><img src="img/x.png"></div>';
@@ -71,6 +69,10 @@ else {
         $.get(BASE+'/comms/' + postid, function(data) {
             $('#load-comms').html(data);
         });
+    }
+
+    function answerto(usrname) {
+        $.markItUp( { target:'textarea', replaceWith: usrname + ': ' } );
     }
 
     </script>
