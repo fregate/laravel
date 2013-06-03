@@ -48,6 +48,17 @@ Route::get('uploads', function() {
     return Response::error('404');
 });
 
+Route::get('pix', array('as' => 'pix', 'before' => 'auth', 'do' => function() {
+    if (Request::ajax()) {
+        // provide the ajax content
+        return View::make('ajax.pix');
+    }
+    else {
+        // provide the full content
+        return View::make('pages.pix')->nest('childview', 'ajax.pix');
+    }
+}));
+
 Route::post('newidn/(:num)', array('before' => 'auth', 'do' => function($uid) {
     $s = file_get_contents('http://ulogin.ru/token.php?token=' . $_POST['token'] 
         . '&host=' . $_SERVER['HTTP_HOST']);
