@@ -25,7 +25,7 @@
     padding: 6px;
     background-color: white;
     width: auto;
-    position: absolute;
+    position: fixed;
     top: 20px;
     left: 20px;
     -webkit-box-shadow: 0px 0px 20px rgba(0, 0, 0, 1);

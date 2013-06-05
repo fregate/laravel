@@ -1,7 +1,26 @@
 <img src="img/DSC06218.jpg" id="target" alt="[Jcrop Example]" />
 
 <div id="preview-pane" class="ui-widget-content">
-    Preview pane (draggable)
+
+<div class="navbar">
+ <div class="navbar-inner">
+  <span class="brand">Preview pane (draggable)</span>
+    <div class="well well-small pull-right" >
+    <a class="btn btn-info btn-mini" href="#">
+      <i class="icon-plus icon-white"></i>
+      Add image
+    </a>
+    <a class="btn btn-danger btn-mini" href="#">
+      <i class="icon-ban-circle icon-white"></i>
+      Discard this image
+    </a>
+    <a class="btn btn-success btn-mini" href="#">
+      <i class="icon-upload icon-white"></i>
+      Confirm upload
+    </a>
+  </div>
+ </div>
+</div>
     <div class="preview-container">
       <img src="img/DSC06218.jpg" class="jcrop-preview" alt="Preview" />
     </div>

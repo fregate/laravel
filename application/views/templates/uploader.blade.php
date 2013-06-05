@@ -19,16 +19,38 @@
 
 </head>
 <body>
-    <div id="ajaxmodal" class="modal" style="display:block">
-        <div class="modal-header">
-            <h3>Upload image</h3>
-        </div>
-        <div class="modal-body">
-			@yield('content')
-        </div>
-        <div class="modal-footer">
-        	{{HTML::link('/', 'Go home')}}
-        </div>
-    </div>
+
+<div class="navbar">
+ <div class="navbar-inner">
+  <span class="brand"><h3>Upload image interface</h3></span>
+    <div class="well well-small pull-right" >
+    <a class="btn btn-inverse" href="{{URL::to('/')}}">
+      <i class="icon-home icon-white"></i>
+      Return to site
+    </a>
+  </div>
+</div>
+</div>
+
+@yield('content')
+
+<br>
+<div class="navbar">
+ <div class="navbar-inner">
+  <div class="btn-group" >
+    <a class="btn btn-inverse" href="{{URL::to('/')}}">
+      <i class="icon-home icon-white"></i>
+      Return to site
+    </a>
+  </div>
+  <ul class="nav pull-right">
+    <li class="active">
+      <a >You logged as {{Auth::user()->nickname}}</a>
+    </li>
+  </ul>
+ </div>
+</div>
+
+
 </body>
 </html>
