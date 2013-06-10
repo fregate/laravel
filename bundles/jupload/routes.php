@@ -5,10 +5,10 @@ Route::get('(:bundle)', function()
 	return View::make('jupload::index');
 });
 
-Route::get('(:bundle)/test', function()
-{
-	return View::make('jupload::test');
-});
+// Route::get('(:bundle)/test', function()
+// {
+// 	return View::make('jupload::test');
+// });
 
 Route::any('(:bundle)/upload/(:any?)', array('as' => 'upload', function($folder = null)
 {
@@ -22,6 +22,9 @@ Route::any('(:bundle)/upload/(:any?)', array('as' => 'upload', function($folder 
 
 	switch (Request::method())
 	{
+		case 'DELETE':
+			$upload_handler->delete($folder);
+			break;
 		case 'OPTIONS':
 			break;
 		case 'HEAD':
@@ -30,7 +33,7 @@ Route::any('(:bundle)/upload/(:any?)', array('as' => 'upload', function($folder 
 			break;
 		case 'POST':
 			if (Input::get('_method') === 'DELETE')
-			{				
+			{
 				$upload_handler->delete($folder);
 			}
 			else

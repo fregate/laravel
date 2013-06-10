@@ -10,15 +10,18 @@ class Create_Posts {
 	public function up()
 	{
 		Schema::create('posts', function($table) {
-		    $table->increments('id');
+		    $table->increments('id'); // unique ids for posts and wiki articles
 		    $table->string('title', 128);
 		    $table->text('body');
 		    $table->integer('author_id');
 		    $table->date('showtime_start'); // use for auto calendar
 		    $table->date('showtime_end');
 		    $table->integer('img');
+		    $table->string('param', 256); // and parameters. like base64(json({x, y, cx, cy})). 
+		    		// if empty - crop to header original, like 
+		    		// {"x":0,"y":0,"width":min(PICx,620),"height":min(PICy,215),"framex":620,"framey":215}
 		    $table->timestamps();
-		});		//
+		});
 	}
 
 	/**
@@ -30,5 +33,4 @@ class Create_Posts {
 	{
 		Schema::drop('posts');
 	}
-
 }

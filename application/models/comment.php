@@ -12,6 +12,11 @@ class Comment extends Eloquent
         return $this->belongs_to('Post', 'post_id');
     }
 
+    // public function article()
+    // {
+    //     return $this->belongs_to('Post', 'article_id');
+    // }
+
   //   static public function get_div_object($ccc)
   //   {
   //   	return get_div_fields($ccc->author()->first()->nickname, $ccc->body, $ccc->id);

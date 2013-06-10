@@ -79,7 +79,7 @@ else {
 @section('content')
     <div class='newsblock'>
 <?php
-    foreach ($posts as $post) {
+    foreach ($posts->results as $post) {
         echo "<div class='postentry'>";
 
         if ( $post->img ) // post with image or not
@@ -106,4 +106,5 @@ else {
     }
 ?>
     </div>
+<?php echo $posts->links(); ?>
 @endsection

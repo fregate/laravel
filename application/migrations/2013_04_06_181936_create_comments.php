@@ -14,6 +14,7 @@ class Create_Comments {
 		    $table->text('body');
 		    $table->integer('author_id');
 		    $table->integer('post_id');
+		    $table->integer('article_id');
 		    $table->timestamps();
 		});		//
 	}

@@ -29,7 +29,7 @@
 				<span class="btn btn-success fileinput-button">
 					<i class="icon-plus icon-white"></i>
 					<span>Add files...</span>
-					<input type="file" name="files[]" multiple>
+					<input type="file" name="files[]" >
 				</span>
 				<button type="submit" class="btn btn-primary start">
 					<i class="icon-upload icon-white"></i>
@@ -155,7 +155,8 @@
 <!-- The jQuery UI widget factory, can be omitted if jQuery UI is already included -->
 <script src="bundles/jupload/js/vendor/jquery.ui.widget.js"></script>
 <!-- The Templates plugin is included to render the upload/download listings -->
-<script src="http://blueimp.github.com/JavaScript-Templates/tmpl.min.js"></script>
+<!-- <script src="http://blueimp.github.com/JavaScript-Templates/tmpl.min.js"></script> -->
+<script src="js/tmpl.js"></script>
 <!-- The Load Image plugin is included for the preview images and image resizing functionality -->
 <script src="http://blueimp.github.com/JavaScript-Load-Image/load-image.min.js"></script>
 <!-- The Canvas to Blob plugin is included for image resizing functionality -->

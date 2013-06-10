@@ -81,8 +81,8 @@ jQuery.fn.encodevalue = function() {
     $.fn.parseVideo = function() {
         return this.each( function () {
              var uri = new URI($(this).attr('src'));
-             if(uri.domain() == 'youtube.com') {
-                  var uo = uri.search(true);
+             if(uri.domain() == 'youtube.com' || uri.domain() == 'youtu.be') {
+                  var uo = uri.domain() == 'youtube.com' ? uri.search(true) : { v: uri.path() };
                   $(this).after('<iframe class="videoframe" src="http://www.youtube.com/embed/'
                       + uo.v  +'"></iframe>');
              }
@@ -91,7 +91,7 @@ jQuery.fn.encodevalue = function() {
                   var vid = uri.path();
                   $(this).after('<iframe class="videoframe" src="http://player.vimeo.com/video'
                          + vid  +
-                        '" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>');
+                        '?color=ff9f40" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>');
              }
         })
     }; 

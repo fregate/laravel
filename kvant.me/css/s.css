@@ -182,7 +182,8 @@ h3 {
 .footer {
 	background: #ff9f40;
 	width: 605px;
-	padding: 3px;
+	padding: 7px;
+	height: 3em;
 }
 
 .inlinebg {
@@ -293,6 +294,9 @@ margin-right: 2px;
 .social_accounts a.vk{background: url('../img/footer.share.png') no-repeat -69px top;}
 .social_accounts a.vk:hover{background: url('../img/footer.share.png') no-repeat -69px bottom;}
 
+.social_accounts a.yt{background: url('../img/footer.share.png') no-repeat -92px top;}
+.social_accounts a.yt:hover{background: url('../img/footer.share.png') no-repeat -92px bottom;}
+
 iframe.videoframe {
 	border: none;
 	width: 605px;
@@ -301,4 +305,13 @@ iframe.videoframe {
 
 media {
  	display:none;
+}
+
+.userprofilemenu {
+}
+
+.userprofilemenu ul.menu {
+	margin-bottom: 20px;
+	margin-left: 0;
+	list-style: none;
 }

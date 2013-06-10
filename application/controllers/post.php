@@ -8,7 +8,7 @@ class Post_Controller extends Base_Controller
     {
         echo "action_index";
     }
-    
+
     public function get_show($postid)
     {
    	    $post = Post::find($postid);
@@ -32,7 +32,7 @@ class Post_Controller extends Base_Controller
     // let's setup some rules for our new data
     // I'm sure you can come up with better ones
         $rules = array(
-            'title'     => 'required|min:3|max:128',
+            'title'     => 'required|min:1|max:128',
             'body'      => 'required',
             AuxImage::get_field()    => 'image'
         );
@@ -82,6 +82,5 @@ class Post_Controller extends Base_Controller
         }
         else
            return Redirect::back();
-
     }
 }

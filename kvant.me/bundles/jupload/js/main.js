@@ -21,14 +21,43 @@ $(function () {
     // Enable iframe cross-domain access via redirect option:
     $('#fileupload').fileupload(
         'option',
-        'redirect',
-        window.location.href.replace(
+        { redirect: window.location.href.replace(
             /\/[^\/]*$/,
             '/cors/result.html?%s'
-        )
+        ),
+        acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
+	previewAsCanvas : false
+            , add: function (e, data) {
+                var that = $(this).data('fileupload'),
+                    options = that.options,
+                    files = data.files;
+                $(this).fileupload('process', data).done(function () {
+                    that._adjustMaxNumberOfFiles(-files.length);
+                    data.maxNumberOfFilesAdjusted = true;
+                    data.files.valid = data.isValidated = that._validate(files);
+                    data.context = that._renderUpload(files).data('data', data);
+                    options.filesContainer[
+                        options.prependFiles ? 'prepend' : 'append'
+                    ](data.context);
+                    that._renderPreviews(files, data.context);
+                    that._forceReflow(data.context);
+                    that._transition(data.context).done(
+                        function () {
+                            if ((that._trigger('added', e, data) !== false) &&
+                                    (options.autoUpload || data.autoUpload) &&
+                                    data.autoUpload !== false && data.isValidated) {
+                                data.submit();
+                            }
+                        }
+                    );
+                });
+            }
+
+//    ,  maxNumberOfFiles: 1
+     }
     );
 
-    if (window.location.hostname === 'blueimp.github.com') {
+/*    if (window.location.hostname === 'blueimp.github.com') {
         // Demo settings:
         $('#fileupload').fileupload('option', {
             url: '//jquery-file-upload.appspot.com/',
@@ -63,7 +92,7 @@ $(function () {
             });
         }
     } else {
-        // Load existing files:
+*/        // Load existing files:
         $('#fileupload').each(function () {
             var that = this;
             $.getJSON(this.action, function (result) {
@@ -73,6 +102,6 @@ $(function () {
                 }
             });
         });
-    }
+    // }
 
 });

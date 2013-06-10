@@ -1,7 +1,6 @@
 <?php
 
 class AuxFunc {
-
     static public function get_cookie_name_autologin() {
         return 'kvant.me.' . 'autologin';
     }

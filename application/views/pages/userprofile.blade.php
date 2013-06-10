@@ -12,6 +12,29 @@
 @endsection
 
 @section('content')
+<!-- <div class='navbar userprofilemenu'>
+<ul class="nav">
+  <li class="active">
+    <a href="#">General info</a>
+  </li>
+  <li><a href="#">Posts</a></li>
+  <li><a href="#">Comments</a></li>
+  <li><a href="#">Gallery</a></li>
+</ul>
+</div>
+
+<div class='userprofilemenu'>
+<ul class="menu">
+  <li class="active">
+    <a href="#">General info</a>
+  </li>
+  <li><a href="#">Posts</a></li>
+  <li><a href="#">Comments</a></li>
+  <li><a href="#">Gallery</a></li>
+</ul>
+</div>
+<br>
+<br> -->
     <div class="profile">
         <?php 
         $dc = new DateTime($user->birthday);
