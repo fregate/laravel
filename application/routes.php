@@ -51,7 +51,7 @@ Route::get('uploads', function() {
 Route::get('pix', array('as' => 'pix', 'before' => 'auth', 'do' => function() {
     if (Request::ajax()) {
         // provide the ajax content
-        return View::make('ajax.pix');
+        return View::make('ajax.pix2');
     }
     else {
         // provide the full content

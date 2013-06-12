@@ -3,37 +3,48 @@
 
 class AuxImage
 {
-    protected static function path() { return 'storage/uploads'; }
+    public static function path() { return path('storage').'uploads/'; }
 
     public static function get_field()
     {
         return 'uimage';
     }
 
-    public static function make($image, $attr = "")
+    public static function make($uploaded_data, $image_size, $image_type, $image_name, $attr = "")
     {
-        $filename = $image['name'];
-        if($filename == '')
+        if($image_name == '')
             return 0;
 
-        Input::upload(AuxImage::get_field(), AuxImage::path(), $filename);
+Log::write('info', 'non empty, moving to '.AuxImage::path().$image_name);
 
-        $layer = PHPImageWorkshop\ImageWorkshop::initFromPath(AuxImage::path() . "/" . $filename);
+	$mres = move_uploaded_file($uploaded_data, AuxImage::path().$image_name);
+
+Log::write('info', 'move_file returns '.$mres);
+
+        return AuxImage::img_store($image_name, $image_type, $image_size);
+    }
+
+    public static function img_store($image_name, $image_type, $image_size)
+    {
+//        $layer = PHPImageWorkshop\ImageWorkshop::initFromPath(AuxImage::path() . $image_name);
+        list($img_width, $img_height) = @getimagesize(AuxImage::path() . $image_name);
+//        Log::write('info', 'img width '.$img_width.' height '.$img_height);
 
         $new_image = array(
-            'mime' => $image['type'],
-            'size' => $image['size'],
+            'mime' => $image_type,
+            'size' => $image_size,
             'path' => AuxImage::path(),
-            'name' => $filename,
-            'sx' => $layer->getWidth(),
-            'sy' => $layer->getHeight(),
+            'name' => $image_name,
+            'sx' => $img_width,
+            'sy' => $img_height,
+            'user_id' => Auth::user()->id,
             'shorturl' => uniqid(),
         );
 
         $img = new Image($new_image);
         $img->save();
 
-        echo $img->id;
+        // Log::write('info', $img->id);
 
         return $img->id;
     }
