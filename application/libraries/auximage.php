@@ -49,32 +49,20 @@ Log::write('info', 'move_file returns '.$mres);
         return URL::base() . "/image/" . $id . "/" . $attrs;
     }
 
-    public static function transform($xlayer, $attrs)
+    public static function transform($layer, $attrs)
     {
         $a = json_decode(base64_decode($attrs), true);
         if(!isset($a['framex']) || !isset($a['framey']))
             return $layer;
 
-        if($xlayer->getimageformat() == 'GIF')
+        if($layer->getimageformat() == 'GIF')
         {
 //        Log::write('info', 'number of images '.$xlayer->getNumberImages());
-for($f = $xlayer->getNumberImages(); $f > 1; $f--)
-{
-    $xlayer->removeimage();
-}
-/*           if($xlayer->getNumberImages() > 1) {
-		$xlayer = $xlayer->coalesceImages();
-		foreach ($xlayer as $frame) {
-		    $frame->cropThumbnailImage(90, 90);
-		    $layer = $frame;
-		    break;
-		}*/
-//$layer = $frame;
-//            }
-//	    else {
-		$layer = $xlayer;
-//            }
-// Log::write('info', 'new number of images '.$layer->getNumberImages());
+	    for($f = $layer->getNumberImages(); $f > 1; $f--)
+	    {
+	        $layer->removeimage();
+	    }
+	// Log::write('info', 'new number of images '.$layer->getNumberImages());
         }
 
         $layer->cropimage(
