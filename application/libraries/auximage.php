@@ -16,7 +16,6 @@ class AuxImage
             return 0;
 
 Log::write('info', 'non empty, moving to '.AuxImage::path().$image_name);
-
 	$mres = move_uploaded_file($uploaded_data, AuxImage::path().$image_name);
 
 Log::write('info', 'move_file returns '.$mres);
@@ -50,24 +49,32 @@ Log::write('info', 'move_file returns '.$mres);
         return URL::base() . "/image/" . $id . "/" . $attrs;
     }
 
-    public static function transform($layer, $attrs)
+    public static function transform($xlayer, $attrs)
     {
         $a = json_decode(base64_decode($attrs), true);
         if(!isset($a['framex']) || !isset($a['framey']))
             return $layer;
 
-        if($layer->getimageformat() == 'GIF')
+        if($xlayer->getimageformat() == 'GIF')
         {
-        Log::write('info', 'number of images '.$layer->getNumberImages());
-            if($layer->hasnextimage()) {
-                $layer = $layer->coalesceImages();
-                foreach ($layer as $frame)
-                {
-                    $layer = $frame;
-                    break;
-                }
-//                $layer = $layer->deconstructImages();
-            }
+//        Log::write('info', 'number of images '.$xlayer->getNumberImages());
+for($f = $xlayer->getNumberImages(); $f > 1; $f--)
+{
+    $xlayer->removeimage();
+}
+/*           if($xlayer->getNumberImages() > 1) {
+		$xlayer = $xlayer->coalesceImages();
+		foreach ($xlayer as $frame) {
+		    $frame->cropThumbnailImage(90, 90);
+		    $layer = $frame;
+		    break;
+		}*/
+//$layer = $frame;
+//            }
+//	    else {
+		$layer = $xlayer;
+//            }
+// Log::write('info', 'new number of images '.$layer->getNumberImages());
         }
 
         $layer->cropimage(
@@ -76,7 +83,7 @@ Log::write('info', 'move_file returns '.$mres);
             isset($a['x']) ? $a['x'] : 0,
             isset($a['y']) ? $a['y'] : 0
         );
-        Log::write('info', json_encode($a));
+//        Log::write('info', json_encode($a));
 //        $layer->resampleimage($a['framex'], $a['framey'], 0, 1);
         $layer->resizeimage($a['framex'], $a['framey'], 0, 1);
 
