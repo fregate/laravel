@@ -136,27 +136,19 @@ Route::get('image/(:num)/(:any?)', function($id, $attrs = "") {
         return Response::make($imagedata, 200, array('content-type' => $image->mime));
     }
     else {
-        $imagedata = Cache::get('image_' . $id . '_' . $attrs);
-        if($imagedata == null) {
-            $layer = new Gmagick($image->path . "/" . $image->name);
-            $layer = AuxImage::transform($layer, $attrs);
+        $imagedata = Cache::remember('image_' . $id . '_' . $attrs, function() use ($image, $attrs) {
+		$layer = new Gmagick($image->path . "/" . $image->name);
+	        $layer = AuxImage::transform($layer, $attrs);
+		ob_clean();
+		ob_start();
+		echo $layer;
+		$imagedata = ob_get_contents();
+		ob_end_clean();
+		$layer->destroy();
 
-            // ob_start();
+	       	return $imagedata;
+	}, 120);
 
-            // if('image/jpeg' == $image->mime)
-            //     imagejpeg($layer->getimageblob());
-
-            // if('image/png' == $image->mime)
-            //     imagepng($layer->getimageblob());
-
-            // if('image/gif' == $image->mime)
-            //     imagegif($layer->getimageblob());
-
-            $imagedata = $layer->getimageblob();
-//            ob_end_clean();
-        }
-        Cache::put('image_' . $id . '_' . $attrs, $imagedata, 120);
-        Log::write('info', 'response with imgdata sent');
         return Response::make($imagedata, 200, array('content-type' => $image->mime));
     }
 });
