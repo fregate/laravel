@@ -14,6 +14,25 @@ class UploadHandler
 {
     protected $options;
 
+    protected $error_messages = array(
+        1 => 'The uploaded file exceeds the upload_max_filesize directive in php.ini',
+        2 => 'The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form',
+        3 => 'The uploaded file was only partially uploaded',
+        4 => 'No file was uploaded',
+        6 => 'Missing a temporary folder',
+        7 => 'Failed to write file to disk',
+        8 => 'A PHP extension stopped the file upload',
+        'post_max_size' => 'The uploaded file exceeds the post_max_size directive in php.ini',
+        'max_file_size' => 'File is too big',
+        'min_file_size' => 'File is too small',
+        'accept_file_types' => 'Filetype not allowed',
+        'max_number_of_files' => 'Maximum number of files exceeded',
+        'max_width' => 'Image exceeds maximum width',
+        'min_width' => 'Image requires a minimum width',
+        'max_height' => 'Image exceeds maximum height',
+        'min_height' => 'Image requires a minimum height'
+    );
+
     function __construct($options=null) {
         $this->options = array(
             'script_url' => $this->getFullUrl().'/',
@@ -63,6 +82,21 @@ class UploadHandler
         if ($options) {
             $this->options = array_replace_recursive($this->options, $options);
         }
+    }
+
+    protected function fix_integer_overflow($size) {
+        if ($size < 0) {
+            $size += 2.0 * (PHP_INT_MAX + 1);
+        }
+        return $size;
+    }
+
+    protected function get_file_size($file_path, $clear_stat_cache = false) {
+        if ($clear_stat_cache) {
+            clearstatcache(true, $file_path);
+        }
+        return $this->fix_integer_overflow(filesize($file_path));
+
     }
 
     protected function getFullUrl() {
@@ -174,23 +208,21 @@ class UploadHandler
         return $success;
     }
 
-    protected function validate($uploaded_file, $file, $error, $index) {
-//            Log::write('info', $file);
-            Log::write('info', json_encode($error));
-            Log::write('info', $index);
+    protected function get_error_message($error) {
+        return array_key_exists($error, $this->error_messages) ?
+            $this->error_messages[$error] : $error;
+    }
 
+    protected function validate($uploaded_file, $file, $error, $index) {
         if ($error) {
-            Log::write('info', 'some $error - false');
-            $file->error = $error;
+            $file->error = $this->get_error_message($error);
             return false;
         }
         if (!$file->name) {
-            Log::write('info', '!file->name - false');
             $file->error = 'missingFileName';
             return false;
         }
         if (!preg_match($this->options['accept_file_types'], $file->name)) {
-            Log::write('info', '!accep file name - false');
             $file->error = 'acceptFileTypes';
             return false;
         }
@@ -204,20 +236,17 @@ class UploadHandler
                 $file->size > $this->options['max_file_size'])
             ) {
             $file->error = 'maxFileSize';
-            Log::write('info', 'max file size - false');
             return false;
         }
         if ($this->options['min_file_size'] &&
             $file_size < $this->options['min_file_size']) {
             $file->error = 'minFileSize';
-            Log::write('info', 'min file size - false');
             return false;
         }
         if (is_int($this->options['max_number_of_files']) && (
                 count($this->get_file_objects()) >= $this->options['max_number_of_files'])
             ) {
             $file->error = 'maxNumberOfFiles';
-            Log::write('info', 'max num of files - false');
             return false;
         }
         list($img_width, $img_height) = @getimagesize($uploaded_file);
@@ -225,13 +254,11 @@ class UploadHandler
             if ($this->options['max_width'] && $img_width > $this->options['max_width'] ||
                     $this->options['max_height'] && $img_height > $this->options['max_height']) {
                 $file->error = 'maxResolution';
-            Log::write('info', 'max resolution - false');
                 return false;
             }
             if ($this->options['min_width'] && $img_width < $this->options['min_width'] ||
                     $this->options['min_height'] && $img_height < $this->options['min_height']) {
                 $file->error = 'minResolution';
-            Log::write('info', 'min resolution - false');
                 return false;
             }
         }
@@ -307,15 +334,10 @@ class UploadHandler
     protected function handle_file_upload($folder, $uploaded_file, $name, $size, $type, $error, $index = null) {
         $file = new stdClass();
         $file->name = $this->trim_file_name($name, $type, $index);
-        $file->size = intval($size);
+        $file->size = $this->fix_integer_overflow(intval($size));
         $file->type = $type;
-//	$file->idi = AuxImage::make($uploaded_file, $file->size, $type, $file->name);
-//$imgsize, $imgtype, $imgname
-            Log::write('info', 'step into');
-            $vret = $this->validate($uploaded_file, $file, $error, $index);
-            Log::write('info', ($vret) ? 'true' : 'false');
+        $vret = $this->validate($uploaded_file, $file, $error, $index);
         if ($vret) {
-            Log::write('info', 'inside');
             $this->handle_form_data($file, $index);
             $file_path = $this->options['upload_dir'].$folder.$file->name;
             $append_file = !$this->options['discard_aborted_uploads'] &&
@@ -363,7 +385,6 @@ class UploadHandler
             }
             $file->size = $file_size;
             $this->set_file_delete_url($folder, $file);
-            Log::write('info', 'store file into db');
             $file->idi = AuxImage::img_store($file->name, $file->type, $file->size);
         }
         return $file;
@@ -387,7 +408,6 @@ class UploadHandler
         }
         $upload = isset($_FILES[$this->options['param_name']]) ?
             $_FILES[$this->options['param_name']] : null;
-        Log::write('info', json_encode($upload['error']));
         $info = array();
         if ($upload && is_array($upload['tmp_name'])) {
             // param_name is an array identifier like "files[]",

@@ -6,13 +6,12 @@ if(count($imgs) == 0) {
 	echo "No uploaded images";
 } else {
 	foreach ($imgs as $img) {
-		echo "<p>".$img->name."</p>";
+		$a = AuxImage::get_thumb_attrs($img->id, 0, $rowh);
+		echo "<span class='imgspan'><img src='". AuxImage::get_uri($img->id, $a) ."'></img></span>";
 	}
+
+//echo '<script type="text/javascript" src="js/jquery.montage.min.js"></script>';
+
 }
 ?>
 
-<script type="text/javascript">
-jQuery(function($){
-
-})
-</script>

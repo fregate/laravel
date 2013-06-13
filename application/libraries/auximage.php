@@ -26,9 +26,7 @@ Log::write('info', 'move_file returns '.$mres);
 
     public static function img_store($image_name, $image_type, $image_size)
     {
-//        $layer = PHPImageWorkshop\ImageWorkshop::initFromPath(AuxImage::path() . $image_name);
         list($img_width, $img_height) = @getimagesize(AuxImage::path() . $image_name);
-//        Log::write('info', 'img width '.$img_width.' height '.$img_height);
 
         $new_image = array(
             'mime' => $image_type,
@@ -44,21 +42,83 @@ Log::write('info', 'move_file returns '.$mres);
         $img = new Image($new_image);
         $img->save();
 
-        // Log::write('info', $img->id);
-
         return $img->id;
     }
 
-    public static function preform($i, $attr = "")
+    public static function get_uri($id, $attrs = "")
     {
-//        return $i;
-       $layer = ImageWorkshop::initFromPath($imagepath);
-//        if($attr == '')
-            return $layer->getResult();
+        return URL::base() . "/image/" . $id . "/" . $attrs;
     }
 
-    public static function get_uri($id)
+    public static function transform($layer, $attrs)
     {
-        return URL::base() . "/image/" . $id;
+        $a = json_decode(base64_decode($attrs), true);
+        if(!isset($a['framex']) || !isset($a['framey']))
+            return $layer;
+
+        if($layer->getimageformat() == 'GIF')
+        {
+        Log::write('info', 'number of images '.$layer->getNumberImages());
+            if($layer->hasnextimage()) {
+                $layer = $layer->coalesceImages();
+                foreach ($layer as $frame)
+                {
+                    $layer = $frame;
+                    break;
+                }
+//                $layer = $layer->deconstructImages();
+            }
+        }
+
+        $layer->cropimage(
+            isset($a['w']) ? $a['w'] : $a['framex'],
+            isset($a['h']) ? $a['h'] : $a['framey'],
+            isset($a['x']) ? $a['x'] : 0,
+            isset($a['y']) ? $a['y'] : 0
+        );
+        Log::write('info', json_encode($a));
+//        $layer->resampleimage($a['framex'], $a['framey'], 0, 1);
+        $layer->resizeimage($a['framex'], $a['framey'], 0, 1);
+
+        return $layer;
+    }
+
+    public static function get_thumb_attrs($id, $frame_width, $frame_height)
+    {
+        $img = Image::find($id);
+        if($img == null || ($frame_width == 0 && $frame_height == 0))
+            return "";
+
+        if($frame_width == 0)
+        {
+            $frame_width = $frame_height * $img->sx / $img->sy;
+        }
+
+        if($frame_height == 0)
+        {
+            $frame_height = $frame_width * $img->sy / $img->sx;
+        }
+
+        $frame_aspect = $frame_width / $frame_height;
+
+        $attrs = new stdClass();
+        $attrs->x = 0;
+        $attrs->y = 0;
+
+        if($img->sy > $img->sx)
+        {
+            $attrs->w = round(max($frame_width, $img->sx), 0, PHP_ROUND_HALF_UP);
+            $attrs->h = round($attrs->w / $frame_aspect, 0, PHP_ROUND_HALF_UP);
+        }
+        else
+        {
+            $attrs->h = round(max($frame_height, $img->sy), 0, PHP_ROUND_HALF_UP);
+            $attrs->w = round($attrs->h * $frame_aspect, 0, PHP_ROUND_HALF_UP);
+        }
+
+        $attrs->framex = round($frame_width, 0, PHP_ROUND_HALF_UP);
+        $attrs->framey = round($frame_height, 0, PHP_ROUND_HALF_UP);
+
+        return base64_encode(json_encode($attrs));
     }
 };

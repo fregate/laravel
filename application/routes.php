@@ -44,18 +44,18 @@ Route::get('/', function() {
         ->with('posts', $posts);
 });
 
-Route::get('uploads', function() {
-    return Response::error('404');
-});
+// Route::get('uploads', function() {
+//     return Response::error('404');
+// });
 
-Route::get('pix', array('as' => 'pix', 'before' => 'auth', 'do' => function() {
+Route::get('pix/(:num)', array('as' => 'pix', 'before' => 'auth', 'do' => function($h) {
     if (Request::ajax()) {
         // provide the ajax content
-        return View::make('ajax.pix2');
+        return View::make('ajax.pix2')->with('rowh', $h);
     }
     else {
         // provide the full content
-        return View::make('pages.pix')->nest('childview', 'ajax.pix');
+        return View::make('pages.pix')->nest('childview', 'ajax.pix')->with('rowh', $h);
     }
 }));
 
@@ -131,32 +131,34 @@ Route::any('(edit|new|delete)/pin/(:num?)', array('as' => 'pin', 'before' => 'au
 Route::get('image/(:num)/(:any?)', function($id, $attrs = "") {
     $image = Image::find($id);
 
-    $imagedata = Cache::get('image_' . $id . '_' . $attrs);
-    if($imagedata == null) {
-        if('' == $attrs)
-            $imagedata = File::get($image->path . "/" . $image->name);
-        else {
-            $layer = PHPImageWorkshop\ImageWorkshop::initFromPath($image->path . "/" . $image->name);
-
-            ob_start();
-
-            if('image/jpeg' == $image->mime)
-                imagejpeg($layer->getResult());
-
-            if('image/png' == $image->mime)
-                imagepng($layer->getResult());
-
-            if('image/gif' == $image->mime)
-                imagegif($layer->getResult());
-
-            $imagedata = ob_get_contents();
-            ob_end_clean();
-        }
-
-        Cache::put('image_' . $id . '_' . $attrs, $imagedata, 120);
+    if("" == $attrs) {
+        $imagedata = File::get($image->path . "/" . $image->name);
+        return Response::make($imagedata, 200, array('content-type' => $image->mime));
     }
+    else {
+        $imagedata = Cache::get('image_' . $id . '_' . $attrs);
+        if($imagedata == null) {
+            $layer = new Gmagick($image->path . "/" . $image->name);
+            $layer = AuxImage::transform($layer, $attrs);
 
-    return Response::make($imagedata, 200, array('content-type' => $image->mime));
+            // ob_start();
+
+            // if('image/jpeg' == $image->mime)
+            //     imagejpeg($layer->getimageblob());
+
+            // if('image/png' == $image->mime)
+            //     imagepng($layer->getimageblob());
+
+            // if('image/gif' == $image->mime)
+            //     imagegif($layer->getimageblob());
+
+            $imagedata = $layer->getimageblob();
+//            ob_end_clean();
+        }
+        Cache::put('image_' . $id . '_' . $attrs, $imagedata, 120);
+        Log::write('info', 'response with imgdata sent');
+        return Response::make($imagedata, 200, array('content-type' => $image->mime));
+    }
 });
 
 Route::get('image/(:any)', function($shorturl) {

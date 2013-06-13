@@ -11,12 +11,47 @@
 <script src="bundles/jupload/js/jquery.iframe-transport.js"></script>
 <script src="bundles/jupload/js/jquery.fileupload.js"></script>
 
+<!-- <link rel="stylesheet" type="text/css" href="css/og-grid.css" />
+<script src="js/modernizr.custom.js"></script>
+ -->
     <script type="text/javascript">
     $(document).ready(function() {
         $('textarea').markItUp(post_editor_settings);
     });
 
     </script>
+
+<style type="text/css">
+/*.am-wrapper{
+    float:left;
+    position:relative;
+    overflow:hidden;
+}*/
+
+/*.am-wrapper img{
+    position:absolute;
+    outline:none;
+}*/
+
+.imgspan {
+    margin: 2px;
+}
+
+#ajaxmodal {
+    display: none;
+    width:auto;
+    margin:0px;
+    left:3%;
+    right:3%;
+    top:3%;
+    bottom:3%
+}
+
+#ajaxmodal .modal-body {
+    max-height: 75%;
+}
+
+</style>
 @endsection
 
 @section('pinned')
@@ -60,33 +95,30 @@
             <a class="close" data-dismiss="modal" title="Cancel">×</a>
             <h3>Select image for header</h3>
         </div>
-        <div class="modal-body"></div>
-  <div class="modal-footer" id="filesDropZone">
-<span class="btn btn-success fileinput-button">
-        <i class="icon-plus icon-white"></i>
-        <span>Select files...</span>
-        <!-- The file input field used as target for the file upload widget -->
-        <input id="fileupload" type="file" name="files[]" multiple="">
-    </span>
+        <div class="modal-body am-container" id="am-container"></div>
+        <div class="modal-footer" id="filesDropZone">
+            <span class="btn btn-success fileinput-button">
+            <i class="icon-plus icon-white"></i>
+            <span>Select files...</span>
+            <!-- The file input field used as target for the file upload widget -->
+            <input id="fileupload" type="file" name="files[]" multiple="">
+            </span>
 
-    <div id="progress" class="progress progress-success progress-striped">
-        <div class="bar"></div>
-    </div>
-    <!-- The container for the uploaded files -->
-    <div id="files" class="files"></div>
-
-  </div>
+            <div id="progress" class="progress progress-success progress-striped">
+                <div class="bar"></div>
+            </div>
+        </div>
         <div class="modal-footer">
             <a href="#" class="btn btn-success btn-dynamic" id="selectimg">Select</a>
             <a href="#" class="btn" data-dismiss="modal">Cancel</a>
         </div>
     </div>
 
-    <script type="text/javascript">
+<script type="text/javascript">
 $(document).ready(function() {
-$(document).bind('drop dragover', function (e) {
-    e.preventDefault();
-});
+    $(document).bind('drop dragover', function (e) {
+        e.preventDefault();
+    });
 
     $('#addPostForm').submit(function(e) {
         $('textarea[name="body"]').encodevalue();
@@ -97,25 +129,22 @@ $(document).bind('drop dragover', function (e) {
 
 $(function () {
     $('#fileupload').fileupload({
-	url: "{{URL::base()}}/upload/xxx",
+    	url: "{{URL::base()}}/upload/xxx",
         dataType: 'json',
-//dropZone: $('#filesDropZone'),
-//acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
-//minFileSize: 1,
-//maxFileSize: 8000000,
-//maxNumberOfFiles: 100000,
+        dropZone: $('#filesDropZone'),
+        acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
+        minFileSize: 1,
+        maxFileSize: 8000000,
         done: function (e, data) {
             console.log(data.result);
-            
-            $.get("{{URL::to_route('pix')}}", function(msg) {
-                $(".modal-body").html(msg);
-            });
+
+            get_gallery_ajax();            
 
 	       $('#progress .bar').css('width', '0%');
        
-            $.each(data.result, function (index, file) {
-                $('<span style="margin-right:2px;border:1px dotted silver;padding:0 3px;border-radius:3px"/>').text(file.name).appendTo('#files');
-            });
+            // $.each(data.result, function (index, file) {
+            //     $('<span style="margin-right:2px;border:1px dotted silver;padding:0 3px;border-radius:3px"/>').text(file.name).appendTo('#files');
+            // });
         },
         progressall: function (e, data) {
             var progress = parseInt(data.loaded / data.total * 100, 10);
@@ -126,14 +155,39 @@ $(function () {
         }
     });
 });
-
-    </script>
+</script>
 
 <script>
-$('#ajaxmodal').on('show', function() {
-    $.get("{{URL::to_route('pix')}}", function(msg) {
+function get_gallery_ajax() {
+    $.get("{{URL::to_route('pix')}}/200", function(msg) {
         $(".modal-body").html(msg);
+
+//         var $container  = $("#am-container"),
+//         $imgs       = $container.find("img").hide(),
+//         totalImgs   = $imgs.length,
+//         cnt         = 0;
+        
+//         $imgs.each(function(i) {
+//             var $img    = $(this);
+//             $("<img/>").load(function() {
+//                 ++cnt;
+//                 if( cnt === totalImgs ) {
+//                     $imgs.show();
+//                     $container.montage({
+//                         liquid  : false
+// //                        maxh : 250
+// //                        fillLastRow : true,
+//   //                      margin: 5
+//                     });
+//                 }
+//             }).attr("src",$img.attr("src"));
+//         });                 
+
     });
+}
+
+$('#ajaxmodal').on('show', function() {
+    get_gallery_ajax();
 });
 
 $('#btopengallery').on('click', function(e) {
