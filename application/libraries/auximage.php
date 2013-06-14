@@ -58,10 +58,10 @@ Log::write('info', 'move_file returns '.$mres);
         if($layer->getimageformat() == 'GIF')
         {
 //        Log::write('info', 'number of images '.$xlayer->getNumberImages());
-	    for($f = $layer->getNumberImages(); $f > 1; $f--)
-	    {
-	        $layer->removeimage();
-	    }
+    	    for($f = $layer->getNumberImages(); $f > 1; $f--)
+    	    {
+    	        $layer->removeimage();
+    	    }
 	// Log::write('info', 'new number of images '.$layer->getNumberImages());
         }
 

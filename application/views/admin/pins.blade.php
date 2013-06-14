@@ -77,6 +77,9 @@ function OnPostSelectChange() {
 }
 
 $(function() {
+
+ $("#managepins").addClass('active');
+
  $(".alert").hide();
 	OnPostSelectChange();
 	var nowTemp = new Date();
@@ -121,7 +124,7 @@ $(function() {
 
 			working = false;
 			$('#submit').val('Add new pin');
-			
+
 			if(msg.status == 1)
 			{
 				$("#postselect :selected").remove();

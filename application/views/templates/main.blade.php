@@ -20,6 +20,7 @@
 
 </head>
 <body>
+<div id="contentwrap"><div id="mainwrap">
 <div class="container_12">
 	<div class='grid_2 topheader'><a href='{{ URL::to("/") }}' title="На главную страницу"> <div class='cqlogotop' ></div> </a></div>
 	<div class='grid_8 topheader'><div class='pinnednews'>
@@ -49,7 +50,7 @@
 			</ul>
 		</div> -->
 	</div></div>
-    <div class="clear"></div>
+        <div class="clear"></div>
 
 	<div class='grid_8 prefix_2 suffix_2'>
 		<div class='content'>
@@ -59,21 +60,25 @@
 		</div>
 	</div>
 	<div class="clear"></div>
+</div>
+</div></div>
 
-	<div class='grid_8 prefix_2 suffix_2'>
-		<div class='footer navbar-static-bottom'>
-			<div class="pull-left" style="display:inline">
-			Клуб Квант <a target=_new href="http://www.phys.nsu.ru/main/">физического факультета</a><br><a href="http://www.nsu.ru" target=_new>Новосибирского Государственного Университета</a>
-			</div>
-			<div class="social_accounts pull-right" style="display:inline">
-				Мы в социальных сетях<br>
-				<a href="https://twitter.com/clubquant" class="tw" title="Twitter" target=_new></a>
-				<a href="https://www.facebook.com/clubquant" class="fb" title="Facebook" target=_new></a>
-				<a href="http://vk.com/clubquant" class="vk" title="ВКонтакте" target=_new></a>
-				<a href="http://www.youtube.com/clubquant" class="yt" title="YouTube" target=_new></a>
-			</div>
+<div id="footerwrap">
+<div class="container_12" >
+	<div class='grid_8 suffix_2 prefix_2'><div class="footer">
+		<div class="pull-left" style="display:inline">
+		Клуб Квант <a target=_new href="http://www.phys.nsu.ru/main/">физического факультета</a><br><a href="http://www.nsu.ru" target=_new>Новосибирского Государственного Университета</a>
+		</div>
+		<div class="social_accounts pull-right" style="display:inline">
+			Мы в социальных сетях<br>
+			<a href="https://twitter.com/clubquant" class="tw" title="Twitter" target=_new></a>
+			<a href="https://www.facebook.com/clubquant" class="fb" title="Facebook" target=_new></a>
+			<a href="http://vk.com/clubquant" class="vk" title="ВКонтакте" target=_new></a>
+			<a href="http://www.youtube.com/clubquant" class="yt" title="YouTube" target=_new></a>
 		</div>
 	</div>
 </div>
+</div>
+
 </body>
 </html>

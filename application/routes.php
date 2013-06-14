@@ -137,17 +137,16 @@ Route::get('image/(:num)/(:any?)', function($id, $attrs = "") {
     }
     else {
         $imagedata = Cache::remember('image_' . $id . '_' . $attrs, function() use ($image, $attrs) {
-		$layer = new Gmagick($image->path . "/" . $image->name);
+    		$layer = new Gmagick($image->path . "/" . $image->name);
 	        $layer = AuxImage::transform($layer, $attrs);
-		ob_clean();
-		ob_start();
-		echo $layer;
-		$imagedata = ob_get_contents();
-		ob_end_clean();
-		$layer->destroy();
-
-	       	return $imagedata;
-	}, 120);
+    		ob_clean();
+    		ob_start();
+    		echo $layer;
+    		$imdata = ob_get_contents();
+    		ob_end_clean();
+    		$layer->destroy();
+    	    return $imdata;
+	   }, 120);
 
         return Response::make($imagedata, 200, array('content-type' => $image->mime));
     }

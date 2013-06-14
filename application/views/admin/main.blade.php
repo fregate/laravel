@@ -7,10 +7,13 @@
 @endsection
 
 @section('content')
-<br>
 	@if ( !Auth::guest() && User::find(Auth::user()->id)->has_role('admin') )
-		{{ HTML::link_to_action('admin@pins', 'Manage Pins') }} 
-		{{ HTML::link_to_action('admin@users', 'Manage Users') }}
+<div class='userprofilemenu'>
+<ul class="usernav">
+  <li id="managepins"><a href="{{URL::to_action('admin@pins')}}"><p>Manage Pins</p></a></li>
+  <li id="manageusers"><a href="{{URL::to_action('admin@users')}}"><p>Manage Users</p></a></li>
+</ul>
+</div>
 		@yield('manage')
 	@else
 		<div class='msgerror'>

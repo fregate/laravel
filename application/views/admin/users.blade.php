@@ -84,7 +84,7 @@
 	}
 
     $(document).ready(function() {
-
+$("#manageusers").addClass('active');
     	$(".alert").hide();
 
 		$.ajax({
