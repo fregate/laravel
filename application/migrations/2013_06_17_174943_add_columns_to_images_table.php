@@ -12,7 +12,7 @@ class Add_Columns_To_Images_Table {
 		Schema::table('images', function($t) {
 		    $t->integer('user_id'); // who upload the image
 		    $t->text('comm'); // remove comm for example
-		}
+		});
 	}
 
 	/**
