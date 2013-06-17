@@ -53,7 +53,7 @@ jQuery(function($){
       H = this.height,
       W = this.width;
     }
-    
+
     console.log('init',[xsize,ysize]);
     $('#target').Jcrop({
       onChange: updatePreview,

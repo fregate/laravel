@@ -27,14 +27,14 @@ class Post_Controller extends Base_Controller
             'title'     => Input::get('title'),
             'body'      => Input::get('body'),
             'author_id' => Input::get('author_id'),
-//            AuxImage::get_field()     => Input::file(AuxImage::get_field()),
+            'img'     => Input::get('imageid'),
+            'imgparam'     => Input::get('imageparam'),
         );
     // let's setup some rules for our new data
     // I'm sure you can come up with better ones
         $rules = array(
             'title'     => 'required|min:1|max:128',
             'body'      => 'required',
-//            AuxImage::get_field()    => 'image'
         );
         // make the validator
         $v = Validator::make($new_post, $rules);
@@ -48,10 +48,6 @@ class Post_Controller extends Base_Controller
                     ->with_errors($v)
                     ->with_input();
         }
-  //      unset($new_post['uimage']);
-
-//        $imgid = AuxImage::make(Input::file('uimage'));
-//        $new_post['img'] = $imgid;
 
         // create the new post
         $post = new Post($new_post);
@@ -73,9 +69,7 @@ class Post_Controller extends Base_Controller
             $post = Post::find($postid);
             $post->comments()->delete();
 
-            $pin = Pin::where('post_id', '=', $post->id)->get();
-            if($pin != null)
-                $pin->delete();
+            Pin::where('post_id', '=', $post->id)->delete();
 
             $post->delete();
             return Redirect::to('/');

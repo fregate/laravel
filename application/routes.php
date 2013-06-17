@@ -128,7 +128,7 @@ Route::get('(edit|new|delete)/post/(:num?)', array('as' => 'post', 'before' => '
 
 Route::any('(edit|new|delete)/pin/(:num?)', array('as' => 'pin', 'before' => 'auth', 'uses' => 'pin@(:1)'));
 
-Route::get('image/(:num)/(:any?)', function($id, $attrs = "") {
+Route::get('image/(:num)/(:any?)', array('as' => 'image', 'do' => function($id, $attrs = "") {
     $image = Image::find($id);
 
     if("" == $attrs) {
@@ -150,7 +150,7 @@ Route::get('image/(:num)/(:any?)', function($id, $attrs = "") {
 
         return Response::make($imagedata, 200, array('content-type' => $image->mime));
     }
-});
+}));
 
 Route::get('image/(:any)', function($shorturl) {
     echo "try get image by short url: " . $shorturl;

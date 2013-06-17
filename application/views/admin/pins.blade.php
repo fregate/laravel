@@ -40,7 +40,7 @@
 	foreach($posts as $pkey => $post) {
 		echo "<option value='" 
 			. $post->title . "' data-image='"
-			. AuxImage::get_uri($post->img) . "'>" . $post->id . "</option>";
+			. AuxImage::get_uri($post->img, $post->imgparam) . "'>" . $post->id . "</option>";
 	}
 	echo "</td>";
 ?>

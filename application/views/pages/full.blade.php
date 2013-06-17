@@ -18,7 +18,7 @@
 @section('pinned')
 <?php
 if($post->img) {
-    echo '<div class="imagelayer" style="overflow:hidden"><img src="' . AuxImage::get_uri($post->img) . '"></div>';
+    echo '<div class="imagelayer" style="overflow:hidden"><img src="' . AuxImage::get_uri($post->img, $post->imgparam) . '"></div>';
 }
 else {
     echo '<div class="imagelayer"><img src="img/x.png"></div>';

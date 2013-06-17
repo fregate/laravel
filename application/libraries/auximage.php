@@ -5,11 +5,6 @@ class AuxImage
 {
     public static function path() { return path('storage').'uploads/'; }
 
-    public static function get_field()
-    {
-        return 'uimage';
-    }
-
     public static function make($uploaded_data, $image_size, $image_type, $image_name, $attr = "")
     {
         if($image_name == '')

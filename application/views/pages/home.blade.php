@@ -44,8 +44,9 @@ if(count($pins) != 0) {
     $linkdivs = '';
     foreach ($pins as $pinkey) {
         $linkuq = uniqid();
-        if($pinkey->post()->first()->img)
-            echo '<img src="' . AuxImage::get_uri($pinkey->post()->first()->img) 
+        $postpin = $pinkey->post()->first();
+        if($postpin->img)
+            echo '<img src="' . AuxImage::get_uri($postpin->img, $postpin->imgparam) 
                 . '" title="#' . $linkuq . '"/>';
         else
             echo '<img src="img/x.png" title="#' . $linkuq . '"/>';
@@ -83,7 +84,7 @@ else {
         echo "<div class='postentry'>";
 
         if ( $post->img ) // post with image or not
-            echo "<div class='postimage' style='background: url(\"" . AuxImage::get_uri($post->img) . "\")'><h3 class='inlinebg'>";
+            echo "<div class='postimage' style='background: url(" . AuxImage::get_uri($post->img, $post->imgparam) . ")'><h3 class='inlinebg'>";
         else
             echo "<h3>";
 

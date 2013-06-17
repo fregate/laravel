@@ -17,9 +17,6 @@ class Create_Posts {
 		    $table->date('showtime_start'); // use for auto calendar
 		    $table->date('showtime_end');
 		    $table->integer('img');
-		    $table->string('param', 256); // and parameters. like base64(json({x, y, cx, cy})). 
-		    		// if empty - crop to header original, like 
-		    		// {"x":0,"y":0,"width":min(PICx,620),"height":min(PICy,215),"framex":620,"framey":215}
 		    $table->timestamps();
 		});
 	}
