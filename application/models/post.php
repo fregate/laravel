@@ -2,7 +2,7 @@
 
 class Post extends Eloquent
 {
-public static $per_page = 42;
+public static $per_page = 21; // half from 42.
 
     public function author()
     {

@@ -40,4 +40,5 @@ return array(
     'authority' => array( 'auto' => true ),
     'recaptcha' => array( 'auto' => true ),
     'jupload' => array( 'handles' => 'upload' ),
+    'swiftmailer' => array('auto'=>true)
 );

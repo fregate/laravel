@@ -4,6 +4,29 @@
 // application/controllers/account.php
 class Account_Controller extends Base_Controller
 {
+    protected function send_mail($user, $subj, $body_paintext) {
+        Bundle::start('swiftmailer');
+        $mailer = IoC::resolve('mailer');
+
+        $transporter = Swift_SmtpTransport::newInstance('smtp.gmail.com', 465, 'ssl')
+            ->setUsername('site@kvant.in')
+            ->setPassword('pass4kvant.in');
+
+        $mailer = Swift_Mailer::newInstance($transporter);
+
+    // To use the ArrayLogger
+        $logger = new Swift_Plugins_Loggers_ArrayLogger();
+        $mailer->registerPlugin(new Swift_Plugins_LoggerPlugin($logger));
+
+        $message = Swift_Message::newInstance($subj)
+                ->setFrom(array('info@kvant.in' => 'Клуб Квант'))
+                ->setTo(array($user->email => $user->nickname))
+                ->setBody($body_paintext);
+        $numSent = $mailer->send($message, $failures);
+        if ($numSent < 1) 
+            dd($logger->dump()); //see logs
+    }
+
     public $restful = true;
 
     public function get_index()
@@ -46,7 +69,7 @@ class Account_Controller extends Base_Controller
             ));
         }
 
-	$new_account = array('password' => Input::get('newpassword'));
+	    $new_account = array('password' => Input::get('newpassword'));
         if($u->id != 1)
         {
             $new_account['email'] = Input::get('newemail');
@@ -87,6 +110,11 @@ class Account_Controller extends Base_Controller
 
         if($new_account['password'] != '') {
             $u->password = Hash::make($new_account['password']);
+            $this->send_mail($u, "Смена пароля на сайте", "Приветствуем!\n
+                Вы изменили пароль для входа на сайт Клуба Квант!\n
+                Теперь он вот такой: ". $new_account['password'] . "\n
+                Заходите к нам по-чаще!\n\n
+                Ваш Клуб Квант");
         }
 
         $u->save();
@@ -222,6 +250,16 @@ class Account_Controller extends Base_Controller
 
         Auth::login($account->id);
 
+        if(Input::get('social') != 'true') {
+            $this->send_mail($account, "Регистрация на сайте Клуба Квант", 
+                "Поздравляем!\n
+                Вы зарегистрировались на сайте Клуба Квант!\n
+                Ваш логин: ".$account->email."\n
+                Ваш пароль: ".Input::get('password')."\n
+                Заходите к нам по-чаще! Мы будем рады!\n\n
+                Ваш Клуб Квант");
+        }
+
         return Redirect::to_action('account@show', array('uid' => $account->id));
     }
 
@@ -271,6 +309,20 @@ class Account_Controller extends Base_Controller
             return Redirect::to_action('account@remindpass')
                 ->with('email_errors', true)
                 ->with_input();
+        }
+        else
+        {
+            $newpass = uniqid();
+            $u->password = Hash::make($newpass);
+            $u->save();
+
+            $this->send_mail($u, 'Сброс пароля на сайте', 
+                "Приветствуем!\n
+                Мы долго думали, какой же пароль вам больше всего подойдет и решили, 
+                что именно вот этот: " . $newpass . "\n
+                Если этот пароль все-таки не понравился, то его всегда можно сменить в своем профиле!\n
+                Заходите к нам по-чаще!\n\n
+                Ваш Клуб Квант");
         }
 
         return Redirect::to_action('account@remindpass')

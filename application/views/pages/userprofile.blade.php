@@ -54,7 +54,7 @@
                 <th width="100px" title="last name">Last Name</th>';
 
             if(!Auth::guest() && Auth::user()->id == $user->id) {
-                echo '<th width="100px" title="last name">Hidden</th>';
+                echo '<th width="100px" title="hidden">Hidden</th>';
                 echo '<th width="100px" title="action">Actions</th>';
             }
 
@@ -144,7 +144,7 @@ if($thisuser) {
 
         echo '<p>' . Form::label('show_birth_year', 'Show birth year in public') . Form::checkbox('show_birth_year', '1', Input::old('show_birth_year', $user->show_year ? '1' : '0')) . '</p>';
 
-        echo '<p>' . Form::label('send_email', 'Send email with new data') . Form::checkbox('send_email', '1', Input::old('send_email', '1')) . '</p>';
+//        echo '<p>' . Form::label('send_email', 'Send email with new data') . Form::checkbox('send_email', '1', Input::old('send_email', '1')) . '</p>';
 
         echo '<a data-toggle="modal" href="#enterpasswd" class="btn btn-primary">Save changes</a>';
     echo Form::close();
