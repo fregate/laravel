@@ -224,6 +224,8 @@ img#target {
         </button>
     {{ Form::close() }}
 
+<div class='alert'></div>
+
     <div id="gallery" class="ajaxmodal modal hide fade in" >
         <div class="modal-header">
             <a class="close" data-dismiss="modal" title="Cancel">×</a>
@@ -288,12 +290,17 @@ function update_header_preview()
 }
 
 $(document).ready(function() {
+$(".alert").hide();
     $(document).bind('drop dragover', function (e) {
         e.preventDefault();
     });
 
     $('#addPostForm').submit(function(e) {
-        $('textarea[name="body"]').encodevalue();
+	var rrr = html_parse($('textarea[name="body"]'));
+        if(rrr === false) {
+		$(".alert").addClass('alert-error').text('Error in html message. Please be careful').show();
+		return false;
+	}
         var x = $('input[name="title"]');
         x.val(x.val().replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'));
     });
@@ -404,16 +411,13 @@ $('#aop').on('show', function() {
     img.src = $pimg.attr('src');
 
     img.onload = function() {
-console.log('img onload');
       H = this.height,
       W = this.width;
 	if(jcrop_api != undefined) {
-console.log('img setselect');
 		jcrop_api.setSelect([0,0,W,H]);
 	}
     }
 
-    console.log('init',[xsize,ysize,W,H]);
     $('#target').Jcrop({
       onChange: updatePreview,
       onSelect: updatePreview,
