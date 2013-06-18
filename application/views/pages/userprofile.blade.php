@@ -60,8 +60,8 @@
 
             echo '</tr></thead><tbody>';
 
+        $cqi = false;
         foreach ($indents as $ind) {
-            $cqi = false;
             $netwk;
             $dell = '<td></td>';
             $hide = '';
