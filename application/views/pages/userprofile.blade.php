@@ -87,11 +87,12 @@
                      . $ind->first_name . "</td><td>" . $ind->last_name  . '</td>'
                      . $hide . $dell . '</tr>';
 
-                if($cqi == false && $thisuser)
-                {
-                    echo '<tr><td colspan=4>add club quant identity</td></tr>';
-                }
             }
+        }
+
+        if($cqi == false && $thisuser)
+        {
+            echo '<tr><td colspan=5><button>add club quant identity</button></td></tr>';
         }
     }
 

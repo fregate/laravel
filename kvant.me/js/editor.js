@@ -46,7 +46,7 @@ function html_parse($textarea) {
     // replace known tags
     html = html.replace(/(<media)([^>]*)(>)/gm, "[media$2]")
                .replace(/(<img)([^>]*)(>)/gm, "[img$2]")
-               .replace(/(<a)([^>]*)(>)/gm, "[a$2]")
+               .replace(/(<a)(.*)?(href=['|"]([^['|"]]*)['|"])([^>]*)(>)/gm, "[a $3]") // remove all except href="" attribute
                .replace(/<\/(a|media)>/g, "[\/$1]")
                .replace(/<(\/?)(strong|em|sup|sub|spoiler|irony)(:?[^>]*)?(>)/gm, "[$1$2]")
                .replace(/<(\/?)([biu])(?:[^>]*)?(>)/gm, "[$1$2]")
@@ -62,95 +62,28 @@ function html_parse($textarea) {
                .replace(/\[\/(a|media)\]/gm, "<\/$1>")
                .replace(/\[(\/?)(strong|em|sup|sub|spoiler|irony)(\])/gm, "<$1$2>")
                .replace(/\[(\/?)([biu])\]/gm, "<$1$2>")
-	       .replace(/\n/g, "<br />");
+	             .replace(/\n/g, "<br />");
 
     // test for emptiness
     var ivpattern = /<media|<img/g;
     var x = $('<div></div>');
     x.html(html);
     if(x.text() === "" && !ivpattern.test(html)) {
-console.log('empty html');
-        return false;
-//        html = "";
-	}
+        return false; // empty html
+  	}
 
     if(html != "")
     {
         var doc = document.createElement('div');
         doc.innerHTML = html;
-console.log(doc.innerHTML);
-console.log(html);
         if( doc.innerHTML !== html ) {
-        console.log('html error');
-            return false;
+           html = doc.innerHTML; // change html by well-formed
         }
     }
 
     $textarea.val(html);
-return true;
+    return true;
 }
-
-
-jQuery.fn.encodevalue = function() {
-
-var errors = false;
-
-//return {
-//	encerrors: function() { return errors; }
-//}
-
-  return this.each(function() {
-    var me   = jQuery(this);
-    var html = me.val();
-
-    // replace known tags
-    html = html.replace(/(<media)([^>]*)(>)/gm, "[media$2]")
-               .replace(/(<img)([^>]*)(>)/gm, "[img$2]")
-               .replace(/(<a)([^>]*)(>)/gm, "[a$2]")
-               .replace(/<\/(a|media)>/g, "[\/$1]")
-               .replace(/<(\/?)(strong|em|sup|sub|spoiler|irony)(:?[^>]*)?(>)/gm, "[$1$2]")
-               .replace(/<(\/?)([biu])(?:[^>]*)?(>)/gm, "[$1$2]")
-               .replace(/(accesskey|class|contenteditable|contextmenu|dir|hidden|id|lang|spellcheck|style|tabindex|title|xml:lang|onblur|onchange|onclick|ondblclick|onfocus|onkeydown|onkeypress|onkeyup|onload|onmousedown|onmousemove|onmouseout|onmouseover|onmouseup|onreset|onselect|onsubmit|onunload)(?:\s?=\s?)(['"][^'"]*['"])?/gm, ""); // remove additional attributes and events
-
-    //replace all unknown tags as lt-gt
-    html = html.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-
-    // return back known tags
-    html = html.replace(/(\[media)([^\]]*)(\])/gm, "<media$2>")
-               .replace(/(\[img)([^\]]*)(\])/gm, "<img$2>")
-               .replace(/(\[a)([^\]]*)(\])/gm, "<a$2>")
-               .replace(/\[\/(a|media)\]/gm, "<\/$1>")
-               .replace(/\[(\/?)(strong|em|sup|sub|spoiler|irony)(\])/gm, "<$1$2>")
-               .replace(/\[(\/?)([biu])\]/gm, "<$1$2>")
-	       .replace(/\n/g, "<br />");
-
-    // test for emptiness
-    var ivpattern = /<media|<img/g;
-    var x = $('<div></div>');
-    x.html(html);
-    if(x.text() === "" && !ivpattern.test(html)) {
-    console.log('empty post');
-        errors = true;
-    }
-
-// check for closed tags
-    if(html != "")
-    {
-	var doc = document.createElement('div');
-	doc.innerHTML = html;
-console.log(doc.innerHTML);
-console.log(html);
-	if( doc.innerHTML !== html ) {
-	console.log('html error');
-	    errors = true;
-	}
-    }
-
-    errors = false;;
-    me.val(html);
-  });
-	return errors;
-};
 
 (function($) {
     $.fn.parseVideo = function() {

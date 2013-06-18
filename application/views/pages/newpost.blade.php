@@ -290,17 +290,18 @@ function update_header_preview()
 }
 
 $(document).ready(function() {
-$(".alert").hide();
+    $(".alert").hide();
     $(document).bind('drop dragover', function (e) {
         e.preventDefault();
     });
 
     $('#addPostForm').submit(function(e) {
-	var rrr = html_parse($('textarea[name="body"]'));
+    	var rrr = html_parse($('textarea[name="body"]'));
         if(rrr === false) {
-		$(".alert").addClass('alert-error').text('Error in html message. Please be careful').show();
-		return false;
-	}
+            $(".alert").addClass('alert-error').text('Error in html message. Please be careful').show();
+            return false;
+        }
+        
         var x = $('input[name="title"]');
         x.val(x.val().replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'));
     });
