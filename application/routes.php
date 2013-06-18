@@ -158,7 +158,7 @@ Route::get('image/(:any)', function($shorturl) {
 
 Route::get('comms/(:num)', function($postid) {
     $post = Post::find($postid);
-    $comms = $post->comments()->get();
+    $comms = $post->comments()->order_by('created_at', 'asc')->get();
     return View::make('ajax.comms')
         ->with('comms', $comms)
         ->with('user', Auth::user());
