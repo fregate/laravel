@@ -39,8 +39,7 @@ class Pin_Controller extends Base_Controller
 		} else { // in 5.3.6 don't work | assigment
             $new_pin['showtime_start'] = DateTime::createFromFormat("d-m-Y", $new_pin['showtime_start']);
             $new_pin['showtime_end'] = DateTime::createFromFormat("d-m-Y", $new_pin['showtime_end']);
-Log::info($new_pin['showtime_start']);
-Log::info($new_pin['showtime_end']);
+Log::info($new_pin['showtime_start']->format('Y-m-d'));
 		}
             $pin = new Pin($new_pin);
             $pin->save();
