@@ -65,6 +65,8 @@ else {
     var BASE = "<?php echo URL::base(); ?>";
 
     function get_comm(postid) {
+	$('.alert').html('').hide();
+
         // attempt to GET the new content
         $.get(BASE+'/comms/' + postid, function(data) {
             $('#load-comms').html(data);
@@ -93,12 +95,13 @@ else {
             <!-- submit button -->
             <p>{{ Form::submit('Add comment', array('id' => 'submit')) }}</p>
         {{ Form::close() }}
-        <div class="commerror"></div>
+        <div class="alert"></div>
         @endif
 
     <script type="text/javascript">
 
 $(document).ready(function() {
+$(".alert").hide();
     get_comm({{ $post->id }});
 
     /* The following code is executed once the DOM is loaded */
@@ -113,10 +116,16 @@ $(document).ready(function() {
         if(working)
             return false;
 
+	if(!html_parse($('textarea[name="body"]')))
+	{
+             $('.alert').html('Error in html message. Please be careful').addClass('alert-error').show(); 
+		return false;
+	}
+
         working = true;
         $('#submit').val('Working...');
 
-        $('textarea[name="body"]').encodevalue();
+//        $('textarea[name="body"]').encodevalue();
 
 var x = $(this).serialize();
         $('textarea[name="body"]').prop('disabled', true);
@@ -132,14 +141,14 @@ var x = $(this).serialize();
 
             working = false;
             $('#submit').val('Add comment');
-            
+
             if(msg.status == 1) {
                 $('textarea[name="body"]').val('');
                 get_comm({{ $post->id }});
             }
             else {
                 $.each(msg.errors, function(key, value) {
-                    $('.commerror').html(key + ' ' + value); 
+                    $('.alert').html(key + ' ' + value).addClass('alert-error').show(); 
                 });
             }
         }, 'json');
