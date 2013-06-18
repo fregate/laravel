@@ -59,31 +59,49 @@ Route::get('pix/(:num)', array('as' => 'pix', 'before' => 'auth', 'do' => functi
     }
 }));
 
-Route::post('newidn/(:num)', array('before' => 'auth', 'do' => function($uid) {
-    $s = file_get_contents('http://ulogin.ru/token.php?token=' . $_POST['token'] 
-        . '&host=' . $_SERVER['HTTP_HOST']);
-    $ulogini = json_decode($s, true);
-
-    $idnhash = md5($ulogini['identity']);
+function handle_new_idn($regarray, $uid) {
+    $idnhash = md5($regarray['identity']);
     $idents = Identity::where('identityhash', '=', $idnhash)->first();
-    $user = User::find($uid);
+//    $user = User::find($uid);
 
     if($idents != NULL)
-        return Redirect::to_action('account@show', array('uid' => $user->id));
+        return;
 
     $new_ident = array(
-        'user_id' => $user->id, 
-        'first_name' => $ulogini['first_name'],
-        'last_name' => $ulogini['last_name'],
-        'identity' => $ulogini['identity'],
-        'network' => $ulogini['network'],
-        'identityhash' => md5($ulogini['identity']),
+        'user_id' => $uid, 
+        'first_name' => $regarray['first_name'],
+        'last_name' => $regarray['last_name'],
+        'identity' => $regarray['identity'],
+        'network' => $regarray['network'],
+        'identityhash' => md5($regarray['identity']),
         'hidden' => false
     );
 
     $ident = new Identity($new_ident);
     $ident->save();
-    return Redirect::to_action('account@show', array('uid' => $user->id));
+}
+
+Route::post('kkidn/(:num)', array('before' => 'auth', 'do' => function($uid) {
+    $idnarr = array(
+        'first_name' => Input::get('kkfirstname'),
+        'last_name' => Input::get('kklastname'),
+        'identity' => 'club.quant/' . $uid,
+        'network' => 'club.quant'
+    );
+
+    handle_new_idn($idnarr, $uid);
+
+    return Redirect::to_action('account@show', array('uid' => $uid));
+}));
+
+Route::post('newidn/(:num)', array('before' => 'auth', 'do' => function($uid) {
+    $s = file_get_contents('http://ulogin.ru/token.php?token=' . $_POST['token'] 
+        . '&host=' . $_SERVER['HTTP_HOST']);
+    $ulogini = json_decode($s, true);
+
+    handle_new_idn($ulogini, $uid);
+
+    return Redirect::to_action('account@show', array('uid' => $uid));
 }));
 
 Route::get('(del|hide)/idn/(:num)', array('as' => 'idn', 'before' => 'auth', 'do' => function($a, $iid) {

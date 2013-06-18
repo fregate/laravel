@@ -92,7 +92,11 @@
 
         if($cqi == false && $thisuser)
         {
-            echo '<tr><td colspan=5><button>add club quant identity</button></td></tr>';
+            echo '<tr><td colspan=5>'.Form::open('kkidn/'.$user->id, 'POST').
+            '<label for="kkfirstname">First name</label><input type="text" name="kkfirstname" value="" id="kkfirstname">'.
+            '<label for="kklastname">Last name</label><input type="text" name="kklastname" value="" id="kklastname">'.
+            '<br><button type="submit" class="btn btn-success"><i class="icon-ok icon-white"></i><span>Add local identity</span></button>'.
+            Form::close().'</td></tr>';
         }
     }
 

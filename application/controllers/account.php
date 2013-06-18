@@ -104,11 +104,13 @@ class Account_Controller extends Base_Controller
 
             $u->email = $new_account['email'];
             $u->nickname = $new_account['nickname'];
-if(version_compare(PHP_VERSION, '5.3.7') >= 0) {
-            $u->birthday = DateTime::createFromFormat("d-m-Y|", $new_account['birthday']);
-} else {  // in 5.3.6 don't work | assigment
-            $u->birthday = DateTime::createFromFormat("d-m-Y", $new_account['birthday']);
-}
+
+            if(version_compare(PHP_VERSION, '5.3.7') >= 0) {
+                $u->birthday = DateTime::createFromFormat("d-m-Y|", $new_account['birthday']);
+            } else {  // in 5.3.6 don't work | assigment
+                $u->birthday = DateTime::createFromFormat("d-m-Y", $new_account['birthday']);
+            }
+
             $u->show_year = $new_account['show_year'];
         }
 
