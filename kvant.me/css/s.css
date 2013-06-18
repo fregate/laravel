@@ -203,8 +203,11 @@ h3 {
 .footer {
 	background: #ff9f40;
 	width: 605px;
+	height: 4em;
+}
+
+.footcontent {
 	padding: 7px;
-	height: 3em;
 }
 
 .inlinebg {

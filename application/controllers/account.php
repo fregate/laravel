@@ -10,7 +10,7 @@ class Account_Controller extends Base_Controller
 
         $transporter = Swift_SmtpTransport::newInstance('smtp.gmail.com', 465, 'ssl')
             ->setUsername('site@kvant.in')
-            ->setPassword('pass4kvant.in');
+	    ->setPassword(AuxPwds::get_password('mailaccount'));
 
         $mailer = Swift_Mailer::newInstance($transporter);
 

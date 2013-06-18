@@ -65,9 +65,9 @@
 
 <div id="footerwrap">
 <div class="container_12" >
-	<div class='grid_8 suffix_2 prefix_2'><div class="footer">
+	<div class='grid_8 suffix_2 prefix_2'><div class="footer"><div class="footcontent">
 		<div class="pull-left" style="display:inline">
-		Клуб Квант <a target=_new href="http://www.phys.nsu.ru/main/">физического факультета</a><br><a href="http://www.nsu.ru" target=_new>Новосибирского Государственного Университета</a>
+			Клуб Квант <a target=_new href="http://www.phys.nsu.ru/">Физического факультета</a><br><a href="http://www.nsu.ru" target=_new>Новосибирского Государственного Университета</a>
 		</div>
 		<div class="social_accounts pull-right" style="display:inline">
 			Мы в социальных сетях<br>
@@ -76,8 +76,7 @@
 			<a href="http://vk.com/clubquant" class="vk" title="ВКонтакте" target=_new></a>
 			<a href="http://www.youtube.com/clubquant" class="yt" title="YouTube" target=_new></a>
 		</div>
-	</div>
-</div>
+	</div></div></div>
 </div>
 
 </body>
