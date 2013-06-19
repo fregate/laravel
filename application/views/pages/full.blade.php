@@ -1,6 +1,11 @@
 @layout('templates.main')
 
 @section('morelinks')
+<meta property="og:type" content="article" /> 
+<meta property="og:url" content="{{URL::full()}}" /> 
+<meta property="og:title" content="{{$post->title}}" /> 
+<meta property="og:image" content="{{$post->img == 0 ? URL::base().'/img/cqlogotop.png' : AuxImage::get_uri($post->img, $post->imgparam)}}" />
+
     <link rel="stylesheet" type="text/css" href="css/markitup/skin/style.css">
     <link rel="stylesheet" type="text/css" href="css/markitup/style.css">
     <script type="text/javascript" src="js/jquery.markitup.min.js"></script>
@@ -8,11 +13,108 @@
     <script type="text/javascript" src="js/uri.min.js"></script>
 
     <script type="text/javascript">
+ var ptitle, psummary, pimage, purl;
+
     $(document).ready(function() {
         $('textarea').markItUp(comm_editor_settings);
-	    $('media').parseVideo();
+        $('media').parseVideo();
+
+	ptitle = encodeURIComponent($('meta[property="og:title"]').attr('content'));
+	psummary = $('#articlemain').text();
+	psummary = psummary.length > 128 ? psummary.substr(0, 125) + "..." : psummary;
+        psummary = encodeURIComponent(psummary);
+        pimage = encodeURIComponent($('meta[property="og:image"]').attr('content'));
+        purl = encodeURIComponent($('meta[property="og:url"]').attr('content'));
     });
+
+function fbshare() {
+	var shareurl = "http://www.facebook.com/sharer.php?s=100&p[title]=" + ptitle 
+		+ "&p[summary]=" + psummary
+		+ "&p[url]=" + purl
+		+ "&p[images][0]=" + pimage;
+	window.open(shareurl,'Share on Facebook','toolbar=0,status=0,width=600,height=325');
+}
+
+function vkshare() {
+	var shareurl = "http://vkontakte.ru/share.php?url=" + purl
+		+ "&title=" + ptitle
+		+ "&description=" + psummary
+		+ "&image=" + pimage
+		+ "&noparse=true";
+	window.open(shareurl, 'Опубликовать ссылку во Вконтакте', 'toolbar=0,status=0,width=600,height=325');
+}
+
+function gpshare() {
+	var shareurl = "https://plus.google.com/share?url=" + purl;
+	window.open(shareurl, 'Share on Google+', 'toolbar=0,status=0,width=600,height=325');
+}
+
+function tweet() {
+	var shareurl = "https://twitter.com/intent/tweet?url=" + purl
+		+ "&text=" + ptitle;
+	window.open(shareurl, 'Share on Google+', 'toolbar=0,status=0,width=600,height=325');
+}
+
     </script>
+<style>
+
+.share {
+	display: inline-block;
+}
+
+.share a.twitter {
+	margin-bottom:-7px;
+	opacity: 0.5;
+	display: block;
+	width: 19px;
+	height: 19px;
+	background: url("img/share.icons.png") no-repeat scroll -42px 0 transparent;
+}
+
+.share a.twitter:hover {
+	opacity: 1.0;
+}
+
+.share a.vk {
+	margin-bottom:-7px;
+	opacity: 0.5;
+	display: block;
+	width: 19px;
+	height: 19px;
+	background: url("img/share.icons.png") no-repeat scroll -21px 0 transparent;
+}
+
+.share a.vk:hover {
+	opacity: 1.0;
+}
+
+.share a.fb {
+	margin-bottom:-7px;
+	opacity: 0.5;
+	display: block;
+	width: 19px;
+	height: 19px;
+	background: url("img/share.icons.png") no-repeat scroll 0 0 transparent;
+}
+
+.share a.fb:hover {
+	opacity: 1.0;
+}
+
+.share a.gp {
+	margin-bottom:-7px;
+	opacity: 0.5;
+	display: block;
+	width: 19px;
+	height: 19px;
+	background: url("img/share.icons.png") no-repeat scroll -63px 0 transparent;
+}
+
+.share a.gp:hover {
+	opacity: 1.0;
+}
+
+</style>
 @endsection
 
 @section('pinned')
@@ -30,12 +132,24 @@ else {
 @endsection
 
 @section('content')
-<!--     <h3 class="postcaption">{{ HTML::link_to_action('post@show', $post->title, array($post->id)) }}</h3> -->
     <div class="postentry">
-        <p>{{ $post->body }} </p>
+        <p id="articlemain" itemprop="description">{{ $post->body }} </p>
 
         <div class='posttimestamp'>
-            от {{ HTML::link_to_action('account@show', $post->author()->first()->nickname, array('uid' => $post->author()->first()->id)) }}, 
+
+<span class="share">
+      <a class="twitter" onclick="tweet()" href="javascript: void(0)" title="Tweet this!"></a>
+</span>
+<span class="share">
+      <a class="vk" onclick="vkshare()" href="javascript: void(0)" title="Опубликовать во ВКонтакте"></a>
+</span>
+<span class="share">
+      <a class="fb" onClick="fbshare()" href="javascript: void(0)" title="Share on Facebook"></a>
+</span>
+<span class="share">
+      <a class="gp" onclick="gpshare()" href="javascript: void(0)" title="Share on Google+"></a>
+</span>
+            | от {{ HTML::link_to_action('account@show', $post->author()->first()->nickname, array('uid' => $post->author()->first()->id)) }}, 
             {{ AuxFunc::formatdate($post->created_at) }} в {{ AuxFunc::formattime($post->created_at) }}
             @if ( !Auth::guest() && Auth::user()->has_any_role(array('admin', 'moderator')) )
                 <div id="removepost" class="modal hide fade in prompts" style="display: none">
