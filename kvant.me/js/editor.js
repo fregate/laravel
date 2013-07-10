@@ -62,7 +62,7 @@ function html_parse($textarea) {
                .replace(/\[\/(a|media)\]/gm, "<\/$1>")
                .replace(/\[(\/?)(strong|em|sup|sub|spoiler|irony)(\])/gm, "<$1$2>")
                .replace(/\[(\/?)([biu])\]/gm, "<$1$2>")
-	             .replace(/\n/g, "<br />");
+               .replace(/\n/g, "<br />");
 
     // test for emptiness
     var ivpattern = /<media|<img/g;
@@ -101,6 +101,8 @@ function html_parse($textarea) {
                          + vid  +
                         '?color=ff9f40" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>');
              }
+
+             $(this).remove();
         })
     }; 
 })(jQuery);
