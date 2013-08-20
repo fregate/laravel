@@ -36,5 +36,4 @@ class Create_Users {
 	{
 		Schema::drop('users');
 	}
-
 }

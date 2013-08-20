@@ -12,106 +12,111 @@
 @endsection
 
 @section('content')
+<?php
+    $thisuser = !Auth::guest() && Auth::user()->id == $user->id;
+?>
 <div class='userprofilemenu'>
 <ul class="usernav">
   <li class='active'><a href="#"><p>General info</p></a></li>
   <li><a href="#"><p>Posts</p></a></li>
   <li><a href="#"><p>Comments</p></a></li>
   <li><a href="#"><p>Gallery</p></a></li>
+  @if ($thisuser == true)
+  <li><a href="#"><p>Избранное</p></a></li>
+  @endif
 </ul>
 </div>
 
-    <div class="profile">
-        <?php 
-        $dc = new DateTime($user->birthday);
-        if($dc->getTimestamp() != 0) {
-            echo '<h3>Birthday: ';
-            if($user->show_year == true)
-                echo $dc->format('d-m-Y');
-            else
-                echo $dc->format('d-m');
-            echo '</h3>';
-       }
-
-        $dc = new DateTime($user->created_at);
-        if($dc->getTimestamp() != 0)
-           echo '<p>Registered since: ' . $dc->format('d-m-Y') . '</p>';
+<div class="profile">
+    <?php 
+    $dc = new DateTime($user->birthday);
+    if($dc->getTimestamp() != 0) {
+        echo '<h3>Birthday: ';
+        if($user->show_year == true)
+            echo $dc->format('d-m-Y');
         else
-            echo '<p>Always here</p>';
-        ?>
-    </div>
+            echo $dc->format('d-m');
+        echo '</h3>';
+    }
 
-    <div>
-    <?php
-        $indents = $user->identities()->get();
-        $thisuser = !Auth::guest() && Auth::user()->id == $user->id;
-        if(count($indents) != 0 && $user->id != 1) {
-            echo '<table class="table table-striped table-bordered" id="idntable">  
-            <thead>  
-              <tr>  
-                <th title="network">Network</th>  
-                <th width="100px" title="first name">First Name</th>
-                <th width="100px" title="last name">Last Name</th>';
+    $dc = new DateTime($user->created_at);
+    if($dc->getTimestamp() != 0)
+       echo '<p>Registered since: ' . $dc->format('d-m-Y') . '</p>';
+    else
+        echo '<p>Always here</p>';
+    ?>
+</div>
 
-            if(!Auth::guest() && Auth::user()->id == $user->id) {
-                echo '<th width="100px" title="hidden">Hidden</th>';
-                echo '<th width="100px" title="action">Actions</th>';
-            }
+<?php
+echo "<div>";
+$indents = $user->identities()->get();
+if(count($indents) != 0 && $user->id != 1) {
+    echo '<table class="table table-striped table-bordered" id="idntable">  
+    <thead>  
+      <tr>  
+        <th title="network">Network</th>  
+        <th width="100px" title="first name">First Name</th>
+        <th width="100px" title="last name">Last Name</th>';
 
-            echo '</tr></thead><tbody>';
+    if(!Auth::guest() && Auth::user()->id == $user->id) {
+        echo '<th width="100px" title="hidden">Hidden</th>';
+        echo '<th width="100px" title="action">Actions</th>';
+    }
 
-        $cqi = false;
-        foreach ($indents as $ind) {
-            $netwk;
-            $dell = '<td></td>';
-            $hide = '';
-            if($ind->network == 'club.quant')
-            {
-                $cqi = true;
-                $netwk = HTML::link_to_action('account@show', $ind->network, array('uid' => $ind->user_id));
-            }
-            else
-            {
-                $netwk = HTML::link($ind->identity, $ind->network);
-                if($thisuser && count($indents) > 1) {
-                    $dell = '<td>' . HTML::link_to_route('idn', 'Del', array('del', $ind->id)) . '</td>';
-                }
-            }
+    echo '</tr></thead><tbody>';
 
-            if($thisuser)
-                $hide = '<td>' . HTML::link_to_route('idn', $ind->hidden == true  ? 'Show' : 'Hide', array('hide', $ind->id)) . '</td>';
-
-            if(!$ind->hidden || $thisuser) {
-                echo '<tr><td>'
-                     . $netwk . '</td><td>'
-                     . $ind->first_name . "</td><td>" . $ind->last_name  . '</td>'
-                     . $hide . $dell . '</tr>';
-
-            }
-        }
-
-        if($cqi == false && $thisuser)
+    $cqi = false;
+    foreach ($indents as $ind) {
+        $netwk;
+        $dell = '<td></td>';
+        $hide = '';
+        if($ind->network == 'club.quant')
         {
-            echo '<tr><td colspan=5>'.Form::open('kkidn/'.$user->id, 'POST').
-            '<label for="kkfirstname">First name</label><input type="text" name="kkfirstname" value="" id="kkfirstname">'.
-            '<label for="kklastname">Last name</label><input type="text" name="kklastname" value="" id="kklastname">'.
-            '<br><button type="submit" class="btn btn-success"><i class="icon-ok icon-white"></i><span>Add local identity</span></button>'.
-            Form::close().'</td></tr>';
+            $cqi = true;
+            $netwk = HTML::link_to_action('account@show', $ind->network, array('uid' => $ind->user_id));
+        }
+        else
+        {
+            $netwk = HTML::link($ind->identity, $ind->network);
+            if($thisuser && count($indents) > 1) {
+                $dell = '<td>' . HTML::link_to_route('idn', 'Del', array('del', $ind->id)) . '</td>';
+            }
+        }
+
+        if($thisuser)
+            $hide = '<td>' . HTML::link_to_route('idn', $ind->hidden == true  ? 'Show' : 'Hide', array('hide', $ind->id)) . '</td>';
+
+        if(!$ind->hidden || $thisuser) {
+            echo '<tr><td>'
+                 . $netwk . '</td><td>'
+                 . $ind->first_name . "</td><td>" . $ind->last_name  . '</td>'
+                 . $hide . $dell . '</tr>';
+
         }
     }
 
-    if($thisuser && $user->id != 1) // add new id
-    { 
-        echo '<tr ><td ><script src="//ulogin.ru/js/ulogin.js"></script>
-              <div id="uLogin" data-ulogin="display=panel;fields=first_name,last_name;providers=facebook,vkontakte,twitter,google,odnoklassniki,mailru,yandex;hidden=openid;redirect_uri='
-              . rawurlencode(URL::base() . '/newidn/' . $user->id) .'"></div>
-              </td><td colspan="4">Connect this account with other social network accounts</td></tr>';
+    if($cqi == false && $thisuser)
+    {
+        echo '<tr><td colspan=5>'.Form::open('kkidn/'.$user->id, 'POST').
+        '<label for="kkfirstname">First name</label><input type="text" name="kkfirstname" value="" id="kkfirstname">'.
+        '<label for="kklastname">Last name</label><input type="text" name="kklastname" value="" id="kklastname">'.
+        '<br><button type="submit" class="btn btn-success"><i class="icon-ok icon-white"></i><span>Add local identity</span></button>'.
+        Form::close().'</td></tr>';
     }
+}
 
-    if(count($indents) != 0 && $user->id != 1) {
-        echo '</tbody></table>';
-    }
-    echo ' </div>';
+if($thisuser && $user->id != 1) // add new id
+{ 
+    echo '<tr ><td ><script src="//ulogin.ru/js/ulogin.js"></script>
+          <div id="uLogin" data-ulogin="display=panel;fields=first_name,last_name;providers=facebook,vkontakte,twitter,google,odnoklassniki,mailru,yandex;hidden=openid;redirect_uri='
+          . rawurlencode(URL::base() . '/newidn/' . $user->id) .'"></div>
+          </td><td colspan="4">Connect this account with other social network accounts</td></tr>';
+}
+
+if(count($indents) != 0 && $user->id != 1) {
+    echo '</tbody></table>';
+}
+echo ' </div>';
 
 if($thisuser) {
     echo '<div>';
@@ -157,7 +162,6 @@ if($thisuser) {
     echo '</div>';
     echo '<div class="alert" id="updatestatus" style="width:250px"></div>';
 }
-
 ?>
 
 <div id="enterpasswd" class="modal hide fade in prompts" style="display: none; ">  
@@ -213,8 +217,6 @@ $(function() {
         $.post('{{ URL::to_action("account@update") }}', $('#changeUserDataForm').serialize(), function(msg) {
             working = false;
             $('#submit').val('Save changes');
-
-console.log(msg);
 
             if(msg.status == 1)
             {

@@ -207,7 +207,7 @@
 					if (button.separator) {
 						li = $('<li class="markItUpSeparator">'+(button.separator||'')+'</li>').appendTo(ul);
 					} else {
-						li = $('<li class="markItUpButton markItUpButton'+button.className+'"><a href="" '+key+' title="'+title+'"></a></li>')
+						li = $('<li class="markItUpButton markItUpButton'+button.className+'"><a href="" '+key+' title="'+title+'">'+title+'</a></li>')
 						.bind("contextmenu.markItUp", function() { // prevent contextmenu on mac and allow ctrl+click
 							return false;
 						}).bind('click.markItUp', function(e) {

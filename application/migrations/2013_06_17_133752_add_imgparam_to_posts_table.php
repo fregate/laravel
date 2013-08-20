@@ -24,7 +24,7 @@ class Add_Imgparam_To_Posts_Table {
 	public function down()
 	{
         Schema::table('posts', function($t) {
-                $t->drop_column('imgparam');
+			$t->drop_column('imgparam');
         });
     }
 }

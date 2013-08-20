@@ -36,7 +36,6 @@ $pins = Pin::where('showtime_start', '<', date('c'))
          ->where('showtime_end', '>', date('c'))->get();
 
 if(count($pins) != 0) {
-
     echo '<div class="imagelayer">
             <div class="slider-wrapper theme-cq">
                 <div id="slider" class="nivoSlider">';
@@ -78,7 +77,7 @@ else {
 @endsection
 
 @section('content')
-    <div class='newsblock'>
+<div class='newsblock'>
 <?php
     foreach ($posts->results as $post) {
         echo "<div class='postentry'>";
@@ -106,6 +105,6 @@ else {
         echo "</div>"; // postentry
     }
 ?>
-    </div>
+</div>
 <?php echo $posts->links(); ?>
 @endsection

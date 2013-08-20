@@ -53,18 +53,17 @@ img#target {
 @section('content')
 
 {{$childview}}
-    <div id="ajaxmodal" class="modal hide fade in" >
-        <div class="modal-header">
-            <a class="close" data-dismiss="modal" title="Cancel">×</a>
-            <h3>Upload image for header</h3>
-        </div>
-        <div class="modal-body"></div>
-        <div class="modal-footer">
-            <a href="#" class="btn btn-success btn-dynamic">Done</a>
-            <a href="#" class="btn" data-dismiss="modal">Cancel</a>  
-        </div>
+<div id="ajaxmodal" class="modal hide fade in" >
+    <div class="modal-header">
+        <a class="close" data-dismiss="modal" title="Cancel">×</a>
+        <h3>Upload image for header</h3>
     </div>
-<!-- <a href="#" data-toggle="modal" class="confirm-delete red" >Upload image through ajax view</a> -->
+    <div class="modal-body"></div>
+    <div class="modal-footer">
+        <a href="#" class="btn btn-success btn-dynamic">Done</a>
+        <a href="#" class="btn" data-dismiss="modal">Cancel</a>  
+    </div>
+</div>
 
 <script>
 $('#ajaxmodal').on('show', function() {

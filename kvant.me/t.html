@@ -10,6 +10,8 @@
 	<link rel="stylesheet" href="css/960_12_col.css" />
 	<link href='http://fonts.googleapis.com/css?family=PT+Sans|PT+Sans+Narrow|Open+Sans+Condensed:700&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
 	<script src="js/jquery.min.js"></script>
+	<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+	<script type="text/javascript" src="js/bootstrap.min.js"></script>
 
 <!-- pinned news extension -->
 	<link rel="stylesheet" href="css/nivo-slider.css" type="text/css" media="screen" />
@@ -23,6 +25,31 @@
 	<script type="text/javascript" src="js/jquery.markitup.min.js"></script>
 
 	<script type="text/javascript">
+	function img_prompt(h) {
+		console.log(h);
+//		$.markItUp({ replaceWith:'x123'} );;
+  // text = "You've just click the "+h.name+" button ";
+  //   text+= "which will wrap '"+h.selection+"' ";
+  //   text+= "with "+h.openWith+" and "+h.closeWith+".";
+  //   alert(text);
+  $('#insertimg').modal('show');
+    	}
+
+
+function url_prompt(h) {
+   console.log(h);
+   $('#inserturl').modal('show');
+}
+
+	function media_prompt(h) {
+		console.log(h);
+		$('#insertmedia').modal('show');
+    	}
+	function glr_prompt(h) {
+		console.log(h);
+		$('#insertglr').modal('show');
+    	}
+
 	var comm_editor_settings = {
 		onTab:    		{keepDefault:false, replaceWith:'    '},
 		markupSet:  [ 	
@@ -36,9 +63,14 @@
 			{name:'Spoiler', className: 'Spoiler', openWith:'<spoiler>', closeWith:'</spoiler>' },
 			{name:'Irony', className: 'Irony', openWith:'<irony>', closeWith:'</irony>' },
 			{separator:'---------------' },
-			{name:'Picture', className: 'Image', key:'P', replaceWith:'<img src="[![Source:!:http://]!]" alt="[![Alternative text]!]" />' },
-			{name:'Link', className: 'Link', key:'L', openWith:'<a href="[![Link:!:http://]!]"(!( title="[![Title]!]")!)>', closeWith:'</a>', placeHolder:'Your text to link...' },
-			{name:'Video', className: 'Video', replaceWith:'<video src="[![Youtube Link:!:http://]!]" />' }
+			{name:'Insert Picture', className: 'Image', dropMenu: [
+				{name:'Insert link', className: 'Image', key:'P', beforeInsert: img_prompt },
+				{name:'Insert from gallery', className: 'Image', key:'G', beforeInsert: glr_prompt }
+			] },
+//			{name:'Link', className: 'Link', key:'L', openWith:'<a href="[![Link:!:http://]!]"(!( title="[![Title]!]")!)>',  closeWith:'</a>', placeHolder:'Your text to link...' },
+			{name:'Link', className: 'Link', key:'L',  beforeInsert: url_prompt },
+			{name:'Video', className: 'Video', key: 'M',  beforeInsert: media_prompt }
+//			{name:'Video', className: 'Video', key: 'M', replaceWith:'<video src="[![Youtube Link:!:http://]!]" />' }
 	//		{name:'Audio', className: 'Audio', openWith:'<audio>', closeWith:'</audio>' }
 		]
 	};
@@ -59,6 +91,7 @@
 	//		{name:'Audio', className: 'Audio', openWith:'<audio>', closeWith:'</audio>' }
 		]
 	};
+
 	</script>
 <!-- editor extension -->
 
@@ -220,6 +253,31 @@
 			$('.inlinebg').inlinebackgrounds();
 
 			$('#commeditor').markItUp(comm_editor_settings);
+
+    $('#confirmimg').on('click', function(e) {
+        e.preventDefault();
+        $("#insertimg").modal('hide');
+        $.markItUp( { target: '#commeditor', replaceWith: '<img src="' + $('#imgurl').val() + '" alt="' + $('#imgalt').val() + '">' } );
+    });
+
+    $('#confirmurl').on('click', function(e) {
+        e.preventDefault();
+        $("#inserturl").modal('hide');
+        $.markItUp( { target: '#commeditor', replaceWith: '<a href="' + $('#linkurl').val() + '">' + $('#linkpromt').val() + '</a>' } );
+    });
+
+    $('#confirmmedia').on('click', function(e) {
+        e.preventDefault();
+        $("#insertmedia").modal('hide');
+        $.markItUp( { target: '#commeditor', replaceWith: '<media src="' + $('#mediaurl').val() + '">' } );
+    });
+
+    $('#confirmglr').on('click', function(e) {
+        e.preventDefault();
+        $("#insertglr").modal('hide');
+        $.markItUp( { target: '#commeditor', replaceWith: '<img src="' + $('#imgurl').val() + '" alt="' + $('#imgalt').val() + '">' } );
+    });
+
 		});
 
 		(function($){
@@ -247,29 +305,6 @@
 	<div class='grid_2 topheader'><div class='cqlogotop'></div></div>
 	<div class='grid_8 topheader'><div class='pinnednews'>
 
-		<div class='imagelayer'>
-		        <div class="slider-wrapper theme-cq">
-			    	<div id="slider" class="nivoSlider">
-		 		<img src="img/a.jpg" title='#AAAAA'>
-		 		<img src="img/b.jpg" title='BBBBB'>
-		 		<img src="img/c.jpg" title='CCCCC'>
-		 		<img src="img/d.jpg" title='DDDDD'>
-		 		<img src="img/e.jpg" title='EEEEE'>
-					</div>
-				</div>
-				<div class='nivo-caption' id='AAAAA'><a href="http://dev7studios.com">AAAAAAAAAA</a></div>
-				<script type="text/javascript">
-				$(window).load(function() {
-				    $("#slider").nivoSlider({
-				    	effect: "random",
-				    	directionNav: false,
-				    	controlNav: true
-				    });
-				});
-				</script> 
-		</div>
-
-		<div class='masklayer'><img src="img/m2.png"></div>
 
 	</div></div>
 	<div class='grid_2 topheader'>
@@ -316,10 +351,72 @@
 					<textarea id="commeditor"></textarea>
 				</div>
 
+<div id="insertimg" class="modal hide fade in prompts" >  
+    <div class="modal-header">
+        <a class="close" data-dismiss="modal">×</a>  
+        <h3>Insert image</h3>  
+    </div>  
+    <div class="modal-body">
+        <p><label for="imgurl">Enter image URL</label></p>
+        <p><input type=text id="imgurl" value="http://"/></p>
+        <p><label for="imgalt">Enter image description</label></p>
+        <p><input type=text id="imgalt"/></p>
+    </div>
+    <div class="modal-footer">  
+        <a href="#" class="btn btn-success btn-primary" id="confirmimg">Insert link</a>  
+        <a href="#" class="btn btn-cancel" data-dismiss="modal">Cancel</a>  
+    </div>  
+</div> 
+
+<div id="inserturl" class="modal hide fade in prompts" >  
+    <div class="modal-header">
+        <a class="close" data-dismiss="modal">×</a>  
+        <h3>Insert Link Url</h3>  
+    </div>  
+    <div class="modal-body">
+        <p><label for="linkurl">Enter URL</label></p>
+        <p><input type=text id="linkurl" value="http://"/></p>
+        <p><label for="linkpromt">Enter description</label></p>
+        <p><input type=text id="linkpromt"/></p>
+    </div>
+    <div class="modal-footer">  
+        <a href="#" class="btn btn-success btn-primary" id="confirmurl">
+		Insert link</a>  
+        <a href="#" class="btn btn-cancel" data-dismiss="modal">Cancel</a>  
+    </div>  
+</div> 
+
+<div id="insertmedia" class="modal hide fade in prompts" >  
+    <div class="modal-header">
+        <a class="close" data-dismiss="modal">×</a>  
+        <h3>Insert online media (youtube, vimeo)</h3>  
+    </div>  
+    <div class="modal-body">
+        <p><label for="mediaurl">Enter video URL</label></p>
+        <p><input type=text id="mediaurl" value="http://"/></p>
+    </div>
+    <div class="modal-footer">  
+        <a href="#" class="btn btn-success btn-primary" id="confirmmedia">Insert media</a>  
+        <a href="#" class="btn btn-cancel" data-dismiss="modal">Cancel</a>  
+    </div>  
+</div> 
+
+<div id="insertglr" class="modal hide fade in prompts" >  
+    <div class="modal-header">
+        <a class="close" data-dismiss="modal">×</a>  
+        <h3>Insert image from gallery</h3>  
+    </div>  
+    <div class="modal-body">
+    </div>
+    <div class="modal-footer">  
+        <a href="#" class="btn btn-success btn-primary" id="confirmglr">Insert image</a>  
+        <a href="#" class="btn btn-success" id="editglrimg">Edit area of interest</a>  
+        <a href="#" class="btn btn-cancel" data-dismiss="modal">Cancel</a>  
+    </div>  
+</div> 
 			</div>
 		</div>
 	</div>
-
 
 <!-- 	<div class='grid_2'>
 	<div class='sidebar'>

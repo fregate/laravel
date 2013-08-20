@@ -13,8 +13,8 @@
 	<script type="text/javascript" src="js/bootstrap.min.js"></script>
 
 	<link rel="stylesheet" href="css/960_12_col.css" />
+	<link href='http://fonts.googleapis.com/css?family=PT+Sans|PT+Sans+Narrow|Open+Sans|Open+Sans+Condensed:700&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" href="css/s.css" />
-	<link href='http://fonts.googleapis.com/css?family=PT+Sans|PT+Sans+Narrow|Open+Sans+Condensed:700&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
 
 @yield('morelinks')
 

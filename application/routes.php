@@ -148,10 +148,13 @@ Route::any('(edit|new|delete)/pin/(:num?)', array('as' => 'pin', 'before' => 'au
 
 Route::get('image/(:num)/(:any?)', array('as' => 'image', 'do' => function($id, $attrs = "") {
     $image = Image::find($id);
+    if($image == null)
+	return Response::make('No image', 404);
 
+    $imagedata = "";
     if("" == $attrs) {
         $imagedata = File::get($image->path . "/" . $image->name);
-        return Response::make($imagedata, 200, array('content-type' => $image->mime));
+//        return Response::make($imagedata, 200, array('content-type' => $image->mime));
     }
     else {
         $imagedata = Cache::remember('image_' . $id . '_' . $attrs, function() use ($image, $attrs) {
@@ -166,14 +169,18 @@ Route::get('image/(:num)/(:any?)', array('as' => 'image', 'do' => function($id, 
     	    return $imdata;
 	   }, 120);
 
-        return Response::make($imagedata, 200, 
-		array('content-type' => $image->mime, 
-		      'Cache-Control' => 'public, must-revalidate, max-age=250000', 
-                      'Vary' => 'Content-ID', 
-                      'Content-ID' => md5($imagedata)
-                )
-               );
     }
+if($imagedata != "")
+    return Response::make($imagedata, 200, 
+	array('content-type' => $image->mime, 
+	      'Cache-Control' => 'public, must-revalidate, max-age=250000', 
+              'Vary' => 'Content-ID', 
+              'Content-ID' => md5($imagedata)
+            )
+   );
+else
+    return Response::make('No image', 404);
+
 }));
 
 Route::get('image/(:any)', function($shorturl) {
