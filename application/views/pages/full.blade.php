@@ -400,20 +400,6 @@ function tweet() {
   display:none;
 }
 
-.imgspan {
-    margin: 1px;
-    border: 2px solid white;
-    cursor:pointer;
-}
-
-.imgspan:hover {
-    border: 2px solid #ffd79d;
-}
-
-.imgspan[active] {
-    border: 2px solid #ffd79d;
-}
-
 #headerimagepreview {
     width: 605px;
     height: 210px;

@@ -2,6 +2,8 @@
 
 class Comment extends Eloquent
 {
+public static $per_page = 21; // half from 42.
+
     public function author()
     {
         return $this->belongs_to('User', 'author_id');

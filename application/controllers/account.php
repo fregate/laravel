@@ -37,7 +37,31 @@ class Account_Controller extends Base_Controller
     public function get_show($uid)
     {
         $user = User::find($uid);
-        return View::make('pages.userprofile')->with('user', $user);
+        return View::make('user.userprofile')->with('user', $user);
+    }
+
+    public function get_post($uid)
+    {
+        $user = User::find($uid);
+        return View::make('user.userpost')->with('user', $user);
+    }
+
+    public function get_comment($uid)
+    {
+        $user = User::find($uid);
+        return View::make('user.usercomment')->with('user', $user);
+    }
+
+    public function get_gallery($uid)
+    {
+        $user = User::find($uid);
+        return View::make('user.usergallery')->with('user', $user);
+    }
+
+    public function get_favorite($uid)
+    {
+        $user = User::find($uid);
+        return View::make('user.userfav')->with('user', $user);
     }
 
     public function post_update() // ajax

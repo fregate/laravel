@@ -25,27 +25,4 @@
 @section('moderation')
 	{{ HTML::link_to_action('admin@index', 'Admin panel') }}
 
-	<!--
-	// determine original size of picture
-	<script>
-var H = $("#img").height(),
-	W = $("#img").width();
-
-$('body').append('<br><br>Height found on DOM element:   '+W+' x '+H);
-
-var img = new Image();
-img.src = $('#img').attr('src');
-
-img.onload = function() {
-	var H2 = this.height,
-    	W2 = this.width;
-    $('body').append('<br><br>Height found on JS element:   '+W2+' x '+H2);
-}
-</script>
-
-<xxxhtml>
-	<img src="http://2013.kvant.me/title.png" height="100"px width="120px" id="img" />
-</xxxhtml>
-	 -->
-
 @endsection

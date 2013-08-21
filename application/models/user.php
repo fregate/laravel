@@ -4,7 +4,12 @@ class User extends Eloquent
 {
     public function posts()
     {
-        return $this->has_many('Post');
+        return $this->has_many('Post', 'author_id');
+    }
+
+    public function comms()
+    {
+        return $this->has_many('Comment', 'author_id');
     }
 
     public function identities()

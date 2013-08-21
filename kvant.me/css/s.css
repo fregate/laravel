@@ -19,6 +19,10 @@ a {
    cursor: pointer;
 }
 
+.curhand {
+    cursor:pointer;
+}
+
 input[type=text] {
     font-family:'PT Sans', sans-serif;
 }
@@ -378,4 +382,19 @@ display:inline-block;
 -moz-transform: skew(8deg);
 -o-transform: skew(8deg);
     transform: skew(8deg);
+}
+
+
+
+.imgspan {
+    margin: 1px;
+    border: 2px solid white;
+}
+
+.imgspan:hover {
+    border: 2px solid #ffd79d;
+}
+
+.imgspan[active] {
+    border: 2px solid #ffd79d;
 }
