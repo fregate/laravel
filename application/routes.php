@@ -146,6 +146,15 @@ Route::get('(edit|new|delete)/post/(:num?)', array('as' => 'post', 'before' => '
 
 Route::any('(edit|new|delete)/pin/(:num?)', array('as' => 'pin', 'before' => 'auth', 'uses' => 'pin@(:1)'));
 
+Route::get('image/remove/(:num)', array('before' => 'auth', 'as' => 'image', 'do' => function($idi) {
+  $img = Image::find($idi);
+  if($img == null)
+    return Response::make('No image', 404);
+
+  AuxImage::remove($idi);
+  return Redirect::back();
+}));
+
 Route::get('image/(:num)/(:any?)', array('as' => 'image', 'do' => function($id, $attrs = "") {
     $image = Image::find($id);
     if($image == null)

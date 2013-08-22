@@ -5,6 +5,25 @@ class AuxImage
 {
     public static function path() { return path('storage').'uploads/'; }
 
+    public static function remove($imageid)
+    {
+      $img = Image::find($imageid);
+      if($img == null)
+        return false;
+
+      $ipath = $img->path . $img->name;
+      if(!is_readable($ipath)) {
+        $img->delete();
+Log::write('info', 'remove image: file '.$ipath.' non exist or smth else. remove only db record');
+        return true;
+      }
+
+      unlink($ipath);
+        $img->delete();
+Log::write('info', 'remove image: file '.$ipath.' successfull');
+        return true;
+    }
+
     public static function make($uploaded_data, $image_size, $image_type, $image_name, $attr = "")
     {
         if($image_name == '')

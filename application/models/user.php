@@ -2,6 +2,8 @@
 
 class User extends Eloquent
 {
+public static $per_page = 21; // half from 42.
+
     public function posts()
     {
         return $this->has_many('Post', 'author_id');

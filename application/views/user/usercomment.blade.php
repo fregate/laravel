@@ -13,6 +13,9 @@ $(document).ready(function() {
 
 @section('profilesection')
 <?php
+
+$useradmin = !Auth::guest() && Auth::user()->has_any_role(array('admin', 'moderator'));
+
 $comms = $user->comms()->order_by('created_at', 'desc')->paginate();
 
 foreach ($comms->results as $cc) {
@@ -20,7 +23,7 @@ echo '<div class="commentry" style="border-bottom: 1px solid #ff9f40;"> <span da
 echo '<div class="posttimestamp">'
      . AuxFunc::formatdate($cc->created_at) . ' в ' . AuxFunc::formattime($cc->created_at);
 
-    if( !Auth::guest() && Auth::user()->has_any_role(array('admin', 'moderator')) )
+    if($useradmin)
     {
          echo ' | <a href="#" data-toggle="modal" class="confirm-delete red" data-id="' . $cc->id . '" >[x] Delete</a>';
     }
@@ -30,7 +33,7 @@ echo '<div class="posttimestamp">'
 
 echo $comms->links();
 
-if( !Auth::guest() && Auth::user()->has_any_role(array('admin', 'moderator')) )
+if( $useradmin )
 {
 if(is_array($comms->results) && count($comms->results) > 0)
 {

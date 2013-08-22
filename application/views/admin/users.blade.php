@@ -13,20 +13,20 @@
 @section('manage')
 <br><br>
 
-<table class="table table-striped table-bordered" id="usertable">  
-<thead>  
-  <tr>  
-    <th width="20">#UID</th>  
-    <th width="100">Username</th>  
-    <th width="50">email</th>  
-    <th >roles</th>  
-    <th width="100">Identities</th>
-  </tr>  
-</thead>  
-<tbody>
 	<?php
-		$users = User::all();
-		foreach ($users as $u) {
+echo '<table class="table table-striped table-bordered" id="usertable">';
+echo '<thead>';
+echo '<tr>';
+echo '<th width="20">#UID</th>';
+echo '<th width="100">Username</th>';
+echo '<th width="50">email</th>';
+echo '<th >roles</th>';
+echo '<th width="100">Identities</th>';
+echo '</tr>';
+echo '</thead>';
+echo '<tbody>';
+		$users = User::order_by("nickname", 'asc')->paginate();
+		foreach ($users->results as $u) {
 			echo "<tr>";
 			echo "<td>" . $u->id . "</td>";
 			echo "<td>" . HTML::link(URL::to_action('account@show', array('uid' => $u->id)), $u->nickname ) . "</td>";
@@ -51,9 +51,10 @@
 			echo "<td>" . $idnshtml . "</td>";
 			echo "</tr>";
 		}
+echo "</tbody>";
+echo "</table>";
+echo $users->links();
 	?>
-</tbody>
-</table>
 
 <div class="alert" style="width:250px"></div>
 
