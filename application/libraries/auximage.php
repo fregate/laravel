@@ -63,7 +63,7 @@ Log::write('info', 'move_file returns '.$mres);
         return URL::base() . "/image/" . $id . "/" . $attrs;
     }
 
-    public static function transform($layer, $attrs)
+    public static function transform($layer, $attrs, $id)
     {
         $a = json_decode(base64_decode($attrs), true);
         if(!isset($a['framex']) || !isset($a['framey']))
@@ -78,6 +78,24 @@ Log::write('info', 'move_file returns '.$mres);
     	    }
 	// Log::write('info', 'new number of images '.$layer->getNumberImages());
         }
+
+// check for percents
+        if(isset($a['w']) && is_string($a['w']))
+	{
+	  $img = Image::find($id);
+	  if($img == null)
+            return $layer;
+          $a['w'] = $img->sx;
+	}
+
+        if(isset($a['h']) && is_string($a['h']))
+        {
+          $img = Image::find($id);
+          if($img == null)
+            return $layer;
+          $a['h'] = $img->sy;
+        }
+
 
         $layer->cropimage(
             isset($a['w']) ? $a['w'] : $a['framex'],

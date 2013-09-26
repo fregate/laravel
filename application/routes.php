@@ -146,7 +146,7 @@ Route::get('(edit|new|delete)/post/(:num?)', array('as' => 'post', 'before' => '
 
 Route::any('(edit|new|delete)/pin/(:num?)', array('as' => 'pin', 'before' => 'auth', 'uses' => 'pin@(:1)'));
 
-Route::get('image/remove/(:num)', array('before' => 'auth', 'as' => 'image', 'do' => function($idi) {
+Route::get('image/remove/(:num)', array('before' => 'auth', 'do' => function($idi) {
   $img = Image::find($idi);
   if($img == null)
     return Response::make('No image', 404);
@@ -166,9 +166,9 @@ Route::get('image/(:num)/(:any?)', array('as' => 'image', 'do' => function($id, 
 //        return Response::make($imagedata, 200, array('content-type' => $image->mime));
     }
     else {
-        $imagedata = Cache::remember('image_' . $id . '_' . $attrs, function() use ($image, $attrs) {
+        $imagedata = Cache::remember('image_' . $id . '_' . $attrs, function() use ($image, $attrs, $id) {
     		$layer = new Gmagick($image->path . "/" . $image->name);
-	        $layer = AuxImage::transform($layer, $attrs);
+	        $layer = AuxImage::transform($layer, $attrs, $id);
     		ob_clean();
     		ob_start();
     		echo $layer;

@@ -7,10 +7,13 @@
 <script src="bundles/jupload/js/jquery.iframe-transport.js"></script>
 <script src="bundles/jupload/js/jquery.fileupload.js"></script>
 <script src="js/jquery-ui.min.js"></script>
+<script src="js/editor.js"></script>
 
 <script type="text/javascript">
 $(document).ready(function() {
   $("#liimgs").addClass("active");
+  $("#upload_waiting").hide();
+  $(".fileinput-button").removeAttr('disabled');
 
   $("#uploadfiles").fileupload({
     url: "{{URL::base()}}/upload/xxx",
@@ -19,9 +22,10 @@ $(document).ready(function() {
     minFileSize: 1,
     done: function (e, data) {
       console.log(data.result);
-      get_gallery_ajax(true);
+//      get_gallery_ajax(true);
       $("#upload_waiting").hide();
       $(".fileinput-button").removeAttr('disabled');
+      createimgpreview(data.result[0].idi);
     },
     progressall: function (e, data) {
       $("#upload_waiting").show();
@@ -29,6 +33,26 @@ $(document).ready(function() {
     }
   });
 });
+
+function createimgpreview(imgid) {
+  $("#uploaded").append("<div class='imgspan uploaded'><img onclick='fullimage(" 
+  + imgid + ")' src='{{URL::to('image')}}/" + imgid +
+  "/" + create_coord(194, 200) + "'/></div>");
+}
+
+function create_coord (Wi, Hi) {
+  var jobj = {
+    'x' : 0,
+    'y' : 0,
+    'w' : '100%',
+    'h' : '100%',
+    'framex' : Wi,
+    'framey' : Hi
+  };
+
+  return base64_encode(JSON.stringify(jobj));
+}
+
 
 var mconst = 40;
 function resize_dlg(dlgid) {
@@ -126,7 +150,13 @@ $('.confirm-delete').on('click', function(e) {
 
 ?>
 <div id="showimg" title="Show image" >
-<div id="imgcontainer"></div>
+  <div id="imgcontainer"></div>
 </div>
 
+<span class="btn btn-success fileinput-button">
+<i class="icon-plus icon-white"></i><span>Add images...</span>
+<input id="uploadfiles" type="file" name="files[]" multiple>
+<span id="upload_waiting"><img src="img/loading.gif"></span>
+</span>
+<div id="uploaded" style="clear:both"></div>
 @endsection
