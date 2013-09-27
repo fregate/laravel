@@ -171,3 +171,8 @@ if ( ! Request::cli() and Config::get('session.driver') !== '')
 {
 	Session::load();
 }
+
+IoC::singleton('translit', function() {
+  $t = new AuxTransLit();
+  return $t;
+});

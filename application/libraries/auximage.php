@@ -85,7 +85,7 @@ Log::write('info', 'move_file returns '.$mres);
 	  $img = Image::find($id);
 	  if($img == null)
             return $layer;
-          $a['w'] = $img->sx;
+          $a['w'] = $img->sx * str_replace('%', '', $a['w']) / 100;
 	}
 
         if(isset($a['h']) && is_string($a['h']))
@@ -93,7 +93,7 @@ Log::write('info', 'move_file returns '.$mres);
           $img = Image::find($id);
           if($img == null)
             return $layer;
-          $a['h'] = $img->sy;
+          $a['w'] = $img->sy * str_replace('%', '', $a['h']) / 100;
         }
 
 

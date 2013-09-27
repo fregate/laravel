@@ -281,10 +281,11 @@ class UploadHandler
     }
 
     protected function trim_file_name($name, $type, $index) {
+	$file_name = IoC::resolve('translit')->translit_title($name);
         // Remove path information and dots around the filename, to prevent uploading
         // into different directories or replacing hidden system files.
         // Also remove control characters and spaces (\x00..\x20) around the filename:
-        $file_name = trim(basename(stripslashes($name)), ".\x00..\x20");
+        $file_name = trim(basename(stripslashes($file_name)), ".\x00..\x20");
         // Add missing file extension for known image types:
         if (strpos($file_name, '.') === false &&
             preg_match('/^image\/(gif|jpe?g|png)/', $type, $matches)) {

@@ -18,12 +18,14 @@ class Account_Controller extends Base_Controller
         $logger = new Swift_Plugins_Loggers_ArrayLogger();
         $mailer->registerPlugin(new Swift_Plugins_LoggerPlugin($logger));
 
+//        Log::write('info', print_r($user, true));
+
         $message = Swift_Message::newInstance($subj)
                 ->setFrom(array('info@kvant.in' => 'Клуб Квант'))
-                ->setTo(array($user->email => $user->nickname))
+                ->setTo($user)
                 ->setBody($body_paintext);
         $numSent = $mailer->send($message, $failures);
-        if ($numSent < 1) 
+        if ($numSent < 1)
             dd($logger->dump()); //see logs
     }
 
@@ -140,7 +142,7 @@ class Account_Controller extends Base_Controller
 
         if($new_account['password'] != '') {
             $u->password = Hash::make($new_account['password']);
-            $this->send_mail($u, "Смена пароля на сайте", "Приветствуем!\n
+            $this->send_mail(array($u->email => $u->nickname), "Смена пароля на сайте", "Приветствуем!\n
                 Вы изменили пароль для входа на сайт Клуба Квант!\n
                 Теперь он вот такой: ". $new_account['password'] . "\n
                 Заходите к нам по-чаще!\n\n
@@ -278,10 +280,16 @@ class Account_Controller extends Base_Controller
         $indent = new Identity($new_ident);
         $indent->save();
 
+        $this->send_mail(array('site@kvant.in' => 'kvant.me no-reply'), 'New account: ' . $account->nickname,
+            "New user registration\n" .
+	    $account->nickname . " (" . $account->email  . ")\n" .
+	    URL::to_action('account@show', array($account->id)) . "\n" .
+            "kvant.me");
+
         Auth::login($account->id);
 
         if(Input::get('social') != 'true') {
-            $this->send_mail($account, "Регистрация на сайте Клуба Квант", 
+            $this->send_mail(array($account->email => $account->nickname), "Регистрация на сайте Клуба Квант", 
                 "Поздравляем!\n
                 Вы зарегистрировались на сайте Клуба Квант!\n
                 Ваш логин: ".$account->email."\n
@@ -346,7 +354,7 @@ class Account_Controller extends Base_Controller
             $u->password = Hash::make($newpass);
             $u->save();
 
-            $this->send_mail($u, 'Сброс пароля на сайте', 
+            $this->send_mail(array($u->email => $u->nickname), 'Сброс пароля на сайте', 
                 "Приветствуем!\n
                 Мы долго думали, какой же пароль вам больше всего подойдет и решили, 
                 что именно вот этот: " . $newpass . "\n
