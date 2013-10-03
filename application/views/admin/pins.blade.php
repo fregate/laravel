@@ -13,10 +13,10 @@
 <thead>  
   <tr>  
     <th width="20px">#PID</th>  
-    <th>Post title</th>  
-    <th width="50px">Image</th>  
-    <th width="50px">Start time</th>  
-    <th width="50px">End time</th>  
+    <th>Заголовок</th>  
+    <th width="50px">Картинка</th>  
+    <th width="50px">Начало периода</th>  
+    <th width="50px">Окончание</th>  
     <th width="100px"></th>
   </tr>  
 </thead>  
@@ -57,7 +57,7 @@
 		<input type="text" class="span2" value="" id="dpd2" name='dpd_end' >
 	</td>  
 	<td>
-		<input type='hidden' id='postidinput' name='postid' ><input type="submit" id="submit" value="Add new pin" />
+		<input type='hidden' id='postidinput' name='postid' ><input type="submit" id="submit" value="Добавить новый" />
 	</td>  
 
 	</form>

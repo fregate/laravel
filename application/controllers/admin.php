@@ -24,5 +24,10 @@ class Admin_Controller extends Base_Controller
     {
         return View::make('admin.users');
     }
+
+    public function get_static()
+    {
+        return View::make('admin.static');
+    }
 }
 

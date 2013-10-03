@@ -3,15 +3,16 @@
 @section('pinned')
     <div class="imagelayer"><img src="img/x.png"></div>
     <div class="masklayer" style="top: -215px;"><img src="img/m2.png">
-    <div class="postcaption">Aministration</div></div>
+    <div class="postcaption">Уголок администратора</div></div>
 @endsection
 
 @section('content')
 	@if ( !Auth::guest() && User::find(Auth::user()->id)->has_role('admin') )
 <div class='userprofilemenu'>
 <ul class="usernav">
-  <li id="managepins"><a href="{{URL::to_action('admin@pins')}}"><p>Manage Pins</p></a></li>
-  <li id="manageusers"><a href="{{URL::to_action('admin@users')}}"><p>Manage Users</p></a></li>
+  <li id="managepins"><a href="{{URL::to_action('admin@pins')}}"><p>Пины</p></a></li>
+  <li id="manageusers"><a href="{{URL::to_action('admin@users')}}"><p>Пользователи</p></a></li>
+  <li id="managestatic"><a href="{{URL::to_action('admin@static')}}"><p>Статики</p></a></li>
 </ul>
 </div>
 		@yield('manage')

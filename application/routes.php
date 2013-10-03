@@ -4,6 +4,7 @@
 Route::controller('account');
 Route::controller('post');
 Route::controller('pin');
+Route::controller('static');
 //Route::controller('image');
 
 /*
@@ -177,7 +178,6 @@ Route::get('image/(:num)/(:any?)', array('as' => 'image', 'do' => function($id, 
     		$layer->destroy();
     	    return $imdata;
 	   }, 120);
-
     }
 if($imagedata != "")
     return Response::make($imagedata, 200, 
@@ -189,7 +189,6 @@ if($imagedata != "")
    );
 else
     return Response::make('No image', 404);
-
 }));
 
 Route::get('image/(:any)', function($shorturl) {
@@ -274,13 +273,54 @@ Route::post('(edit|new)/comm/(:num?)', array('before' => 'auth', 'as' => 'comm',
 
 Route::any('admin/(:any)', array('before' => 'auth', 'uses' => 'admin@(:1)'));
 
+Route::any('s/(:num)', array('as' => 's', 'do' => function($sid) {
+    $s = StaticPage::find($sid);
+    if($s == null) {
+        return Response::error('404');
+    }
+
+    return View::make('pages.static')->with('sp', $s);
+}));
+
+Route::post('snew', array('as' => 'snew', 'before' => 'auth', 'do' => function() {
+    $new_static = array(
+        'title' => Input::get('spt_title'),
+        'scripts' => Input::get('spt_scripts'),
+        'styles' => Input::get('spt_styles'),
+        'content' => Input::get('spt_content'),
+        'meta' => Input::get('spt_metas'),
+        'author_id' => Input::get('aid'),
+        'suri' => uniqid()
+    );
+
+    $s = new StaticPage($new_static);
+    $s->save();
+
+    return Redirect::back();
+}));
+
+Route::any('sdel/(:num)', array('as' => 'sdel', 'before' => 'auth', 'do' => function($sid) {
+    if( !Auth::guest() && Auth::user()->has_any_role(array('admin', 'moderator')) )
+    {
+        StaticPage::find($sid)->delete();
+    }
+    return Redirect::back();
+}));
+
+Route::post('s/preview', function() {
+    return View::make('pages.static')
+         ->with('title', Input::get('spt_title'))
+         ->with('scripts', Input::get('spt_scripts'))
+         ->with('styles', Input::get('spt_styles'))
+         ->with('content', Input::get('spt_content'))
+         ->with('metas', Input::get('spt_metas'));
+});
+
 Route::any('login', 'account@login');
 Route::any('signup', array('as' => 'signup', 'uses' => 'account@signup'));
 Route::any('remindpass', 'account@remindpass');
 
 Route::get('logout', 'account@logout');
-
-
 
 Event::listen('404', function()
 {
