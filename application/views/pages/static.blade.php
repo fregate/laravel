@@ -10,9 +10,9 @@
 
 @section('title')
 @if ( isset($sp) )
-    {{ $sp->title }}
+{{ $sp->title }}
 @else
-    {{ $title }}
+{{ $title }}
 @endif
 @endsection
 

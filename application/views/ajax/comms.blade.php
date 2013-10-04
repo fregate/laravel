@@ -12,7 +12,7 @@
 </div>
 
 @foreach($comms as $cc)
-<div class="commentry"> <span data-commid='{{$cc->id}}'>{{ $cc->body }}</span>
+<div class="commentry"><a name="#{{ $cc->id }}" /> <span data-commid='{{$cc->id}}'>{{ $cc->body }}</span>
     <div class='posttimestamp'>
         <a onclick="javascript:answerto('{{$cc->author()->first()->nickname}}')">ответить</a> | от {{ HTML::link_to_action('account@show', $cc->author()->first()->nickname, array('uid' => $cc->author()->first()->id)) }}, 
         {{ AuxFunc::formatdate($cc->created_at) }} в {{ AuxFunc::formattime($cc->created_at) }}

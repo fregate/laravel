@@ -1,0 +1,98 @@
+.share {
+	display: inline-block;
+}
+
+.share a {
+	cursor:pointer;
+}
+
+.share a.twitter {
+	margin-bottom:-6px;
+	opacity: 0.5;
+	display: block;
+	width: 19px;
+	height: 19px;
+	background: url("../img/share.icons.png") no-repeat scroll -42px 0 transparent;
+}
+
+.share a.twitter:hover {
+	opacity: 1.0;
+}
+
+.share a.vk {
+	margin-bottom:-6px;
+	opacity: 0.5;
+	display: block;
+	width: 19px;
+	height: 19px;
+	background: url("../img/share.icons.png") no-repeat scroll -21px 0 transparent;
+}
+
+.share a.vk:hover {
+	opacity: 1.0;
+}
+
+.share a.fb {
+	margin-bottom:-6px;
+	opacity: 0.5;
+	display: block;
+	width: 19px;
+	height: 19px;
+	background: url("../img/share.icons.png") no-repeat scroll 0 0 transparent;
+}
+
+.share a.fb:hover {
+	opacity: 1.0;
+}
+
+.share a.gp {
+	margin-bottom:-6px;
+	opacity: 0.5;
+	display: block;
+	width: 19px;
+	height: 19px;
+	background: url("../img/share.icons.png") no-repeat scroll -63px 0 transparent;
+}
+
+.share a.gp:hover {
+	opacity: 1.0;
+}
+
+/* large icons for static */
+
+.xshare {
+	display: inline-block;
+}
+
+.xshare a {
+	cursor: pointer;
+	-moz-transition: all .3s ease-in-out;
+	-webkit-transition: all .3s ease-in-out;
+	-o-transition: all .3s ease-in-out;
+	transition: all .3s ease-in-out;
+	opacity: 0.5;
+	margin: 5px 5px 0px 0px;
+	display: block;
+	width: 64px;
+	height: 64px;
+}
+
+.xshare a:hover {
+	opacity: 1.0;
+}
+
+.xshare a.xgp {
+	background: url("../img/xshare.icons.png") no-repeat -128px 0 transparent;
+}
+
+.xshare a.xtwitter {
+	background: url("../img/xshare.icons.png") no-repeat 0px 0 transparent;
+}
+
+.xshare a.xfb {
+	background: url("../img/xshare.icons.png") no-repeat  -64px 0 transparent;
+}
+
+.xshare a.xvk {
+	background: url("../img/xshare.icons.png") no-repeat  -192px 0 transparent;
+}

@@ -20,7 +20,7 @@ $comms = $user->comms()->order_by('created_at', 'desc')->paginate();
 
 foreach ($comms->results as $cc) {
 echo '<div class="commentry" style="border-bottom: 1px solid #ff9f40;"> <span data-commid=' . $cc->id . '>' . $cc->body . '</span>';
-echo '<div class="posttimestamp">'
+echo '<div class="posttimestamp"><a href="' .URL::to_action("post@show", array($cc->post_id)). '#' .$cc->id.'">#</a>&nbsp;|&nbsp;'
      . AuxFunc::formatdate($cc->created_at) . ' в ' . AuxFunc::formattime($cc->created_at);
 
     if($useradmin)
