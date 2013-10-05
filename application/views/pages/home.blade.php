@@ -36,6 +36,8 @@ $pins = Pin::where('showtime_start', '<', date('c'))
          ->where('showtime_end', '>', date('c'))->get();
 
 if(count($pins) != 0) {
+    $b = IoC::resolve('bungs');
+
     echo '<div class="imagelayer">
             <div class="slider-wrapper theme-cq">
                 <div id="slider" class="nivoSlider">';
@@ -48,7 +50,7 @@ if(count($pins) != 0) {
             echo '<img src="' . AuxImage::get_uri($postpin->img, $postpin->imgparam) 
                 . '" title="#' . $linkuq . '"/>';
         else
-            echo '<img src="img/x.png" title="#' . $linkuq . '"/>';
+            echo '<img src="' . $b->get_bung_img() . '" title="#' . $linkuq . '"/>';
 
         $linkdivs .= '<div class="nivo-caption" id="' . $linkuq . '"><a href="' 
             . URL::to_action("post@show", array("postid" => $pinkey->post_id)) 
@@ -70,7 +72,9 @@ if(count($pins) != 0) {
     echo '<div class="masklayer"><img src="img/m2.png"></div>';
 }
 else {
-    echo '<div class="imagelayer"><img src="img/x.png"></div>';
+    $b = IoC::resolve('bungs');
+
+    echo '<div class="imagelayer"><img src="' . $b->get_bung_img() . '"></div>';
     echo '<div class="masklayer" style="top: -215px;"><img src="img/m2.png"></div>';
 }
 ?>

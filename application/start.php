@@ -176,3 +176,8 @@ IoC::singleton('translit', function() {
   $t = new AuxTransLit();
   return $t;
 });
+
+IoC::singleton('bungs', function() {
+  $t = new Bungs();
+  return $t;
+});

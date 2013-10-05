@@ -1,7 +1,10 @@
 @layout('templates.main')
 
 @section('pinned')
-    <div class="imagelayer"><img src="img/x.png"></div>
+<?php
+    $b = IoC::resolve('bungs');
+    echo '<div class="imagelayer"><img src="' . $b->get_bung_img() . '"></div>';
+?>
     <div class="masklayer" style="top: -215px;"><img src="img/m2.png"></div>
 @endsection
 

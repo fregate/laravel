@@ -277,7 +277,8 @@ public function translit_title($filename) {
  * @see language_default()
  */
 public function translit($text, $unknown = '?') {
-  return $this->_transliteration_process($text, $unknown);
+  return Str::ascii($text);
+//  return $this->_transliteration_process($text, $unknown);
 }
 
 };
