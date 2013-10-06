@@ -523,22 +523,26 @@ function update_header_preview()
 
 var BASE = "<?php echo URL::base(); ?>";
 
-function get_comm(postid) {
+function get_comm(postid, navigate) {
 $('.alert').html('').hide();
 
     // attempt to GET the new content
     $.get(BASE+'/comms/' + postid, function(data) {
         $('#load-comms').html(data);
         $('media').parseVideo();
-        var linkanchor;
-        var index = document.URL.lastIndexOf('#');
-        if (index != -1)
-           linkanchor = document.URL.substring(index );
 
-        if(linkanchor) {
-         var targetOffset = $("[name=" + linkanchor + "]").offset().top;
+        if(navigate)
+        {
+          var linkanchor;
+          var index = document.URL.lastIndexOf('#');
+          if (index != -1)
+             linkanchor = document.URL.substring(index );
+
+          if(linkanchor) {
+           var targetOffset = $("[name=" + linkanchor + "]").offset().top;
 //            document.location.hash = linkanchor;
-         $('html, body').animate({scrollTop: targetOffset}, 200);
+           $('html, body').animate({scrollTop: targetOffset}, 200);
+          }
         }
     });
 }
@@ -576,7 +580,7 @@ function get_gallery_ajax(bforce) {
 
 <div id="load-comms"></div>
 
-<input onclick="get_comm({{ $post->id }});" type=button value="Refresh Comms">
+<input onclick="get_comm({{ $post->id }}, false);" type=button value="Refresh Comms">
 @if ( !Auth::guest() )
 <br><br>
 {{ Form::open( '', 'POST', array('id' => 'addCommentForm') ) }}
@@ -595,7 +599,7 @@ function get_gallery_ajax(bforce) {
 <script type="text/javascript">
 $(document).ready(function() {
     $(".alert").hide();
-    get_comm({{ $post->id }});
+    get_comm({{ $post->id }}, true);
 
     var working = false;
 
@@ -626,7 +630,7 @@ $(document).ready(function() {
 
             if(msg.status == 1) {
                 $('textarea[name="body"]').val('');
-                get_comm({{ $post->id }});
+                get_comm({{ $post->id }}, false);
             }
             else {
                 $.each(msg.errors, function(key, value) {
