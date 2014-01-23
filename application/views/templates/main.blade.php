@@ -44,8 +44,8 @@
  		<div id="commonnav" class="commonmenu">
 			<ul>
 				<li>{{ HTML::link('', 'Лента новостей') }}</li>
-				<li>{{ HTML::link('wiki', 'Энциклопедия') }}</li>
-				<!-- <li><a href="">Архивы</a></li> -->
+				<!--<li>{{ HTML::link('wiki', 'Энциклопедия') }}</li>
+				 <li><a href="">Архивы</a></li> -->
 				<li>{{ HTML::link('about', 'О клубе') }}</li>
 			</ul>
 		</div>
