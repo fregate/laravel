@@ -1,0 +1,45 @@
+
+* {
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+.wikipattern {
+  width:621px;
+  margin-bottom: 5px;
+}
+
+/* clearfix */
+.isotope:before,
+.isotope:after {
+  content: " ";
+  display: table;
+}
+
+.isotope:after {
+  clear: both;
+}
+
+/* ---- item elements ---- */
+
+.element-item {
+  position: relative;
+  float: left;
+  width: 199px;
+  height: 142px;
+  margin-right: 2px;
+  margin-bottom: 2px;
+  margin-top: 2px;
+  border: 1px solid rgba(0, 0, 0, .1);
+  padding: 10px; 
+  background: rgba(0, 0, 0, .05);
+/*  color: #262524; */
+}
+
+
+/* varying sizes */
+.is-varying-sizes .element-item.width2 { width: 402px; }
+.is-varying-sizes .element-item.height2 { height: 284px; }
+.is-varying-sizes .element-item.h13 { height: 92px; }
+

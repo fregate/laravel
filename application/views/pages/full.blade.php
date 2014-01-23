@@ -22,8 +22,10 @@
     <script src="js/jquery.jcrop.min.js"></script>
     <script src="js/jquery-ui.min.js" type="text/javascript"></script>
     <script src="js/sharer.js" type="text/javascript"></script>
+    <script src="js/jquery.jeditable.min.js"></script>
 
     <script type="text/javascript">
+
 function init_jcrop(bpreview) {
       if(nselectedimage < 0) {
         $("#aop").dialog("close");
@@ -156,79 +158,35 @@ $(function() {
   });
 });
 
-  $(function() {
-    $( "#inserturl" ).dialog({
-//      resizable: false,
-      modal: true,
-      autoOpen: false,
-      closeOnEscape: true,
-      draggable:true,
-
-      buttons: {
-        "Insert Link": function() {
-          $( this ).dialog( "close" );
-          $.markItUp( { target: 'textarea', replaceWith: '<a href="' + $('#linkurl').val() + '">' + $('#linkpromt').val() + '</a>' } );
-          $('#linkurl').val("http://");
-        },
-        "Cancel": function() {
-          $( this ).dialog( "close" );
-        }
-      }
-    });
+$(function () {
+  $( "#inserturl" ).dialog({
+    modal: true,
+    autoOpen: false,
+    closeOnEscape: true,
+    draggable:true
   });
+})
 
-  $(function() {
-    $( "#insertmedia" ).dialog({
-//      resizable: false,
-      modal: true,
-      autoOpen: false,
-      closeOnEscape: true,
-      draggable:true,
-
-      buttons: {
-        "Insert Link": function() {
-          $( this ).dialog( "close" );
-          $.markItUp( { target: 'textarea', replaceWith: '<media src="' + $('#mediaurl').val() + '">' } );
-          $('#linkurl').val("http://");
-        },
-        "Cancel": function() {
-          $( this ).dialog( "close" );
-        }
-      }
-    });
+$(function () {
+  $( "#insertimg" ).dialog({
+    modal: true,
+    autoOpen: false,
+    closeOnEscape: true,
+    draggable:true
   });
+})
 
-  $(function() {
-    $( "#insertimg" ).dialog({
-      modal: true,
-      autoOpen: false,
-      closeOnEscape: true,
-      draggable:true,
-
-      buttons: {
-        "Insert Link": function() {
-          $( this ).dialog( "close" );
-          $.markItUp( { target: 'textarea', replaceWith: '<img src="' + $('#imgurl').val() + '" alt="' + $('#imgalt').val() + '">' } );
-          $('#linkurl').val("http://");
-        },
-        "Cancel": function() {
-          $( this ).dialog( "close" );
-        }
-      }
-    });
+$(function () {
+  $( "#insertmedia" ).dialog({
+    modal: true,
+    autoOpen: false,
+    closeOnEscape: true,
+    draggable:true
   });
+})
 
-        function img_prompt(h) {
-		            $('#insertimg').dialog('open');
-        }
-        function url_prompt(h) {
-                $('#inserturl').dialog('open');
-        }
-        function media_prompt(h) {
-                $('#insertmedia').dialog('open');
-        }
-        function glr_prompt(h) {
-  $( "#dlgheaderimg" ).dialog( "option", "buttons", [ { 
+function glr_handler(trg) {
+  xxx = [{ 
     text: "Edit image",
     click: function() { 
       if(nselectedimage < 0)
@@ -237,20 +195,22 @@ $(function() {
       $( this ).dialog( "close" );
 
       $("#aop").dialog({ buttons: {
-        "Insert image": function() {
-          $( this ).dialog( "close" );
-          $.markItUp( { target: 'textarea', replaceWith: '<img src="{{URL::to_route("image")}}/' +  nselectedimage + '/' + $("#prepimglink").val() + '" alt="Place description here...">' } );
-        },
-        "Cancel": function() {
-          nselectedimage = -1;
-          $( this ).dialog( "close" );
-        }
+          "Insert image": function() {
+            $( this ).dialog( "close" );
+            $.markItUp( { target: trg, replaceWith: '<img src="{{URL::to_route("image")}}/' + nselectedimage + '/' + $("#prepimglink").val() + '" alt="Place description here...">' } );
+          },
+          "Cancel": function() {
+            nselectedimage = -1;
+            $( this ).dialog( "close" );
+          }
       } } );
+
       $('#aop').dialog( { 
         open : function(event, ui) {
           init_jcrop(false);
         } 
       });
+
       $('#aop').dialog('open');
     }
   },
@@ -260,13 +220,84 @@ $(function() {
       nselectedimage = -1;
       $( this ).dialog( "close" );
     }
-  } ] );
-
+  }];
+  $( "#dlgheaderimg" ).dialog( "option", "buttons", xxx );
   $( "#dlgheaderimg" ).dialog( "open" );
+}
+
+function url_handler(trg) {
+    xxx = [{
+      text : "Insert Link", 
+      click : function() {
+        $( this ).dialog( "close" );
+        $.markItUp( { target: trg, replaceWith: '<a href="' + $('#linkurl').val() + '">' + $('#linkpromt').val() + '</a>' } );
+        $('#linkurl').val("http://");
+      }
+    }, {
+      text : "Cancel",
+      click : function() {
+        $( this ).dialog( "close" );
+      }
+    }];
+  $( "#inserturl" ).dialog( "option", "buttons", xxx );
+  $('#inserturl').dialog('open');
+}
+
+function img_handler(trg) {
+    xxx = [{
+      text :"Insert Link",
+      click : function() {
+        $( this ).dialog( "close" );
+        $.markItUp( { target: trg, replaceWith: '<img src="' + $('#imgurl').val() + '" alt="' + $('#imgalt').val() + '">' } );
+        $('#linkurl').val("http://");
+      }
+    }, {
+      text: "Cancel",
+      click : function() {
+        $( this ).dialog( "close" );
+      }
+    }];
+  $( "#insertimg" ).dialog( "option", "buttons", xxx );
+  $('#insertimg').dialog('open');
+}
+
+function media_handler(trg) {
+    xxx = [{
+      text: "Insert Link",
+      click: function() {
+        $( this ).dialog( "close" );
+        $.markItUp( { target: trg, replaceWith: '<media src="' + $('#mediaurl').val() + '">' } );
+        $('#linkurl').val("http://");
+      }
+    }, {
+      text: "Cancel",
+      click : function() {
+        $( this ).dialog( "close" );
+      }
+    }];
+    console.log(xxx);
+  $( "#insertmedia" ).dialog( "option", "buttons", xxx );
+  $('#insertmedia').dialog('open');
+}
+
+        function img_prompt(h) {
+          img_handler('#commArea');
+        }
+
+        function url_prompt(h) {
+          url_handler('#commArea');
+        }
+
+        function media_prompt(h) {
+          media_handler('#commArea');
+        }
+
+        function glr_prompt(h) {
+          glr_handler('#commArea');
         }
 
         var ces = {
-                onTab:                  {keepDefault:false, replaceWith:'    '},
+                onTab:  {keepDefault:false, replaceWith:'    '},
                 markupSet:  [
                         {name:'Bold', className: 'Bold', key:'B', openWith:'(!(<b>|!|<strong>)!)', closeWith:'(!(</b>|!|</strong>)!)' },
                         {name:'Emphasis', className: 'Emphasis', key:'I', openWith:'(!(<i>|!|<em>)!)', closeWith:'(!(</i>|!|</em>)!)'  },
@@ -353,9 +384,96 @@ function create_coord (x, y, w, h, aspx, aspy, Wi, Hi) {
   return base64_encode(JSON.stringify(jobj));
 }
 
+$.editable.addInputType('markitup', {
+    element : $.editable.types.textarea.element,
+    plugin  : function(settings, original) {
+        $('textarea', this).markItUp(settings.markitup);
+    }
+});
+
+@if( !Auth::guest() && Auth::user()->has_any_role(array('admin', 'moderator')) )
+function img_edit() {
+  img_handler('textarea[name="bodyPost"]');
+}
+
+function url_edit() {
+  url_handler('textarea[name="bodyPost"]');
+}
+
+function glr_edit() {
+  glr_handler('textarea[name="bodyPost"]');
+}
+
+function media_edit() {
+  media_handler('textarea[name="bodyPost"]');
+}
+@endif
+
     $(document).ready(function() {
-        $('textarea').markItUp(ces);
+        $('#commArea').markItUp(ces);
         $('media').parseVideo();
+
+@if( !Auth::guest() && Auth::user()->has_any_role(array('admin', 'moderator')) )
+$("#articlemain").editable('{{ URL::to_route("post", array("edit", $post->id)) }}', {
+    type      : 'markitup',
+    event     : "editbody",
+    cancel    : 'Cancel',
+    onblur    : 'ignore',
+    submit    : 'OK',
+    height    : '500px',
+    markitup  : {
+                onTab: { keepDefault:false, replaceWith:'    ' },
+                markupSet:  [
+                        {name:'Bold', className: 'Bold', key:'B', openWith:'(!(<b>|!|<strong>)!)', closeWith:'(!(</b>|!|</strong>)!)' },
+                        {name:'Emphasis', className: 'Emphasis', key:'I', openWith:'(!(<i>|!|<em>)!)', closeWith:'(!(</i>|!|</em>)!)'  },
+                        {name:'Underline', className: 'Underline', key:'U', openWith:'<u>', closeWith:'</u>' },
+                        {name:'Superscript', className: 'Sup', openWith:'<sup>', closeWith:'</sup>' },
+                        {name:'Subscript', className: 'Sub', openWith:'<sub>', closeWith:'</sub>' },
+                        {separator:'---------------' },
+                        {name:'Spoiler', className: 'Spoiler', openWith:'<spoiler>', closeWith:'</spoiler>' },
+                        {name:'Irony', className: 'Irony', openWith:'<irony>', closeWith:'</irony>' },
+                        {separator:'---------------' },
+                        {name:'Insert Picture', className: 'Image', dropMenu: [
+                                {name:'Insert link', className: 'Image', key:'P', beforeInsert: img_edit },
+                                {name:'Insert from gallery', className: 'Image', key:'G', beforeInsert: glr_edit }
+                        ] },
+                        {name:'Link', className: 'Link', key:'L',  beforeInsert: url_edit },
+                        {name:'Video', className: 'Video', key: 'M',  beforeInsert: media_edit }
+                ]
+              },
+    name      : 'bodyPost',
+    data: function (value, settings) {
+        return value.replace(/<br>/gi, '\n');
+    },
+    onsubmit: function(settings, td) {
+      if(!html_parse($('textarea[name="bodyPost"]')))
+      {
+          $('.alert').html('Error in html message. Please be careful').addClass('alert-error').show(); 
+          return false;
+      }
+      return true;
+    }
+});
+
+$('#posttitle').editable('{{ URL::to_route("post", array("title", $post->id)) }}', {
+    indicator : 'Saving...',
+    submit    : 'OK',
+    name      : 'title',
+    event     : "edittitle"
+});
+
+$("#triggerbody").bind("click", function() {
+    $("#articlemain").trigger("editbody");
+});
+
+$("#triggertitle").bind("click", function() {
+    $("#posttitle").trigger("edittitle");
+});
+
+$("#triggerimg").bind("click", function() {
+});
+@endif
+
     });
 
     </script>
@@ -425,7 +543,17 @@ else {
 }
 ?>
     <div class="masklayer" style="top: -215px;"><img src="img/m2.png">
-    <div class="postcaption">{{ $post->title }}</div>
+    <div class="postcaption" id="posttitle">{{ $post->title }}</div>
+    @if( !Auth::guest() && Auth::user()->has_any_role(array('admin', 'moderator')) )
+    <span class="posttimestamp" style="float:right;background:rgba(255, 255, 255, 1);padding:3px">
+      <a class='blue' id="triggertitle">[+] Edit title</a>&nbsp;&nbsp;&nbsp;
+      <a class='blue' id="triggerimg">[+] Edit image</a>
+    </span>
+{{ Form::open( 'img/post/' . $post->id, 'POST', array('id' => 'imgEditForm') ) }}
+    {{ Form::hidden('img', $post->img) }}
+    {{ Form::hidden('imgparam', $post->imgparam) }}
+{{ Form::close() }}
+    @endif
     </div>
 @endsection
 
@@ -462,7 +590,7 @@ else {
                     <a href="#" class="btn" data-dismiss="modal">No</a>
                 </div>
             </div>
-        | <a data-toggle="modal" href="#removepost" class="red">[x] Delete post</a>
+        | <a class="blue" id="triggerbody">[+] Edit post</a> | <a data-toggle="modal" href="#removepost" class="red">[x] Delete post</a>
         @endif
     </div>
     <br>
@@ -589,7 +717,7 @@ function get_gallery_ajax(bforce) {
     <!-- post -->
     {{ Form::hidden('post_id', $post->id) }}
     <!-- body field -->
-    <p>{{ Form::textarea('body', Input::old('body')) }}</p>
+    <p>{{ Form::textarea('body', Input::old('body'), array('id' => 'commArea') ) }}</p>
     <!-- submit button -->
     <p>{{ Form::submit('Add comment', array('id' => 'submit')) }}</p>
 {{ Form::close() }}

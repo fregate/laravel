@@ -27,8 +27,8 @@ class Post_Controller extends Base_Controller
             'title'     => Input::get('title'),
             'body'      => Input::get('body'),
             'author_id' => Input::get('author_id'),
-            'img'     => Input::get('imageid'),
-            'imgparam'     => Input::get('imageparam'),
+            'img'       => Input::get('imageid'),
+            'imgparam'  => Input::get('imageparam'),
         );
     // let's setup some rules for our new data
     // I'm sure you can come up with better ones
@@ -56,9 +56,69 @@ class Post_Controller extends Base_Controller
         return Redirect::to_action('post@show', array('postid' => $post->id));
     }
 
-    public function get_edit($postid)
+    public function post_edit($postid)
     {
-    	echo "edit post! " . $postid;
+        $p = Post::find($postid);
+        $new_body = array(
+            'body' => Input::get('bodyPost'),
+        );
+
+        $rules = array(
+            'body' => 'required',
+        );
+
+        $v = Validator::make($new_body, $rules);
+        if ( $v->fails() )
+        {
+            echo $p->body;
+            return;
+        }
+
+        $p = Post::find($postid);
+        $p->body = Input::get('bodyPost');
+        $p->save();
+
+        echo Input::get('bodyPost');
+    }
+
+    public function post_img($postid)
+    {
+        $p = Post::find($postid);
+
+        $img = Input::get('imageid');
+        $imgparam = Input::get('imageparam');
+
+        $p = Post::find($postid);
+        $p->img = $img;
+        $p->imgparam = $img == 0 ? "" : $imgparam;
+        $p->save();
+
+        echo Input::get('body');
+    }
+
+    public function post_title($postid)
+    {
+        $p = Post::find($postid);
+        $new_title = array(
+            'title' => Input::get('title'),
+        );
+    // let's setup some rules for our new data
+    // I'm sure you can come up with better ones
+        $rules = array(
+            'title' => 'required|min:1|max:128',
+        );
+        // make the validator
+        $v = Validator::make($new_title, $rules);
+        if ( $v->fails() )
+        {
+            echo $p->title;
+            return;
+        }
+
+        $p->title = Input::get('title');
+        $p->save();
+
+        echo Input::get('title');
     }
 
     public function get_delete($postid)

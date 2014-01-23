@@ -5,7 +5,7 @@ function html_parse($textarea) {
     // replace known tags
     html = html.replace(/(<media)([^>]*)(>)/gm, "[media$2]")
                .replace(/(<img)([^>]*)(>)/gm, "[img$2]")
-               .replace(/(<a)(.*)?(href=['|"]([^['|"]]*)['|"])([^>]*)(>)/gm, "[a $3]") // remove all except href="" attribute
+               .replace(/(<a(.*)?(href=['"][^'"]+['"])([^>]+)?[>])/gm, "[a $3]") // remove all except href="" attribute
                .replace(/<\/(a|media)>/g, "[\/$1]")
                .replace(/<(\/?)(strong|em|sup|sub|spoiler|irony)(:?[^>]*)?(>)/gm, "[$1$2]")
                .replace(/<(\/?)([biu])(?:[^>]*)?(>)/gm, "[$1$2]")
@@ -17,7 +17,7 @@ function html_parse($textarea) {
     // return back known tags
     html = html.replace(/(\[media)([^\]]*)(\])/gm, "<media$2>")
                .replace(/(\[img)([^\]]*)(\])/gm, "<img$2>")
-               .replace(/(\[a)([^\]]*)(\])/gm, "<a$2>")
+               .replace(/((\[a)(.*)?(href=["'][^"']+["'])([^\]]+)?[\]])/gm, "<a $4>")
                .replace(/\[\/(a|media)\]/gm, "<\/$1>")
                .replace(/\[(\/?)(strong|em|sup|sub|spoiler|irony)(\])/gm, "<$1$2>")
                .replace(/\[(\/?)([biu])\]/gm, "<$1$2>")
@@ -42,6 +42,13 @@ function html_parse($textarea) {
 
     $textarea.val(html);
     return true;
+}
+
+function post_parse($textarea)
+{
+    var html = $textarea.val();
+    html = html.replace(/<br(\/?)|(\ ?)>/g, "\n");
+    $textarea.val(html);
 }
 
 (function($) {

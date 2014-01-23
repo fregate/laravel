@@ -41,14 +41,14 @@
         @yield('moderation')
 	    @endif
 		</div>
-<!-- 		<div id="commonnav" class="commonmenu">
+ 		<div id="commonnav" class="commonmenu">
 			<ul>
-				<li><a href="">Лента новостей</a></li>
-				<li><a href="">Энциклопедия</a></li>
-				<li><a href="">Архивы</a></li>
-				<li><a href="">О клубе</a></li>
+				<li>{{ HTML::link('', 'Лента новостей') }}</li>
+				<li>{{ HTML::link('wiki', 'Энциклопедия') }}</li>
+				<!-- <li><a href="">Архивы</a></li> -->
+				<li>{{ HTML::link('about', 'О клубе') }}</li>
 			</ul>
-		</div> -->
+		</div>
 	</div></div>
         <div class="clear"></div>
 

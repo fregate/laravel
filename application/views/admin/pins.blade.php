@@ -120,7 +120,7 @@ $(function() {
 		$('#submit').val('Working..');
 
 		/* Sending the form fileds to submit.php: */
-		$.post('{{ URL::to_action("pin@new") }}',$(this).serialize(),function(msg){
+		$.post('{{ URL::to_action("pin@new") }}', $(this).serialize(), function(msg){
 
 			working = false;
 			$('#submit').val('Add new pin');

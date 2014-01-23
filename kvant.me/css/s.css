@@ -128,7 +128,7 @@ h3 {
 }
 
 .usermenu {
-//	height: 100%; Баритон, хворостовский, канал культура, 26/05/2013. вечером было 22-23-24
+//	height: 100%;
 	float: left;
 }
 
@@ -292,6 +292,10 @@ div#uLogin {
 
 .red {
 	color: red ! important;
+}
+
+.blue {
+	color: #08c ! important;
 }
 
 .prompts {

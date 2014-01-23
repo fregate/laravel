@@ -5,6 +5,7 @@ Route::controller('account');
 Route::controller('post');
 Route::controller('pin');
 Route::controller('static');
+Route::controller('wikiarticle');
 //Route::controller('image');
 
 /*
@@ -45,9 +46,13 @@ Route::get('/', function() {
         ->with('posts', $posts);
 });
 
-// Route::get('uploads', function() {
-//     return Response::error('404');
-// });
+Route::get('about', function() {
+    return View::make('pages.about');
+});
+
+Route::get('wiki', array('as' => 'wiki', 'uses' => 'wikiarticle@index'));
+Route::get('wiki/new', array('as' => 'wiki', 'uses' => 'wikiarticle@new'));
+Route::get('wiki/(:any)/(:any?)', array('as' => 'wiki', 'uses' => 'wikiarticle@show'));
 
 Route::get('pix/(:num)', array('as' => 'pix', 'before' => 'auth', 'do' => function($h) {
     if (Request::ajax()) {
@@ -81,6 +86,25 @@ function handle_new_idn($regarray, $uid) {
     $ident = new Identity($new_ident);
     $ident->save();
 }
+
+Route::get('jany/(:any)', function($token) {
+    $j = Jany::where('token', '=', $token)->get();
+    return eloquent_to_json($j);
+});
+
+Route::post('jany', function() {
+    $input = Input::all();
+    $new_jany = array(
+        'uid' => Auth::guest() ? 0 : Auth::user()->id,
+        'token' => Input::get('token'),
+        'json' => json_encode($input)
+    );
+
+    $jany = new Jany($new_jany);
+    $jany->save();
+
+    echo json_encode(array('ok' => 1));
+});
 
 Route::post('kkidn/(:num)', array('before' => 'auth', 'do' => function($uid) {
     $idnarr = array(
@@ -143,7 +167,8 @@ Route::post('social', function() {
     return Redirect::to('/');
 });
 
-Route::get('(edit|new|delete)/post/(:num?)', array('as' => 'post', 'before' => 'auth', 'uses' => 'post@(:1)'));
+Route::get('(new|delete)/post/(:num?)', array('as' => 'post', 'before' => 'auth', 'uses' => 'post@(:1)'));
+Route::post('(title|img|edit)/post/(:num)', array('as' => 'post', 'before' => 'auth', 'uses' => 'post@(:1)'));
 
 Route::any('(edit|new|delete)/pin/(:num?)', array('as' => 'pin', 'before' => 'auth', 'uses' => 'pin@(:1)'));
 
