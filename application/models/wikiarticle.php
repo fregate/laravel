@@ -31,6 +31,19 @@ public static $table = "wiki_articles";
 
     public function vars()
     {
-        return $this->has_many('WikiVariants', 'article_id');
+        return $this->has_many('WikiArticleVariant', 'article_id');
+    }
+
+    public function content()
+    {
+        return WikiArticleVariant::where('article_id', '=', $this->id)->order_by('id', 'desc')->first();
+    }
+}
+
+class WikiArticle404 extends WikiArticle
+{
+    public function content()
+    {
+        return new WikiArticleVariant(array( 'body' => 'no page',  'title' => 'Unknown page' ));
     }
 }

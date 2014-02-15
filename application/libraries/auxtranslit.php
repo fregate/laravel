@@ -191,7 +191,7 @@ $langcode = 'ru';
 
   if (!isset($map[$bank][$langcode])) {
     $file = path('app') . 'libraries/tldata/' . sprintf('x%02x', $bank) . '.php';
-Log::write("info", $file);
+//Log::write("info", $file);
     if (file_exists($file)) {
       include $file;
       if ($langcode != 'en' && isset($variant[$langcode])) {
@@ -277,8 +277,8 @@ public function translit_title($filename) {
  * @see language_default()
  */
 public function translit($text, $unknown = '?') {
-  return Str::ascii($text);
-//  return $this->_transliteration_process($text, $unknown);
+//  return Str::ascii($text);
+  return $this->_transliteration_process($text, $unknown);
 }
 
 };

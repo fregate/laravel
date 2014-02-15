@@ -34,6 +34,7 @@
   border: 1px solid rgba(0, 0, 0, .1);
   padding: 10px; 
   background: rgba(0, 0, 0, .05);
+  overflow: hidden;
 /*  color: #262524; */
 }
 
@@ -43,3 +44,7 @@
 .is-varying-sizes .element-item.height2 { height: 284px; }
 .is-varying-sizes .element-item.h13 { height: 92px; }
 
+.empty {
+  border: none;
+  background: rgba(0, 0, 0, 0.0);
+}

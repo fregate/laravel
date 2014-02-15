@@ -8,7 +8,11 @@
 
 <script type="text/javascript" src="js/isotope.min.js"></script>
 <link rel="stylesheet" href="css/iso.s.css" />
+<style type="text/css">
+    .previewarticle {
 
+    }
+</style>
 @endsection
 
 @section('pinned')
@@ -69,7 +73,7 @@ else {
 За время, пока КК существует, накопилось так много информации, что мы уже выпустили 2 тома бумажной энциклопедии. И теперь она может быть не только у вас на полке, но и в электронном виде - всегда самые свежие фотографии и точная информация.</div>
 <div class="element-item h13">{{ HTML::link_to_action('wiki.new', 'Написать новую статью!') }}</div>
 <div class="element-item h13">Побродить по категориям</div>
-<!-- <div class="element-item h13">Случайная статья</div> -->
+<div class="element-item h13 empty"></div>
 
 <?php
 
@@ -82,14 +86,19 @@ $articles_ids = DB::table('wiki_articles')->get('id');
 $perpage = min(9, count($articles_ids));
 
 if(count($articles_ids)) {
-$randids = array_rand($articles_ids, $perpage);
-array_walk($randids, function(&$id, $key, $arr) {
-	$id = $arr[$id];
-}, $articles_ids);
+    $randids = array_rand($articles_ids, $perpage);
+    if(count($articles_ids) == 1)
+       $randids = array($randids);
 
-shuffle($randids);
+    shuffle($randids);
 
-print_r($randids);
+    array_walk($randids, function(&$id, $key, $arr) {
+        $wa = WikiArticle::find($arr[$id]->id);
+        echo '<div class="element-item h13"><a class="headerarticle" href="' . URL::to_action('wiki', array('id' => $wa->uri)) 
+        . '">' . $wa->content()->title . '</a><div class="previewarticle"><small>' . strip_tags(substr($wa->content()->body, 0, 126)) // 3 * 42
+        . '</small></div></div>';
+    }, $articles_ids);
+
 }
 ?>
 

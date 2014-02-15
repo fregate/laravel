@@ -11,9 +11,18 @@
 	<p><label for="ta_styles">Add &lt;style&gt; (don't forget to wrap by tags)</label><textarea id="ta_styles" name="spt_styles" style="width:100%"></textarea></p>
 	<p><label for="ta_content">Content of &lt;body&gt;</label><textarea id="ta_content" name="spt_content" style="width:100%" rows="10"></textarea></p>
 	<input type='hidden' name='aid' value="{{ Auth::user()->id }}">
-	<input type="submit" id="submit" value="Add new page" />
-	<input type="button" id="preview" value="Preview Page" />
+	<div>
+    <button class="btn btn-warning pull-right" id="preview">
+        <i class="icon-eye-open icon-white"></i>
+        <span>Посмотреть</span>
+    </button>
+    <button type="submit" class="btn btn-success pull-left" id="submit">
+        <i class="icon-ok icon-white"></i>
+        <span>Создать</span>
+    </button>
+	</div>
 	</form>
+	<br><br>
 	Созданные ранее статические страницы
 <table class="table table-striped table-bordered" id="statictable">  
 <thead>  

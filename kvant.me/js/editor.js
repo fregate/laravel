@@ -7,8 +7,8 @@ function html_parse($textarea) {
                .replace(/(<img)([^>]*)(>)/gm, "[img$2]")
                .replace(/(<a(.*)?(href=['"][^'"]+['"])([^>]+)?[>])/gm, "[a $3]") // remove all except href="" attribute
                .replace(/<\/(a|media)>/g, "[\/$1]")
-               .replace(/<(\/?)(strong|em|sup|sub|spoiler|irony)(:?[^>]*)?(>)/gm, "[$1$2]")
                .replace(/<(\/?)([biu])(?:[^>]*)?(>)/gm, "[$1$2]")
+               .replace(/<(\/?)(strong|em|sup|sub|spoiler|irony|li|ul|ol|h[1-6])(:?[^>]*)?(>)/gm, "[$1$2]")
                .replace(/(accesskey|class|contenteditable|contextmenu|dir|hidden|id|lang|spellcheck|style|tabindex|title|xml:lang|onblur|onchange|onclick|ondblclick|onfocus|onkeydown|onkeypress|onkeyup|onload|onmousedown|onmousemove|onmouseout|onmouseover|onmouseup|onreset|onselect|onsubmit|onunload)(?:\s?=\s?)(['"][^'"]*['"])?/gm, ""); // remove additional attributes and events
 
     //replace all unknown tags as lt-gt
@@ -19,7 +19,7 @@ function html_parse($textarea) {
                .replace(/(\[img)([^\]]*)(\])/gm, "<img$2>")
                .replace(/((\[a)(.*)?(href=["'][^"']+["'])([^\]]+)?[\]])/gm, "<a $4>")
                .replace(/\[\/(a|media)\]/gm, "<\/$1>")
-               .replace(/\[(\/?)(strong|em|sup|sub|spoiler|irony)(\])/gm, "<$1$2>")
+               .replace(/\[(\/?)(strong|em|sup|sub|spoiler|irony|li|ul|ol|h[1-6])(\])/gm, "<$1$2>")
                .replace(/\[(\/?)([biu])\]/gm, "<$1$2>")
                .replace(/\n/g, "<br />");
 

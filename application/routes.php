@@ -52,7 +52,10 @@ Route::get('about', function() {
 
 Route::get('wiki', array('as' => 'wiki', 'uses' => 'wikiarticle@index'));
 Route::get('wiki/new', array('as' => 'wiki', 'uses' => 'wikiarticle@new'));
-Route::get('wiki/(:any)/(:any?)', array('as' => 'wiki', 'uses' => 'wikiarticle@show'));
+//Route::get('wiki/(:num)/(:num?)', array('as' => 'wiki', 'uses' => 'wikiarticle@show'));
+Route::get('wiki/(:any)/(:num?)', array('as' => 'wiki', 'uses' => 'wikiarticle@showany'));
+//Route::post('(edit|new)/wiki/(:num?)', array('as' => 'wiki', 'before' => 'auth', 'uses' => 'wikiarticle@(:1)'));
+Route::post('wiki/new', array('as' => 'wiki', 'before' => 'auth', 'uses' => 'wikiarticle@new'));
 
 Route::get('pix/(:num)', array('as' => 'pix', 'before' => 'auth', 'do' => function($h) {
     if (Request::ajax()) {
